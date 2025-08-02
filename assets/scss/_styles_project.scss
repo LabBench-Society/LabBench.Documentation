@@ -1,12 +1,17 @@
 .td-page-meta__view {
-  display: none;
+  display: none !important;
+}
+
+.td-page-meta__edit {
+  display: none !important;
 }
 
 .td-page-meta__child {
-  display: none;
+  display: none !important;
 }
+
 .td-page-meta__project-issue {
-  display: none;
+  display: none !important;
 }
 
 .td-page-meta__lastmod {
