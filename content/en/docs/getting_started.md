@@ -33,7 +33,7 @@ Once, like for the present introduction, a protocol is available in a protocol r
 
 In short LabBench Runner is used in experimental sessions when a participant is present, and LabBench Designer is used at all other purposes.
 
-## Experimental setup
+### Experimental setup
 
 LabBench is intended for experiments that takes place in a laboratory where equipment, such as rating scales, stimulators, visual displays are used to carry out experimental procedures. The set of equipment and their configuration for a study is referred to as the Experimental Setup of the study. 
 
@@ -52,7 +52,7 @@ These three instrument types that are a small subset of the instruments that are
 
 These instruments are provided by two alternative experimental setups; one based on the LabBench I/O device, and the other based on a standard USB joystick. This is possible as both a joystick and the LabBench I/O implements the Button instrument that is required for the protocol. In addition to either a joystick or an LabBench I/O both setups use a standard external monitor that implements the Questionnaire and ImageDisplay instruments.
 
-### Experimental Setup: Joystick
+#### Experimental Setup: Joystick
 
 The Joystick experimental setup is intended as a low-cost experimental setup that can be used for educational purposes, as it does not use specialized LabBench equipment. Instead, it relies on a standard USB joystick for PCs, which can be purchased for 25-35€. One joystick that has been used extensively is the Logitech F310 Gamepad. 
 
@@ -62,7 +62,7 @@ The Joystick experimental setup is intended as a low-cost experimental setup tha
 
 An overview of the Joystick experimental setup can be seen in Figure 1. Caution must be observed when using this experimental setup as it is only intended for educational or evaluation purposes. The joystick does not provide means for synchronizing button presses with stimuli such as the visual stimuli in the Stop-Signal Task. Consequently, it has a low temporal precision and button presses can only be timestamped with a precision of 5-10ms. For neuroscience studies the LabBench I/O based setup is recommended.
 
-### Experimental Setup: LabBench I/O
+#### Experimental Setup: LabBench I/O
 
 The LabBench I/O setup shown in Figure 2 is the recommended experimental setup for cognitive tasks such as the Stop-Signal Task that are used in the present protocol.
 
@@ -71,6 +71,220 @@ The LabBench I/O setup shown in Figure 2 is the recommended experimental setup f
 *Figure 2: Overview of the LabBench I/O experimental setup.*
 
 The experimental setup consists of; 1) an LabBench PAD which implements the Button instrument, 2) a LabBench VTG which is used to timestamp button presses with respect to when the visual stimuli is shown on the display in the Stop-Signal Task, 3) An external monitor facing the subject that when configured for LabBench is termed a LabBench DISPLAY, and a LabBench I/O which is used to collect the responses from the subject. This setup has a high temporal resolution of < 1ms.
+
+### Adding required equipment to LabBench
+
+Before an experiment can be created using one of its experimental setups the devices for this setup must first be added to LabBench. Please note this is done only once, if the devices have already been added for previous experiment this step can be skipped.
+
+To add the equipment to LabBench; 1) start the LabBench Designer program, 2) Select the Devices page, 3) Select the type of equipment you want to add (LabBench Display and Joystick), 4) Click the “Scan and add” button (please see Figure 3).
+
+![](/images/getting_started/Figure03.png)
+
+*Figure 3:*
+
+Once the “Scan and add” button is pressed it will open a dialog window that allow you to scan for devices to add to the system (see Figure 4).
+
+![](/images/getting_started/Figure04.png)
+
+*Figure 4:*
+
+### Creating an experiment
+
+To create an experiment, we must install a protocol from a repository. To view and install protocols from repositories first select the Protocols page in the LabBench Designer. This page allows you to configure repositories, view their protocols, and install protocols as experiments.
+
+In this case we want to install the Introduction to LabBench protocol from the LabBench Protocol Repository. The LabBench Protocol Repository is an open and online protocol repository that is added automatically to LabBench when the program is installed. Consequently, for the installation of the Introduction to LabBench protocol we do not need to first add a protocol repository to LabBench to access this protocol. However, if you need to develop your own protocols, you must first create a repository in which you place your protocols and then add this repository to LabBench (please see [] for a guide on how to create and manage protocol repositories).
+
+![](/images/getting_started/Figure05.png)
+
+*Figure 5:*
+
+To install the Introduction to LabBench protocols; 1) fold out the LabBench Protocol Repository, 2) fold out the Getting Started category in that repository, 3) in that category, select the Introduction to LabBench protocol, and 4) click the “Install Protocol” button (see Figure 5).
+
+![](/images/getting_started/Figure06.png)
+
+*Figure 6:*
+
+Once the “Install Protocol” button is clicked it will open the Create Experiment dialog (see Figure 6). This dialog allows you to create an experiment from the protocol in the protocol repository. To create an experiment, you must give it a unique ID, a name, and choose which experimental setup to use in the experiment.
+
+The ID must be unique. The reason for the uniqueness is that the ID is what LabBench use to store all protocol assets and data in its internal database, and thus it must be unique. If there is not an experiment with the same ID as the ID of the protocol in the repository, then the ID filled will be prefilled with the protocol ID. However, if there is already an experiment with that ID then you must provide a valid unique experiment ID.
+
+The protocol name is what identifies the experiment to operators when they start the LabBench Runner to run an experimental session. You can use any description as the name for the experiment, however, it too must be unique as otherwise it would be confusing to the operators and will risk that they select the wrong experiment.
+
+The “Store experiment remotely in the repository” allows you to configure whether the protocol is copied into the LabBench database on the current computer or whether the protocol and its assets are kept in its repository. If the protocol is stored remotely, it means that it will be loaded from the repository every time the experiment is accessed from the LabBench Designer or LabBench Runner. **Storing the protocol remotely is an option that is intended ONLY as a convenience for the development protocols and should NEVER be used when running real experiments in the lab.** Consequently, in this case make sure the “Store experiment remotely …” option is not checked when creating the experiment.
+
+When you have provided an ID, Name, and chosen the experimental setup that match the devices you have available, then click the CREATE button. Once you click the CREATE button, the experiment will be created, and you will be taken to its Experiment page on the Experiments tab of the LabBench Designer.
+
+### Configuring the experiment
+
+Once the experiment is created, some experiments will need to be configured if they use devices that will need a different configuration based on which laboratory computer is used for the experiment. They may also need configuration if they use post session actions. The “Introduction to LabBench” use an external monitor (LabBench DISPLAY) where its size and location of fiducials needs to be configured. Consequently, this protocol needs to be configured after the experiment is created.
+
+![](/images/getting_started/Figure07.png)
+
+*Figure 7:*
+
+Configuration of and export of data from experiments takes place on the Experiments tab of the LabBench Designer (see Figure 7). This tab consists of to the left a list of all the experiments that are currently installed on the computer and two the right the Experiment page for the currently selected experiment. The experiment page consists of up three tabs:
+
+![](/images/getting_started/Table01.png)
+
+The experimental setup can be in the Setup tab and consists of a list of devices required by the experiment. 
+
+![](/images/getting_started/Figure08.png)
+
+*Figure 8:*
+
+The protocol refers to each device by a Protocol Device ID for the device to which a physical device ID must be assigned. The physical device ID is the ID given to each device that are added to the computer on the Devices tab of the LabBench Designer. When the experiment was created, a default physical device assignment was created. If you have more than one of the same types of devices this assignment may be incorrect and may need to be corrected.
+
+#### Assignning equipment
+
+To inspect and change the assignment of physical devices to Protocol Device IDs can be done by click the “Assign equipment” button. This will open the dialog shown in Figure 9.
+
+![](/images/getting_started/Figure09.png)
+
+*Figure 9:*
+
+The “Configure Devices” dialog consists of a list of Protocol Device IDs on the left, and to the right a drop-down for each Protocol Device ID that allow you to assign a Physical Device ID to each Protocol Device ID. Once the correct device assignments have been made you can save and close the dialog by clicking the OK button.
+
+#### Configuring equipment
+
+Most LabBench equipment is fully configured through the protocol and consequently does not need manual configuration by the experimenter. However, several generic 3rd party equipment does need to be manually configured. 
+
+In the present protocol, the external screen that is used to display the visual stimuli required for the Stop-Signal Task needs to be configured.
+
+For the stimuli to be presented correctly the size of the screen, its distance to the subject, and the location and size of fiducials need to be configured. The size of the screen needs to be known to for the location and size of fiducials to be calculated correctly. Fiducials are white markers that are embedded in the visual stimuli and used to trigger a photosensor (LabBench VTG device) that will provide precise timing of subject responses. 
+
+The distance from the screen to the subject is not used in the present protocol. However, in protocols that requires elements that occupy a given visual angle for the subject it is used to calculate the size of these elements on the screen. Examples of such protocols are protocols that record psychophysical ratings with visual analog scales. The visual scale is usually required to be 10cm in length when viewed by a subject holding the scale in their hands. When the scale is displayed on an external screen at much larger distances, LabBench will automatically scale up the Visual Analog Scale, so it occupies the same visual angle for the subject as if they held the scale in their hands.
+
+![](/images/getting_started/Figure10.png)
+
+*Figure 10:*
+
+To configure an equipment, click the “Configure the device” button on the device in the list of equipment in the Experimental Setup section. If this button is disabled, it means that the device does not need configuration.
+
+Clicking this “Configure the device” button will open the configuration dialog for the device; the configuration dialog for the LabBench Display is shown in Figure 10. The values needed to be entered into this dialog can be determined with the Screen and Fiducial Calibration Protocol (`calibration.screenFiducial@labbench.io`) protocol that is available in the Calibration section of the LabBench Protocol Repository.
+
+#### Post-session actions
+
+Post-session actions are optional protocol elements and are actions that are performed at the end of a session when LabBench Runner is closed. If a post-session action fails at the end of a session, it can also be rerun from the LabBench Designer. Reasons for the failure of post-session actions could be the absence of an internet connection for actions that for example saves data to a network share or upload data to an FTP server.
+
+Currently, LabBench supports the following types of post-session actions:
+
+1.	Export Data Action: will export session data in either the json or MATLAB file format.
+2.	Export to CSV File Action: will export session data as comma-separated values. This action will also enable export to CSV for all the experimental data. In this case, when all experimental data is exported to a CSV file each subject will be a row in the CSV file.
+3.	Create PDF File Action: This will create a PDF file from the session data. The format and data content of this PDF file needs to be specified in the Experiment Definition File (*.expx).
+4.	Copy File Action: will copy a file in the file system. This action is useful to copy previously created PDF and/or data files to for example a network share or similar.
+5.	Run Script Action: will run a python script. This action can be used to create actions that are not natively supported by LabBench. An example of such an action could be the upload of data to an FTP server or another 3rd party data backend service.
+
+The dialog for configuration and rerunning post-session actions are shown in Figure 11.
+
+![](/images/getting_started/Figure11.png)
+
+*Figure 11:*
+
+
+## Running the experiment
+
+LabBench Runner is used to perform experimental sessions. One an experiment has been created and configured this experiment will become available in the LabBench Runner. 
+
+### Starting a session
+
+When LabBench Runner is started it will first display the Startup Wizard (Figure 12). The Startup Wizards consists of up to five steps depending on which protocol elements have been enabled. 
+
+The Startup wizard will always start with the Experiment step, where you will be asked to select one of the experiments that are available on the computer. If the selected experiment has been localized then it will display the Language step, otherwise it will go to the Subject step. Localization refers to the tailoring of a protocol to a different cultures/language. When a protocol is localized all participant facing information can be shown according to the subjects’ language and culture.
+
+The Subject step consists of either create a new Subject or selecting an existing subject. A new subject is created by specifying a subject ID that does not yet exist. It is possible to validate subject IDs with a rule that will prevent invalid IDs from being created.
+
+![](/images/getting_started/Figure12.png)
+
+*Figure 12:*
+
+Once the subject is either created or selected, the Startup Wizard will go to the Session steps if the experiment consists of multiple sessions, otherwise it will go to the Devices step. If the experiment does not contain sessions or devices the Startup Wizard will be completed once the subject is created or selected, and the main user interface of LabBench Runner will be open.
+
+An experiment may contain of multiple sessions, each consisting of an individual set of experimental procedures (tests) for each session. These procedures/tests do not need to be identical for all sessions, and by selecting the current session in the Session step only procedures/tests belonging to that session will be displayed while the session is performed.
+
+If the experiment requires devices to run, the Startup Wizard will end with the Devices step. In this step it will connect to an configure all required devices. If there errors with one or more devices the operator will be instructed in how to resolve these errors. Once all devices has been connected, configured and all errors if present has been resolved the Startup Wizard can be closed.
+
+### Overview of LabBench Runner
+
+Once the Startup Wizard is closed the main user interface of the LabBench Runner will be opened. This user interface consists of four areas/windows; the Protocol Window, Test control and Information Window, Test Window, and Log window (see Figure 13)
+
+![](/images/getting_started/Figure13.png)
+
+*Figure 13:*
+
+#### Protocol
+
+The Protocol Panel lists the tests that are included in the protocol. Each test provides information of the current test state, test name, and test instruction (please see Figure 14).
+
+![](/images/getting_started/Figure14.png)
+
+*Figure 14:*
+
+When a test is not running, tests can be selected by clicking on the test in the Protocol Panel. For each test the following information is displayed; 1) the Test Name, 2) Test Instruction, and 3) Test State. 
+
+The Test Name describes what is to be performed in protocol. The Test Instruction informs whether the test is ready to run. In case it is not ready to run, the Test Instruction will inform the operator as to what actions are required to Unlock the test to make it ready to run. 
+
+All tests have a state, which can be either inactive or an active state. Inactive states are Locked, Unlocked, Completed, and Excluded states, and the active state is the Running state.
+
+Only one test at a time can be in the Running state, and if a test is in the running state the Protocol Panel will be disabled, meaning it is not possible to select another test than the currently active test.
+
+Below is a specification of the different test states:
+
+![](/images/getting_started/Table02.png)
+
+#### Test control and information
+
+The Test Control and Information makes it possible to start and abort tests (see Figure 15).
+
+![](/images/getting_started/Figure15.png)
+
+*Figure 15:*
+
+![](/images/getting_started/Table03.png)
+
+#### Test window
+
+The content of the test window is dynamic, and change based on which test is selected in the Protocol Window. The general principle is that it will be configured to what is required to perform the currently selected test. Consequently, this principle is what simplifies the user interface of LabBench Runner as it will always only contain the user interface elements required to perform the tests that are in the protocol and nothing else. 
+
+![](/images/getting_started/Figure16.png)
+
+*Figure 16:*
+
+#### Log window
+
+LabBench has an extensive log system that automatically records log entries for all actions taken through the UI during an experiment, the execution of the experimental procedures, and the collection of experimental results. For events beyond the knowledge of LabBench, the experimenter can add manual entries to the log. 
+
+During an experiment the log is available in the Log Window, which is a list of log entries with the newest log entry on the top. These log entries are also stored in the internal data storage of LabBench, which contains all log entries for a given subject. However, the Log Window will only contain the log entries that have occurred since the start of the LabBench Runner.
+
+![](/images/getting_started/Figure17.png)
+
+*Figure 17:*
+
+## Analysing experimental data
+
+Data from experiments can be exported either from the LabBench Designer or with post-session actions that are defined in the protocol.
+
+The difference between exporting from LabBench Designer and with post-session actions is that the former will export all data for all subjects to a single file, whereas post-session actions will export data from each subject as individual files. Post-session actions are executed when the LabBench Runner is closed. However, if this fails, they can also be rerun from the LabBench Designer.
+
+The present protocol has defined one post-session action named “Export to CSV”, the data created by this action is shown in Figure 18.
+
+![](/images/getting_started/Figure18.png)
+
+*Figure 18:*
+
+This data can be imported into Excel, SPSS, R, or Python for further analysis and data visualization.
+
+## License
+
+The Introduction to LabBench Protocol (introdemo@labbench.io) © 2024 by Inventors’ Way ApS is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. 
+
+![](/images/getting_started/Figure19.png)
+
+For a full explanation for the conditions of its use and the full license text, please refer to: [Attribution-NonCommercial-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+
+
+
+
 
 ## Where should I go next?
 
