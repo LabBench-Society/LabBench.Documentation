@@ -1,5 +1,5 @@
 ---
-title: Installation
+title: LabBench CPAR+
 description: Instructions on how to install LabBench
 weight: 20
 ---

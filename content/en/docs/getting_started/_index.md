@@ -1,7 +1,7 @@
 ---
 title: Getting started
 description: A demonstration of how to run an experiment with LabBench.
-weight: 3
+weight: 30
 ---
 
 {{% pageinfo %}}

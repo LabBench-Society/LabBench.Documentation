@@ -1,7 +1,7 @@
 ---
 title: Administration
 description: Information on how to administer a LabBench system.
-weight: 4
+weight: 40
 ---
 
 {{% pageinfo %}}
