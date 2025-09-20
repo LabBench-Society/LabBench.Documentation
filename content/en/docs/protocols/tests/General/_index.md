@@ -1,7 +1,7 @@
 ---
 title: General
 description: Information on how to write LabBench protocols.
-weight: 20
+weight: 10
 ---
 
 {{% pageinfo %}}

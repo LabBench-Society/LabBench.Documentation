@@ -1,7 +1,7 @@
 ---
-title: Algometry
+title: Thermal
 description: Information on how to write LabBench protocols.
-weight: 30
+weight: 40
 ---
 
 {{% pageinfo %}}
