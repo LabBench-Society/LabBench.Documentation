@@ -1,7 +1,7 @@
 ---
 title: Resources
 description: Resources for labbench such as installers and reference materials
-weight: 9
+weight: 9000
 ---
 
 {{% pageinfo %}}
