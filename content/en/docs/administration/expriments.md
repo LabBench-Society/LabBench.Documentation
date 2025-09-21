@@ -4,73 +4,56 @@ description: The Experiment Page allows experiment management, which allows user
 weight: 40
 ---
 
-Experiments are managed on the Experiments Page of LabBench Designer (see Figure \ref{fig:ExperimentsPage}). To the left, this page lists all the experiments that are currently present in the system. This list selects which experiment will be shown on the Experiment Panel on the right of the Experiments Page.
+Experiments are managed on the Experiments Page of LabBench Designer (see Figure 1). To the left, this page lists all the experiments that are currently present in the system. This list selects which experiment will be shown on the Experiment Panel on the right of the Experiments Page.
 
 The Experiment Panel consists of tabs to the left that lets you choose between four tabs:
 
-\begin{itemize}
-    \item \textbf{Protocol:} If a protocol description is available, it will be shown in this tab. This tab will allow you to read the description within LabBench Designer or to print it to a physical printer or a PDF file. If no protocol description is available, this tab will not be present for the experiment.
-    \item \textbf{Setup:} The setup tab will always be present and allow you to configure the experiment. This includes configuring its validation of subject IDs, experimental setup, and post-session actions.
-    \item \textbf{Data:} The data tab will always be present and show you a list of subjects. From this tab, it will be possible to delete subjects and export data from all subjects.
-    \item \textbf{Errors:} This tab will only be present if there are errors, warnings or information regarding the experiment. 
-\end{itemize}
+* **Protocol:** If a protocol description is available, it will be shown in this tab. This tab will allow you to read the description within LabBench Designer or to print it to a physical printer or a PDF file. If no protocol description is available, this tab will not be present for the experiment.
+* **Setup:** The setup tab will always be present and allow you to configure the experiment. This includes configuring its validation of subject IDs, experimental setup, and post-session actions.
+* **Data:** The data tab will always be present and show you a list of subjects. From this tab, it will be possible to delete subjects and export data from all subjects.
+* **Errors:** This tab will only be present if there are errors, warnings or information regarding the experiment. 
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=14cm]{illustrations/ExperimentsPage.png}
-    \caption{The Experiments Page in the LabBench Designer}
-    \label{fig:ExperimentsPage}
-\end{figure}
+![](/images/administration/ExperimentsPage.png)
+
+*Figure 1: The Experiments Page in the LabBench Designer.*
 
 From the header of the Experiment Panel, it is also possible to delete the experiment by clicking the Delete Experiment button. As this action will irrevocably delete all data, a warning dialog will first be displayed, where you must confirm your deletion of the experiments before the system will delete it.
 
-\subsection{Subject ID}
+## Subject ID
 
-The subject ID section on the Setup tab provides information on the subject ID validation performed in the experiment (see Figure \ref{fig:ExperimentsSubjectID}). If this validation has not been defined in the protocol then it can be enabled or changed by clicking the Configure validation button.
+The subject ID section on the Setup tab provides information on the subject ID validation performed in the experiment (see Figure 2). If this validation has not been defined in the protocol then it can be enabled or changed by clicking the Configure validation button.
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=8cm]{illustrations/ExperimentsSubjectID.png}
-    \caption{Subject ID validation section on the Setup tab in the Experiment Panel}
-    \label{fig:ExperimentsSubjectID}
-\end{figure}
+![](/images/administration/ExperimentsSubjectID.png)
 
-Clicking the Configure validation button will open a dialog to enter the validation rule and a help text that LabBench Runner will display if an operator enters an invalid subject ID (see Figure \ref{fig:DialogSubjectID}).
+*Figure 2: Subject ID validation section on the Setup tab in the Experiment Panel.*
 
-The rule must be specified as a regular expression. A useful tool for developing and testing regular expressions can be found at \url{https://regex101.com/} and tutorials to learn regular expressions at \url{https://regexlearn.com/}. Regular expressions are a very powerful albeit complex tool that can be used to search and validate text.
+Clicking the Configure validation button will open a dialog to enter the validation rule and a help text that LabBench Runner will display if an operator enters an invalid subject ID (see Figure 3).
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=12cm]{illustrations/DialogSubjectID.png}
-    \caption{Configuration of subject ID validation.}
-    \label{fig:DialogSubjectID}
-\end{figure}
+The rule must be specified as a regular expression. A useful tool for developing and testing regular expressions can be found at [Regex 101](https://regex101.com/) and tutorials to learn regular expressions at [Regex Learn](https://regexlearn.com/). Regular expressions are a very powerful albeit complex tool that can be used to search and validate text.
 
-\subsection{Experimental setup}
+![](/images/administration/DialogSubjectID.png)
+
+*Figure 3: Configuration of subject ID validation.*
+
+## Experimental setup
 
 Most protocols will need access to a set of devices to run. This set of devices and their configuration is often called the experimental setup of a study, the term that LabBench uses. 
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=12cm]{illustrations/ExperimentsSetup.png}
-    \caption{Section with information about the experimental setup}
-    \label{fig:ExperimentsSetup}
-\end{figure}
+![](/images/administration/ExperimentsSetup.png)
 
-The devices used in the protocol for an experiment can be seen in the Experimental Setup section of the Setup tab (see Figure \ref{fig:ExperimentsSetup}). Each device defined in the Experimental Setup must be assigned a device from the Device Page (see Figure \ref{fig:DevicesPage}). A default device assignment is created when the experimental is created from a protocol in a repository. This will assign the first available device to each device in the Experimental Setup. However, if more than one device of the same type is present in the system, this assignment may be incorrect. 
+*Figure 4: Section with information about the experimental setup.*
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=6cm]{illustrations/DialogConfigureDevices.png}
-    \caption{Figure caption.}
-    \label{fig:DialogConfigureDevices}
-\end{figure}
+The devices used in the protocol for an experiment can be seen in the Experimental Setup section of the Setup tab (see Figure 4). Each device defined in the Experimental Setup must be assigned a device from the Device Page (see Figure 5). A default device assignment is created when the experimental is created from a protocol in a repository. This will assign the first available device to each device in the Experimental Setup. However, if more than one device of the same type is present in the system, this assignment may be incorrect. 
 
-Clicking the Assign devices button will open the Configure Devices dialog (see Figure \ref{fig:DialogConfigureDevices} that will allow you to change the assignment of devices.
+![](/images/administration/DialogConfigureDevices.png)
 
-Some devices also have a configuration that can be changed by click their Configure device button (see Figure \ref{fig:ExperimentsSetup}. Currently, it is possible to configure LabBench DISPLAY and Joystick devices.
+*Figure 5: Assignment of devices to logical devices in the protocol (Configure Devices Dialog).*
 
-\subsubsection{Display configuration}
+Clicking the Assign devices button will open the Configure Devices dialog (see Figure 5) that will allow you to change the assignment of devices.
+
+Some devices also have a configuration that can be changed by click their Configure device button (see Figure 4). Currently, LabBench I/O, LabBench DISPLAY and Joystick devices has properties that can be configured in the LabBench Designer.
+
+### Display configuration
 
 The configuration dialog for LabBench Devices is shown in Figure \ref{fig:DialogConfigureDisplay}. The LabBench DISPLAY is a second application window intended to be placed on a display shown to the subject. It can be used for multiple purposes, including displaying psychophysical rating scales, instructions to the subjects, images for visual stimuli, cognitive tests that require visual stimuli such as Stroop, Flanker, Stop-Signal tasks, and questionnaires.
 
