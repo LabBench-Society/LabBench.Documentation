@@ -59,83 +59,65 @@ The configuration dialog for LabBench Devices is shown in Figure \ref{fig:Dialog
 
 The parameters that can be changed for the LabBench Display are:
 
-\begin{itemize}
-    \item \textbf{Display:} the display on which the application window will be opened. Typically, this will be the Secondary display. However, during the development and testing of a protocol, opening it on the Primary display may be beneficial, as this will allow you to test the protocol on a computer for which a secondary display is unavailable.
-    \item \textbf{Positon:} The position on the display where the application window will be opened. This can be configured as Fullscreen, Upper Half, Lower Half, Upper Right Corner, Upper Left Corner, Lower Right Corner, or Lower Left Corner.
-    \item \textbf{Size:} The physical diagonal size of the display.
-    \item \textbf{Distance:} The distance from the eyes of the subject to the display.
-\end{itemize}
+**Display:** the display on which the application window will be opened. Typically, this will be the Secondary display. However, during the development and testing of a protocol, opening it on the Primary display may be beneficial, as this will allow you to test the protocol on a computer for which a secondary display is unavailable.
+**Positon:** The position on the display where the application window will be opened. This can be configured as Fullscreen, Upper Half, Lower Half, Upper Right Corner, Upper Left Corner, Lower Right Corner, or Lower Left Corner.
+**Size:** The physical diagonal size of the display.
+**Distance:** The distance from the eyes of the subject to the display.
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=7cm]{illustrations/DialogConfigureDisplay.png}
-    \caption{Configuration of LabBench DISPLAY parameters.}
-    \label{fig:DialogConfigureDisplay}
-\end{figure}
+![](/images/administration/DialogConfigureDisplay.png)
 
-The \verb|Size| and \verb|Distance| parameters are used for visual angle calculations. For some experimental procedures, visual stimuli must occupy a given angle of the subject's visual field. This is the case of the display of visual analogue scales, where the size and distance are used to scale the size of the scale so it occupies the same visual angle as a 10cm scale would at a nominal distance of 40cm from the subject's eyes. The protocol's author defines the scale's nominal distance and physical size.
+*Figure 6: Configuration of LabBench DISPLAY parameters.*
 
-\subsubsection{Joystick configuration}
+The Size and Distance parameters are used for visual angle calculations. For some experimental procedures, visual stimuli must occupy a given angle of the subject's visual field. This is the case of the display of visual analogue scales, where the size and distance are used to scale the size of the scale so it occupies the same visual angle as a 10cm scale would at a nominal distance of 40cm from the subject's eyes. The protocol's author defines the scale's nominal distance and physical size.
+
+### Joystick configuration
 
 Subjects can use a standard USB Joystick to complete questionnaires and provide answers in response tasks to estimate psychophysical functions and/or thresholds. However, no standard exists for the codes assigned to the USB buttons. Consequently, protocols written for one brand of USB joystick are unlikely to work with other brands of USB buttons.
 
-To make it possible to use a brand of Joystick different from the one a protocol was initially written for, it is possible to change the codes assigned to each button. To change the codes, click the Configure device button for the Joystick, which will open the dialog shown in Figure \ref{fig:DialogConfigureJoystick}.
+To make it possible to use a brand of Joystick different from the one a protocol was initially written for, it is possible to change the codes assigned to each button. To change the codes, click the Configure device button for the Joystick, which will open the dialog shown in Figure 7.
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=14cm]{illustrations/DialogConfigureJoystick.png}
-    \caption{Figure caption.}
-    \label{fig:DialogConfigureJoystick}
-\end{figure}
+![](/images/administration/DialogConfigureJoystick.png)
+
+*Figure 7: Configuration of Joystick parameters.*
 
 When using this dialog, it is beneficial to have the joystick connected to the computer. This allows you to press buttons on the joystick and see their code(s) at the top of the dialog. This allows you to identify the correct codes to enter in the button map shown in the lower half of the dialog. Click OK to update the button maps; if you click Cancel, your changes will be discarded.
 
-\subsection{Post-session actions}
+## Post-session actions
 
 Post-session actions are actions that are performed when LabBench Runner are closed. Currently, it is possible to include the following post-session actions in protocols:
 
-\begin{itemize}
-    \item \textbf{Export Data:} This action will export the data from a single subject in either MATLAB format (*.mat) or Java Script Object Notation format (*.json).
-    \item \textbf{Export CSV:} This action will export selected data to a comma-separated values file (*.csv). A calculated parameter in the export action must define each value in the CSV file.
-    \item \textbf{Export Log:} This action will export the experimental log for the subject as a PDF file.
-    \item \textbf{Generate PDF:} This action will generate a PDF file defined in the protocol. This can be used to, for example, generate immutable audit records or reports of results.
-    \item \textbf{Copy File:}
-    \item \textbf{Run Script:} This action will run a Python script that most likely can do anything impossible with one of the other post-session actions. 
-\end{itemize}
+* **Export Data:** This action will export the data from a single subject in either MATLAB format (*.mat) or Java Script Object Notation format (*.json).
+* **Export CSV:** This action will export selected data to a comma-separated values file (*.csv). A calculated parameter in the export action must define each value in the CSV file.
+* **Export Log:** This action will export the experimental log for the subject as a PDF file.
+* **Generate PDF:** This action will generate a PDF file defined in the protocol. This can be used to, for example, generate immutable audit records or reports of results.
+* **Copy File:** This action will copy a file from one place in the filesystem to another. This can be used to for example copy generates files to a shared network drive, or similar.
+* **Run Script:** This action will run a Python script that most likely can do anything impossible with one of the other post-session actions. 
 
-The post-session actions can be configured and rerun from the Post-Session Action section of the Setup tab on the Experiment Panel (please see Figure \ref{fig:ExperimentsActions}).
+The post-session actions can be configured and rerun from the Post-Session Action section of the Setup tab on the Experiment Panel (please see Figure 7).
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=14cm]{illustrations/ExperimentsActions.png}
-    \caption{Post-session action section of the Setup tab on the Experiment Panel.}
-    \label{fig:ExperimentsActions}
-\end{figure}
+![](/images/administration/ExperimentsActions.png)
+
+*Figure 7: Post-session action section of the Setup tab on the Experiment Panel.*
 
 The post-session action section allows you to set the output directory for each action. It also allows you to rerun an action on all subjects in an experiment. If, for some reason, a post-session action fails when LabBench Runner is closed, then rerunning the action from LabBench Designer can ensure that its data is generated for all subjects, including the subjects for which it failed.
 
-\subsection{Managing experimental data}
+## Managing experimental data
 
-Data for an experiment can be managed on the Data tab on the Experiment Panel (please see Figure \ref{fig:ExperimentsData}). This tab contains a list of all the subjects that have participated in the experiment.
+Data for an experiment can be managed on the Data tab on the Experiment Panel (please see Figure 8). This tab contains a list of all the subjects that have participated in the experiment.
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=14cm]{illustrations/ExperimentsData.png}
-    \caption{Figure caption.}
-    \label{fig:ExperimentsData}
-\end{figure}
+![](/images/administration/ExperimentsData.png)
 
-\subsection{Exporting data}
+*Figure 8*
+
+### Exporting data
 
 To export data for all subjects, click the Export all subjects button. This will open a file save dialog for where to save the exported data file. The format for the data is determined by the file ending:
 
-\begin{itemize}
-    \item \textbf{mat}: Data will be exported in MATLAB data format.
-    \item \textbf{json}: Data will be exported in Java Script Object Notation.
-    \item \textbf{csv}: This format is only available if a CSV export post-session action is defined in the protocol for the experiment. If present, this will export all subjects in the same CSV format as the single subject CSV export post-session action.
-\end{itemize}
+* **mat:** Data will be exported in MATLAB data format.
+* **json:** Data will be exported in Java Script Object Notation.
+* **csv:** This format is only available if a CSV export post-session action is defined in the protocol for the experiment. If present, this will export all subjects in the same CSV format as the single subject CSV export post-session action.
 
-\subsection{Deleting subjects}
+### Deleting subjects
 
 Subjects can be deleted by clicking the Delete Subject button on the subject. Because this is an irrevocable action, you will be asked to confirm this deletion in a dialog before the subject is deleted. This is to guard against accidental clicks on the Delete subject button.
 
