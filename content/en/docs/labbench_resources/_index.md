@@ -1,6 +1,6 @@
 ---
 title: Resources
-description: Resources for labbench such as installers and reference materials
+description: Resources for LabBench such as installers and reference materials
 weight: 9000
 ---
 
