@@ -10,13 +10,12 @@ Before LabBench installation, please read the Release Notes for the version you 
 
 Once you have downloaded the installer, run this installer and accept all default choices.
 
-# Setup
-
 ## Registrering the license
 
 Before LabBench can run experiments, it must be registered with a valid license code. To register a license, open the LabBench Designer and, on the System tab, scroll down to the License section.
 
 ![](/images/administration/SystemLicense.png)
+
 *Figure 1: License section that allows for registration and deregistration of license keys.*
 
 The license section contains three circular license registration buttons in the lower right part of the header: the two leftmost for offline registration and the rightmost for online registration of license keys. When no license key is registered, these will be enabled.
@@ -28,11 +27,13 @@ Below the header is information about the license key that is currently register
 The laboratory computer can register the license key online when it has internet access. This is the simplest and fastest registration method. To perform an online registration, click the Online Registration button to open the Online License Registration Dialog (please see Figure 2).
 
 ![](/images/administration/DialogLicenseEnterKey.png)
+
 *Figure 2: Online license registration dialog.*
 
 Once a key is entered, the REGISTER button will become enabled, as shown in Figure \ref{fig:LicenseDialog_Register}. Click the REGISTER button to register the license key with the license server.
 
 ![](/images/administration/DialogLicenseRegister.png)
+
 *Figure 3: Online license registration dialog with key entered.*
 
 After clicking REGISTER, the dialog shown will close, and the LICENSE section should now display the activated license key with information about the license.
@@ -59,6 +60,7 @@ Take the USB key to the laboratory computer and click the Offline Registration b
 A LabBench License Key can only be used on one computer at a time; however, it can be moved between computers as many times as needed. To move the license key, the key must first be deregistered on the license server.
 
 ![](/images/administration/SystemLicenseDeregister.png)
+
 *Figure 4: Deregistrering a license.*
 
 To deregister a license, click the Deregister button as shown in Figure \ref{fig:LicenseDialog_Deregister}. The method of deregistering depends on the method used to register the license key. If the online registration method was used when registering the license key, then the license key will be automatically deregistered online; however, if the offline registration method was used, then a license deregistration request file \verb|*.req| will be generated that must be uploaded to:
@@ -71,14 +73,11 @@ When the license deregistration request file is uploaded, the license key is rel
 
 LabBench has a logging system that logs events during an experiment. The system will automatically log as many events as it can, such as the start and completion of tests and errors. However, for events outside the control of LabBench can be manually added to the log by the operator. Consequently, this logging system is intended to replace manual logging by operators in, for example, study logbooks.
 
-The Logging section on the Systems page (please see Figure \ref{fig:LoggingConfiguration}) allows this logging system to be configured.
+The Logging section on the Systems page (please see Figure 4) allows this logging system to be configured.
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=8cm]{illustrations/SystemLogging.png}
-    \caption{Log configuration.}
-    \label{fig:LoggingConfiguration}
-\end{figure}
+![](/images/administration/SystemLogging.png)
+
+*Figure 4: Log configuration.*
 
 Events during an experimental session will be displayed in the LabBench Runner program. Events are categorized according to log levels:
 
