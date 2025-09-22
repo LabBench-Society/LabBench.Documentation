@@ -1,5 +1,5 @@
 ---
 title: MentaLab Explorer Pro
 description: Instructions on how to install LabBench
-weight: 20
+weight: 30
 ---

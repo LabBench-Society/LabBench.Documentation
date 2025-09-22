@@ -1,5 +1,5 @@
 ---
 title: Sound Card
 description: Instructions on how to install LabBench
-weight: 20
+weight: 100
 ---
