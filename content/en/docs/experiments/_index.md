@@ -54,7 +54,7 @@ The above description of the XML format is all the knowledge of XML itself neede
 
 ## Development tools
 
-For writing Experiment Definition Files, as well as Python scripts, an Integrated Development Environment (IDE) makes the process significantly easier due to code completion. Code completion means that you do not need to remember which XML elements or attributes are valid at a given place in your definition file. Instead, tap \verb|CTRL + SPACE| (for Visual Studio Code) to get a list of valid elements or attributes Figure~\ref{fig:codecomp}. Code completion also reduces the need for manual typing, as you can simply select the required element or attribute and then press enter, at which point the IDE will complete the code for you without requiring typing. 
+For writing Experiment Definition Files, as well as Python scripts, an Integrated Development Environment (IDE) makes the process significantly easier due to code completion. Code completion means that you do not need to remember which XML elements or attributes are valid at a given place in your definition file. Instead, tap `CTRL + SPACE` (for Visual Studio Code) to get a list of valid elements or attributes Figure 1. Code completion also reduces the need for manual typing, as you can simply select the required element or attribute and then press enter, at which point the IDE will complete the code for you without requiring typing. 
 
 \begin{figure}
     \centering
@@ -67,9 +67,7 @@ For writing Experiment Definition Files, as well as Python scripts, an Integrate
 
 To use Visual Studio Code to develop LabBench experiments, first download the installer from:
 
-\begin{itemize}
-    \item \href{https://code.visualstudio.com/}{https://code.visualstudio.com/} 
-\end{itemize}
+* [https://code.visualstudio.com/](https://code.visualstudio.com/) 
 
 Then, install the program. However, Visual Studio Code does not support XML code completion without a suitable editor extension. The Red Hat XML extension can be recommended to enable XML code completion.
 
