@@ -1,8 +1,7 @@
 ---
 title: Downloads
-description: >
-  Download LabBench
-date: 2017-01-05
+description: Downloads
+weight: 10
 ---
 
 {{% pageinfo %}}
