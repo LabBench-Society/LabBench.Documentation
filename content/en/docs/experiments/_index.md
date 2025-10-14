@@ -38,13 +38,15 @@ _Listing 1: Structure of an experiment definition file_
 
 ## Syntax
 
-We will now give a brief but complete introduction to what you need to know about XML for writing Experiment Definition Files. The first line in Listing 1 identifies the file as an XML file and its encoding. All files include this line, and even though other character encodings exist today, there is little reason to use other encodings than UTF-8. As a result, the first line is invariant, and the Experiment Definition Files must always start with this line. 
+We will now give a brief but complete introduction to what you need to know about XML for writing Experiment Definition Files. 
+
+The first line in Listing 1 identifies the file as an XML file and its encoding. All files include this line, and even though other character encodings exist today, there is little reason to use other encodings than UTF-8. As a result, the first line is invariant, and the Experiment Definition Files must always start with this line. 
 
 XML documents are built from a hierarchical structure of XML elements. All XML documents have one root element that may contain nested elements, which, in turn, can contain more nested elements in an arbitrary deep hierarchical structure. XML elements consist of a starting tag, a closing tag, and content between these tags. In Listing 1, the root element is an experiment element, with a starting tag of `<experiment>` and a closing tag of `</experiment>`. 
 
 The exception to this rule is self-closing elements. The `<subject-validator>` is an example of a self-closing tag, as it is not followed by a `</subject-validator>` tag; instead, the starting tag ends with `/>`. Self-content tags allow for a more concise and easier-to-read document. The use of self-closing elements is widespread in the LabBench Language.
 
-The `<experiment>` element has other elements as its content: a `<subject-validator>`, a `<experimental-setup>`, a `<protocol>` element, and a `<post-actions>` element. Their order is significant; some of these elements are optional, but if used, they must be used in the order given in Listing 1. 
+The `<experiment>` element has other elements as its content: a `<subject-validator>`, a `<experimental-setup>`, a `<protocol>` element, and a `<post-actions>` element. 
 
 XML elements can be adorned with characteristics in the form of XML attributes. In Listing 1, `regex` and `advice` are attributes of the `<subject-validator/>` element, which provides a regular expression to validate session IDs and help the experimenter if a session ID fails this validation. Attributes are in the form of `name=”value of the attribute”` and are listed after the element's name and before the `>` character or `/>` character for self-closing elements.
 
