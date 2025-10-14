@@ -22,8 +22,6 @@ Using Instruments in tests instead of concrete devices makes it easier to add ne
 
 Without Instruments, there would have been two sets of identical tests, one set for the CPAR device, and another set for the CPAR+ device. With Instruments, there is no need to implement a second identical set of tests for the CPAR+ device; all that was required for the CPAR+ device to be used in the tests that were originally intended for the CPAR device was to implement the IPressureAlgometer interface, which greatly reduced the amount of work required to add this new device to LabBench. 
 
-The same mechanism can be used to add custom-designed devices to LabBench by identifying Instruments that are provided by the device and implementing a custom LabBench Instrument Driver that implements these Instruments. 
-
 ## Devices
 
 A specific research device typically also implements multiple instruments. For example, an `IRatioScale` instrument is built into both the Nocitech CPAR and LabBench CPAR+ devices. Consequently, for cuff pressure algometry tests, you do not need a separate device providing the `IRatioScale` instrument because this is built into and provided by these devices in addition to the `IPressureAlgometer` instrument.
