@@ -1,6 +1,6 @@
 ---
-title: Devices
-description: Information on how call python code from LabBench protocols.
+title: Instruments
+description: Information on how to use LabBench Instruments from python scripts.
 weight: 20
 ---
 
