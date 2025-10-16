@@ -1,7 +1,7 @@
 ---
 title: Languages and Localization
 description: Instructions on how to localize protocols.
-weight: 20
+weight: 15
 ---
 
 Localization refers to adapting software to suit a specific region or culture, typically involving language, cultural norms, and regional preferences. Most importantly, this involves that subject-facing text is displayed in a language that the subject understands, but it may also involve customizing other aspects of the protocol, such as formats for dates, numbers, currency, and similar culture dependent items. 

@@ -1,7 +1,7 @@
 ---
 title: Subject Validation
 description: Instructions on how to validate subject identifiers (IDs)
-weight: 10
+weight: 5
 ---
 
 {{% pageinfo %}}

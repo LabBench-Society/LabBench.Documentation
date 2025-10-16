@@ -1,7 +1,7 @@
 ---
 title: Experimental Setups
 description: Information on how to define experimental setups.
-weight: 20
+weight: 10
 ---
 
 {{% pageinfo %}}
@@ -100,11 +100,11 @@ The `<devices>` elements specify and configure the research devices that are use
 </device-mapping>
 ```
 
-The names of the required instruments, in this case Button, Questionnaire, and PressureAlgometer are determined by the tests in the protocol The names that must be assigned a device from the `<devices>` element can be looked up in the documentation for the test. 
+The names of the required instruments, in this case Button, Questionnaire, and PressureAlgometer are determined by the tests in the protocol. The names that must be assigned a device from the `<devices>` element can be looked up in the documentation for the test, which unless explicitly specified in the protocol is the name of the Instrument with the initial `I` removed.
 
 Each device that is assigned to an Instrument, required by a test, must implement the required Instrument for that name. Assigning a device that does not implement the required Instrument will result in an error that will prevent the experiment from being run by the LabBench interpreter.
 
-Each mapping of a device to an Instrument is done with a `<device-assignment>` element, where the device-id is the id of the device from the `<devices>` element, instrument-name is the name of the Instrument from test. 
+Each mapping of a device to an Instrument is done with a `<device-assignment>` element, where the device-id is the id of the device from the `<devices>` element, instrument-name is the name of the Instrument that is required by a test in the protocol. 
 
 You may note from listing above that two of the assigned devices is identified by `[root device].[sub device]`. Devices may have sub-devices – in this example, the display device has two sub-devices; 1) an `IQuestionnaire` device (`id = "questionnaire"`), and 2) an `IImageDisplay` device (`id = “image”`). They cannot be active at the same time, the display will either work as an `IQuestionnaire` instrument, or an `IImageDisplay` instrument, depending on which `experimental-setup` has been specified by the currently selected test. 
 
