@@ -12,7 +12,7 @@ Experimental setups are the collection of research devices that are used to perf
 
 ## Instruments 
 
-Each test in a protocol may require a set of instruments to carry out its experimental procedures. Instruments are abstractions of the functionality provided by research devices, defining the capabilities of a generalized class of devices. 
+Instruments are used in a protocol by the tests to carry out experimental procedures. Instruments are abstractions of the functionality provided by research devices, defining the capabilities of a generalized class of devices. 
 
 For example, for a stimulus-response test in cuff pressure algometry, you will need an `IPressureAlgometer` and an `IRatioScale` instrument. The `IPressureAlgometer` is used in the stimulus-response test to provide a linearly increasing pressure. At the same time, the `IRatioScale` instrument allows the subject to rate the pain and stop the stimulation when the Pain Tolerance Threshold (PTT) is reached. However, the IPressureAlgometer is not tied to a specific pressure algometry device; instead, it defines what LabBench expects all pressure algometers to be capable of. Today, the IPressureAlgometer instrument is provided by two pressure algometers: the Nocitech CPAR and LabBench CPAR+ devices. 
 
@@ -67,27 +67,29 @@ The `<devices>` element list which devices are required for the experiment and s
 
 | Device            | Description                                       | Instruments |
 |-------------------|---------------------------------------------------|-------------|
-| `<lio>`           | LabBench I/O                                      | IStimulator, ITriggerGenerator, IScales, IResponseHost |
+| `<lio>`           | LabBench I/O                                      | IStimulator, ITriggerGenerator, IScales, IButton, IRatioScale, ITriggerDetector |
 | `<cpar>`          | Nocitech CPAR                                     | IPressureAlgometer, IButton, IRatioScale, IScales |
 | `<cparplus>`      | LabBench CPAR+                                    | IPressureAlgometer, IButton, IRatioScale, IScales |
 | `<daqmx>`         | National Instrument DAQmx Cards                   | IStimulator, ISweepSampler, IButton |
 | `<sound>`         | Standard Soundcards                               | IStimulator, ISoundPlayer |
 | `<joystick>`      | USB PC Joysticks/Gamepads                         | IButton, IJoystick, `*`ITriggerGenerator |
-| `<tactor>`        | Engineering Acoustics Universal Tactor Controller | |
-| `<tcs>`           | QSTLab Thermal Cutaneous Stimulator               | |
-| `<thermal-plate>` | QSTLab Thermal Plate                              | |
-| `<evas>`          | QSTLab eVAS                                       | |
-| `<display>`       | Secondary Computer Monitors                       | |
+| `<tactor>`        | Engineering Acoustics Universal Tactor Controller | IStimulator |
+| `<tcs>`           | QSTLab Thermal Cutaneous Stimulator               | IThermalStimulator, IButton, IStimulator, ISweepSampler |
+| `<thermal-plate>` | QSTLab Thermal Plate                              | IThermalPlate |
+| `<evas>`          | QSTLab eVAS                                       | IRatioScale, IScales, IButton |
+| `<display>`       | Secondary Computer Monitors                       | IDisplay, IRatioScale, IIntervalScale, IOrdinalScale, IImageDisplay, IScales, IQuestionnaire |
 
 `*` Dummy implementation, no actual functionality provided.
 
-All devices required by a protocol is listed in the `<devices>` as nested elements. These elements assign an ID that is used to identify the device when they are mapped in the `<device-mapping>` element to the Instruments required by tests.
+All devices required by a protocol must be listed in the `<devices>` element. The devices listed in the `<devices>` elements is assigned an ID that is used to identify the device when they are mapped in the `<device-mapping>` element to the Instruments required by tests.
 
 The Experiment Definition File does not, however, specify the actual physical devices that are in your laboratory. The reason for this is that the same experiment may be performed at multiple sites, and consequently, the Experiment Definition File cannot know which devices are present. Instead, when an experiment is added to a test site, physical devices are assigned by LabBench Designer to the devices in the `<devices>` element.
 
 ### Device assignments
 
-The `<devices>` elements specify and configure the research devices that are used in the experiment, but it does not configure which devices are used in the tests in the protocol. Each test will require a set of Instruments to perform their experimental procedures. Below is an example of device assignments to instruments required by tests in a protocol:
+The `<devices>` elements specify and configure the research devices that are used in the experiment, but it does not assign these devices to the instruments that are required by the tests in the protocol. These assignment are done by the `<device-mapping>` element.
+
+ Below is an example of device assignments to instruments required by tests in a protocol:
 
 ```xml
 <device-mapping>
