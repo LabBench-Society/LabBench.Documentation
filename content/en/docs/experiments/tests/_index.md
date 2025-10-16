@@ -11,26 +11,17 @@ LabBench tests are the basic building blocks of a protocol, where each test impl
 {{% /pageinfo %}}
 
 
-Definition of tests consists of elements and attributes common to all tests regardless of their type and elements and attributes specific to the type of test being specified. 
-
-The attributes and elements common for all tests are shown in the code listing below:
+Definition of tests consists of elements and attributes common to all tests regardless of their type and elements and attributes specific to the type of test being specified. The attributes and elements common for all tests are shown in the code listing below:
 
 ```xml
-<test-type ID="[Identifier of the test]"
-           Name="[Human understandable name of the test]"
-           experimental-setup-id="[Experiment Setup Configuration Identifier]">
-    <test-events>
-        <!-- Contents omitted for brevity -->
-    </test-events>        
-    <properties>
-        <!-- Contents omitted for brevity -->
-    </properties>
-    <dependencies>
-        <!-- Contents omitted for brevity -->
-    </dependencies>
-    <condition>
-        <!-- Contents omitted for brevity -->
-    </condition>
+<test-type id="[Required: Identifier of the test]"
+           name="[Required: Human understandable name of the test]"
+           session="[Optional: ID of the session the test belongs to]"
+           experimental-setup-id="[Optional: Experiment Setup Configuration Identifier]">
+    <test-events> <!-- Contents omitted for brevity --> </test-events>        
+    <properties> <!-- Contents omitted for brevity --> </properties>
+    <dependencies> <!-- Contents omitted for brevity --> </dependencies>
+    <condition> <!-- Contents omitted for brevity --> </condition>
 
     <!-- Additional test-specific elements -->
 </test-type>
