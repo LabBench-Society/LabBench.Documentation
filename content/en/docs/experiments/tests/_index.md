@@ -27,6 +27,15 @@ Definition of tests consists of elements and attributes common to all tests rega
 </test-type>
 ```
 
+Tests have four common attributes:
+
+| Attribute               | Type   | Function                                                                                        |
+|-------------------------|--------|-------------------------------------------------------------------------------------------------|
+| `id`                    | string | This required attribute is identifier (ID) of the test in the protocol. This ID must be unique. |
+| `name`                  | string | This required attribute is the name of the test, which is the name that will be shown to the experimenter in the protocol window of the LabBench Runner program. |
+| `session`               | string | This optional attribute specifies which session the test belong to. If specified the test will only be shown in the protocol window if the active session is equeal to the session specified by this attribute. |
+| `experimental-setup-id` | string | This optional attribute which experimental setup device configuration that will be active while the test is running. |
+
 ## Dependencies
 
 The `<dependencies>` element is used to prevent tests from running if the test depends on results from tests that have not yet been completed. 
