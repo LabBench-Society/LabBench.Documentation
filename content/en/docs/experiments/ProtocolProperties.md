@@ -1,5 +1,5 @@
 ---
-title: Properties
-description: Instructions on how to install LabBench
+title: Protocol properties
+description: Control and configure the behavior of a protocol.
 weight: 16
 ---
