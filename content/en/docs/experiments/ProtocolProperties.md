@@ -17,7 +17,7 @@ Protocol properties is specified with the `<properties>` element in the `<protoc
    <rerun-policy message="[The message to be displayed to the operator]" 
                  require-reason="[true or false]"
                  force-warning="[true or false]" />
-   <incomplete-protocol-warning value="[true or false]"/>
+   <incomplete-protocol-warning value="[true or false]" />
 </properties>
 ```
 

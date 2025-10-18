@@ -127,7 +127,7 @@ params:
   prism_syntax_highlighting: false
 
   copyright:
-    authors: LabBench Authors | [CC BY NC ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) |
+    authors: Inventors' Way | [CC BY NC ND 4.0](https://creativecommons.org/licenses/by-nc-nd/4.0/) |
     from_year: 2025
 
   # User interface configuration
