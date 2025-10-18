@@ -1,6 +1,6 @@
 ---
 title: Psychophysics
-description: Information on how to write LabBench protocols.
+description: Test for determining thresholds and psychometric functions.
 weight: 20
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: Algometry
-description: Information on how to write LabBench protocols.
+description: Tests for performing pressure algometry.
 weight: 30
 ---
 

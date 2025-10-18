@@ -85,24 +85,21 @@ In their study, they wanted to use a LabBench CPAR+ device to apply a conditioni
 These attributes can contain either a single-line Python statement or reference a function in a Python script. Starting and stopping the pressure stimuli is too complicated to achieve in a single Python code line. Instead, a Python function was called to start and stop the stimulation. Using Python functions, and scripting in general, is first discussed in the section “Scripting”; however, for completeness, the code for these functions is provided in code listing below:
 
 ```python
-from Serilog import Log
-from LabBench.Interface.Instruments.Algometry import *
-
 def Condition(tc):
-    algometer = tc.Devices.Algometer
-    chan = algometer.Channels[0]
+    dev = tc.Instruments.Algometer
+    chan = dev.Channels[0]
 
     chan.SetStimulus(1, chan.CreateWaveform()
-                           .Step(0.70 * tc.SR.PTT, 9.9 * 60))
-    algometer.ConfigurePressureOutput(0, ChannelID.CH01)
-    algometer.StartStimulation(AlgometerStopCriterion.STOP_CRITERION_ON_BUTTON_PRESSED, True)
+                            .Step(0.70 * tc.SR.PTT, 9.9 * 60))
+    dev.ConfigurePressureOutput(0, dev.ChannelIDs.CH01)
+    dev.ConfigurePressureOutput(1, dev.ChannelIDs.NoChannel)
+    dev.StartStimulation(dev.StopCriterions.WhenButtonPressed, True)
 
-    Log.Information("Starting conditioning: {intensity}", 0.07 * tc.SR.PTT)
+    tc.Log.Information("Starting conditioning: {intensity}", 0.70 * tc.SR.PTT)
     return True
 
 def Stop(tc):
-    algometer = tc.Devices.Algometer
-    algometer.StopStimulation()
+    tc.Instruments.Algometer.StopStimulation()
     return True    
 ```
 
@@ -110,7 +107,11 @@ In the section “Scripting”, we will introduce in detail how Python is used f
 
 The example in the code listing above defines (“`def`”) two functions, `Condition(tc)` and `Stop(tc)`, that is intended to start and stop the pressure stimulus, respectively. What causes these functions to be called from the `<test-event>` is that, for example, the `start` attribute contains `func: Functions.Condition(tc)`. The `func:` statement is a keyword that tells LabBench that a Python function must be called, which in this case is the `Condition(tc)` function located in the `Functions` script.
 
-In this case, the test event is used to condition/modulate evoked potentials. However, as test events are common to all tests, this test event could be inserted into any other LabBench test. For example, if we wanted to see how the responses to the DASS scale are influenced by a simultaneous painful stimulus, it could be inserted into the `<questionnaire>` test. Furthermore, test events do not need to be used to apply a stimulus to a subject. If we need general code to run when a test starts, we can run it in the `start` test event. This could be used, for example, to initialize a random sequence of visual stimuli or similar, or if we want to add custom information to the log system, then that can also be accomplished with test events. 
+In this case, the test event is used to condition/modulate evoked potentials. However, as test events are common to all tests, this test event could be inserted into any other LabBench test. 
+
+For example, if we wanted to see how a simultaneous painful stimulus influences the responses to the DASS scale, it could be inserted into the `<questionnaire>` test. Furthermore, test events do not need to be used to apply a stimulus to a subject. If we need general code to run when a test starts, we can run it in the `start` test event. 
+
+The `start`test event could be used, for example, to initialize a random sequence of visual stimuli or similar, or if we want to add custom information to the log system, custom data to the data set, then that can also be accomplished with test events. 
 
 ## Properties
 

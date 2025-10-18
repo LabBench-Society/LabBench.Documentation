@@ -1,6 +1,6 @@
 ---
 title: General
-description: Information on how to write LabBench protocols.
+description: General purpose tests with functionality that extends across multiple application domains.
 weight: 10
 ---
 
