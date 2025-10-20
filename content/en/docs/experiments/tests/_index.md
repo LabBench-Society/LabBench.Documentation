@@ -128,7 +128,7 @@ The `<properties>` element is an optional element that can be used for modifying
     <annotations> <!-- Contents omitted for brevity --> </annotations>
 </properties>    
 ```
-### Selecting the next test in the protocol (`<next>`)
+### Selecting the next test in the protocol
 
 The `<next>` element is included to support the logical flow of the protocol when tests have been excluded. By default, when a test is completed, LabBench will select the next test in the protocol unless the `<next>` element is used for the completed test. 
 
@@ -136,7 +136,7 @@ If the `<next>` element is used, its `id` attribute must be the ID of the next t
 
 Consequently, if the results of, for example, a `<questionnaire>` test have caused a test to be excluded, then the `<next>` element can be used to select the correct next test in the protocol instead of the test that has been excluded.
 
-### Auto start (`<auto-start>`)
+### Auto start
 
 The `<auto-start>` property can be used to chain tests. LabBench will automatically select the test in the protocol when a test is completed. Setting the value attribute to `true` on the `<auto-start>` attribute will cause the test to start automatically when it is selected after the previous test has been completed. 
 
@@ -146,12 +146,20 @@ Combined with the `<next>` property, this can be used to create protocols that r
 
 The effect of the `<extended-data-collection>` property depends on the type of test. Certain tests support an extended collection of data that will be enabled if this property is true.
 
-### Instructions to the experienter 
+### Instructions to the experienter
 
-All tests support displaying information to the researcher when they are selected and not running. The `<instructions>` element is used to enable the showing of instructions to the researcher, which will be shown in the test window in LabBench Runner:
+All tests support displaying information to the researcher when they are selected and not running. 
+
+The `<instructions>` element is used to enable the showing of instructions to the researcher, which will be shown in the test window in LabBench Runner:
 
 ```xml
-<instructions />
+<instructions default="[Optional: default instructions]"
+              blocked="[Optional: instructions when the test is in the blocked state]"
+              ready="[Optional: instructions when the test is in the ready state]"
+              excluded="[Optional: instructions when the test is in the excluded state]"
+              completed="[Optional: instructions when the test is in the completed state]"
+              override-results="[Optional: true or false]"
+              start-instruction="[Optional: text for starting and restarting the test]" />
 ```
 
 
