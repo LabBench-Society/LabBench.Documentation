@@ -146,6 +146,8 @@ Combined with the `<next>` property, this can be used to create protocols that r
 
 The effect of the `<extended-data-collection>` property depends on the type of test. Certain tests support an extended collection of data that will be enabled if this property is true.
 
+### Time constraint
+
 ### Instructions to the experienter
 
 All tests support displaying information to the researcher when they are selected and not running. 
@@ -162,13 +164,11 @@ The `<instructions>` element is used to enable the showing of instructions to th
               start-instruction="[Optional: text for starting and restarting the test]" />
 ```
 
+The `<instructions>` element support showing different instructions depending on the test state, where each instruction is defined by an attribute named after the test state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return either an image or an RTF document.
 
+By default, selecting a completed test will display its results; however, this behaviour can be overridden by the `override-results` attribute to true, which will always display instructions when the test has been completed. The `start-instruction` property can be used to modify the instruction given to the researcher when a test is selected and can start. By default, LabBench will display “Test is ready to start” when a test can be started, but if the `start-instruction` attribute is used, then this can be used to display a custom message. As this attribute can be scripted, this message can also depend on previous results recorded in the protocol. 
 
-If used, the `default-instruction` attribute is mandatory and must provide the ID of the information file to display to the researcher. This instruction file is used if the test is blocked due to an unsatisfied dependency, has been excluded, or if the instructions attribute is not specified. If the `instruction` attribute is specified, then the information file specified by this attribute will be used when the test can run. The difference between the `default-instruction` and `instruction` attribute is that the latter can be scripted, while the former cannot. 
-
-In our protocol, we could use the `instruction` attribute to select different instructions to present to the experimenter depending on whether the subject is right or left-handed. The \verb|override-results| attribute controls whether the results of a test or its instructions will be shown when the test is completed. By default, selecting a completed test will display its results; however, this behaviour can be overridden by the \verb|override-results| attribute to true, which will always display instructions when the test has been completed. The \verb|start-instruction| property can be used to modify the instruction given to the researcher when a test is selected and can start. By default, LabBench will display “Test is ready to start” when a test can be started, but if the \verb|start-instruction| attribute is used, then this can be used to display a custom message. As this attribute can be scripted, this message can also depend on previous results recorded in the protocol. 
-
-### Instrucitions to the participants
+### Instructions to the participants
 
 
 ### Test annotations
