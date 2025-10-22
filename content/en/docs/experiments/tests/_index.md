@@ -18,11 +18,11 @@ Tests implements experimental procedures with code that can be configured throug
 |---------------|------------------------------------|---------------------------------------------------------------------------------------------------------|
 | [General](docs/experiments/tests/general/) | [Questionnaire](docs/experiments/tests/general/questionnaire/) | A questionnaire is a series of questions to collect information in a consistent and organized way.      |
 |               | [Sequential](docs/experiments/tests/general/sequential/) | Custom-defined experimental procedures implemented with a state machine and functionality in Python code. |
-|               | [Stimulation Sequence](docs/experiments/tests/general/stimulationsequence/) | |
-| [Psychophysics](docs/experiments/tests/psychophysics/) | [Cold Pressor](docs/experiments/tests/psychophysics/coldpressor/) | |
-|               | [Manual Threshold Estimation](docs/experiments/tests/psychophysics/manualthresholdestimation/) | |
-|               | [Response Recording](docs/experiments/tests/psychophysics/responserecording/) | |
-|               | [Stimulus Presentation](docs/experiments/tests/psychophysics/stimuluspresentation/) | |
+|               | [Stimulation Sequence](docs/experiments/tests/general/stimulationsequence/) | Sequences of stimuli where the stimuli and their pattern are known when the test is started. |
+| [Psychophysics](docs/experiments/tests/psychophysics/) | [Cold Pressor](docs/experiments/tests/psychophysics/coldpressor/) | The cold pressor test is an experimental procedure in which a participant immerses a hand or forearm in ice-cold water to induce controlled pain or stress, allowing researchers to measure physiological and behavioral responses. |
+|               | [Manual Threshold Estimation](docs/experiments/tests/psychophysics/manualthresholdestimation/) | Threshold estimation where LabBench cannot automatically deliver the stimuli. Instead, the experimenter is guided through an adaptive algorithm on which stimuli to present to the subject. |
+|               | [Response Recording](docs/experiments/tests/psychophysics/responserecording/) | Recording of psychophysical responses. The recording can be combined with sampling of biophysical signals, stimulus delivery, and marking of events. |
+|               | [Stimulus Presentation](docs/experiments/tests/psychophysics/stimuluspresentation/) | Manual presentation of stimuli that can be used to familiarize a subject with the stimuli and set initial stimulation intensities for subsequent tests. |
 |               | [Threshold Estimation](docs/experiments/tests/psychophysics/thresholdestimation/) | |
 | [Algometry](docs/experiments/tests/algometry/) | [Stimulus Response](docs/experiments/tests/algometry/stimulusresponse/) | |
 |               | [Temporal Summation](docs/experiments/tests/algometry/temporalsummation/) | |

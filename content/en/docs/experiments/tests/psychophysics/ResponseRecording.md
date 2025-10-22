@@ -1,6 +1,6 @@
 ---
 title: Response Recording
-description: Instructions on how to install LabBench
+description: Recording of psychophysical responses. The recording can be combined with sampling of biophysical signals, stimulus delivery, and marking of events.
 weight: 20
 ---
 
