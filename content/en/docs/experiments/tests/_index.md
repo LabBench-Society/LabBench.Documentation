@@ -10,6 +10,45 @@ LabBench tests are the basic building blocks of a protocol, where each test impl
 
 {{% /pageinfo %}}
 
+Tests implements experimental procedures with code that can be configured through the Experiment Definition File (`*.exox`) and extended with Python. 
+
+## Test types
+
+| Domain        | Test                               | Description |
+|---------------|------------------------------------|-------------|
+| General       | Questionnaire                      | |
+|               | Sequential                         | |
+|               | Stimulation Sequence               | |
+| Psychophysics | Cold Pressor                       | |
+|               | Manual Threshold Estimation        | |
+|               | Response Recording                 | |
+|               | Stimulus Presentation              | |
+|               | Threshold Estimation               | |
+| Algometry     | Stimulus Response                  | |
+|               | Temporal Summation                 | |
+|               | Arbitrary Temporal Summation       | |
+|               | Static Temporal Summation          | |
+|               | Conditioned Pain Modulation        | |
+|               | Stimulus Rating                    | |
+|               | Conditioned Pain Modulation Rating | |
+| Thermal       | Rated Stimulation                  | |
+|               | Threshold Estimation               | |
+|               | Plate Setup                        | |
+
+
+## Test states
+
+Tests can be in one of the following states:
+
+| Symbol                                 | State      | Definition | 
+|:--------------------------------------:|------------|------------|
+| ![](/images/experiments/unlocked.png)  | `ready`    | The test is ready to run and has not been completed yet. |
+| ![](/images/experiments/blocked.png)   | `blocked`  | The test depends on one or more tests that has not yet been completed. Dependencies to tests is declared in the `<dependencies>` element. |
+| ![](/images/experiments/excluded.png)  | `excluded` | The test defined a condition with the `<condition>` element that must be satisfied in order for the test to be included in the session. This condition is not satisfied, and consequently, the test has been excluded from the session. |
+| ![](/images/experiments/running.png)   | `running`  | The test is currently running, which means it is in the process of performing the experimental procedure that it describes. Only one test can be running at any time, and when it is running the protocol window is locked and the test cannot be deselected in LabBench Runner. |
+| ![](/images/experiments/completed.png) | `completed`| The test has been completed, and the collected data has been automatically saved to the subject's data set. In the `completed` state, the test can be rerun, causing it to reenter the running state and record new data. If it completes, this new data will replace the currently recorded data for the test. |
+
+## Test definition
 
 Definition of tests consists of elements and attributes common to all tests regardless of their type and elements and attributes specific to the type of test being specified. The attributes and elements common for all tests are shown in the code listing below:
 
@@ -36,15 +75,15 @@ Tests have four common attributes:
 | `session`               | string | This optional attribute specifies which session the test belong to. If specified the test will only be shown in the protocol window if the active session is equeal to the session specified by this attribute. |
 | `experimental-setup-id` | string | This optional attribute sets which experimental setup device configuration that will be active while the test is running. |
 
-## Dependencies
+### Dependencies
 
 The `<dependencies>` element is used to prevent tests from running if the test depends on results from tests that have not yet been completed. 
 
-## Exclusions
+### Exclusions
 
 The second common element is the `<condition>` element. This element place a condition on the inclusion of a test experimental sessions, and thus makes it possible to excludes tests from a protocol if they cannot be performed. 
 
-## Test events
+### Test events
 
 The `<test-events>` element is used to specify Python scripts that are executed when tests are selected, started, completed, or aborted. This can be used to extend tests with functionality outside the scope of what the test was originally designed for. To illustrate their use, an example where the base functionality of a `<stimulation-sequence>` test is extended with test events is provided in the code listing below:
 
@@ -113,7 +152,7 @@ For example, if we wanted to see how a simultaneous painful stimulus influences 
 
 The `start`test event could be used, for example, to initialize a random sequence of visual stimuli or similar, or if we want to add custom information to the log system, custom data to the data set, then that can also be accomplished with test events. 
 
-## Properties
+### Properties
 
 The `<properties>` element is an optional element that can be used for modifying the execution of tests. The code listing below provides an overview of all possible test properties and their attributes:
 
@@ -128,7 +167,7 @@ The `<properties>` element is an optional element that can be used for modifying
     <annotations> <!-- Contents omitted for brevity --> </annotations>
 </properties>    
 ```
-### Selecting the next test in the protocol
+#### Selecting the next test in the protocol
 
 The `<next>` element is included to support the logical flow of the protocol when tests have been excluded. By default, when a test is completed, LabBench will select the next test in the protocol unless the `<next>` element is used for the completed test. 
 
@@ -136,19 +175,19 @@ If the `<next>` element is used, its `id` attribute must be the ID of the next t
 
 Consequently, if the results of, for example, a `<questionnaire>` test have caused a test to be excluded, then the `<next>` element can be used to select the correct next test in the protocol instead of the test that has been excluded.
 
-### Auto start
+#### Auto start
 
 The `<auto-start>` property can be used to chain tests. LabBench will automatically select the test in the protocol when a test is completed. Setting the value attribute to `true` on the `<auto-start>` attribute will cause the test to start automatically when it is selected after the previous test has been completed. 
 
 Combined with the `<next>` property, this can be used to create protocols that run automatically from their beginning to their end.
 
-### Extended data collection
+#### Extended data collection
 
 The effect of the `<extended-data-collection>` property depends on the type of test. Certain tests support an extended collection of data that will be enabled if this property is true.
 
-### Time constraint
+#### Time constraint
 
-### Instructions to the experienter
+#### Instructions to the experienter
 
 All tests support displaying information to the researcher when they are selected and not running. 
 
@@ -168,10 +207,10 @@ The `<instructions>` element support showing different instructions depending on
 
 By default, selecting a completed test will display its results; however, this behaviour can be overridden by the `override-results` attribute to true, which will always display instructions when the test has been completed. The `start-instruction` property can be used to modify the instruction given to the researcher when a test is selected and can start. By default, LabBench will display “Test is ready to start” when a test can be started, but if the `start-instruction` attribute is used, then this can be used to display a custom message. As this attribute can be scripted, this message can also depend on previous results recorded in the protocol. 
 
-### Instructions to the participants
+#### Instructions to the participants
 
 
-### Test annotations
+#### Test annotations
 
 The \verb|<annotation>| property does not influence how a test is executed. Instead, it can add information to the test that will be exported with the results. This can be used, for example, if a strength-duration curve is determined to specify the duration of the stimuli used in the test. Adding numbers, Boolean values, text strings, and a list of numbers as annotations to a test is possible. Listing~\ref{lst:annotations} provides an example of all possible test annotations.
 
