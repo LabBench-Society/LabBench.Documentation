@@ -14,26 +14,26 @@ Tests implements experimental procedures with code that can be configured throug
 
 ## Test types
 
-| Domain        | Test                               | Description |
-|---------------|------------------------------------|-------------|
-| General       | Questionnaire                      | |
-|               | Sequential                         | |
-|               | Stimulation Sequence               | |
-| Psychophysics | Cold Pressor                       | |
-|               | Manual Threshold Estimation        | |
-|               | Response Recording                 | |
-|               | Stimulus Presentation              | |
-|               | Threshold Estimation               | |
-| Algometry     | Stimulus Response                  | |
-|               | Temporal Summation                 | |
-|               | Arbitrary Temporal Summation       | |
-|               | Static Temporal Summation          | |
-|               | Conditioned Pain Modulation        | |
-|               | Stimulus Rating                    | |
-|               | Conditioned Pain Modulation Rating | |
-| Thermal       | Rated Stimulation                  | |
-|               | Threshold Estimation               | |
-|               | Plate Setup                        | |
+| Domain        | Test                               | Description                                                                                             |
+|---------------|------------------------------------|---------------------------------------------------------------------------------------------------------|
+| [General](docs/experiments/tests/general/) | [Questionnaire](docs/experiments/tests/general/questionnaire/) | A questionnaire is a series of questions to collect information in a consistent and organized way.      |
+|               | [Sequential](docs/experiments/tests/general/sequential/) | Custom-defined experimental procedures implemented with a state machine and functionality in Python code. |
+|               | [Stimulation Sequence](docs/experiments/tests/general/stimulationsequence/) | |
+| [Psychophysics](docs/experiments/tests/psychophysics/) | [Cold Pressor](docs/experiments/tests/psychophysics/coldpressor/) | |
+|               | [Manual Threshold Estimation](docs/experiments/tests/psychophysics/manualthresholdestimation/) | |
+|               | [Response Recording](docs/experiments/tests/psychophysics/responserecording/) | |
+|               | [Stimulus Presentation](docs/experiments/tests/psychophysics/stimuluspresentation/) | |
+|               | [Threshold Estimation](docs/experiments/tests/psychophysics/thresholdestimation/) | |
+| [Algometry](docs/experiments/tests/algometry/) | [Stimulus Response](docs/experiments/tests/algometry/stimulusresponse/) | |
+|               | [Temporal Summation](docs/experiments/tests/algometry/temporalsummation/) | |
+|               | [Arbitrary Temporal Summation](docs/experiments/tests/algometry/arbitrarytemporalsummation/) | |
+|               | [Static Temporal Summation](docs/experiments/tests/algometry/statictemporalsummation/) | |
+|               | [Conditioned Pain Modulation](docs/experiments/tests/algometry/conditionedpainmodulation/) | |
+|               | [Stimulus Rating](docs/experiments/tests/algometry/stimulusrating/) | |
+|               | [Conditioned Pain Modulation Rating](docs/experiments/tests/algometry/conditionedpainmodulationrating/) | |
+| [Thermal](docs/experiments/tests/thermal/) | [Rated Stimulation](docs/experiments/tests/thermal/ratedstimulation/) | |
+|               | [Threshold Estimation](docs/experiments/tests/thermal/thresholdestimation/) | |
+|               | [Plate Setup](docs/experiments/tests/thermal/platesetup/) | |
 
 
 ## Test states
