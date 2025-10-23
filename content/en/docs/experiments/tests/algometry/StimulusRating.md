@@ -1,7 +1,7 @@
 ---
 title: Stimulus Rating
 description: Instructions on how to install LabBench
-weight: 20
+weight: 6
 ---
 
 {{% pageinfo %}}
