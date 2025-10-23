@@ -125,20 +125,21 @@ These attributes can contain either a single-line Python statement or reference 
 
 ```python
 def Condition(tc):
-    dev = tc.Instruments.Algometer
+    dev = tc.Instruments.PressureAlgometer
     chan = dev.Channels[0]
+    pressure = 0.70 * tc.SR.PTT
 
     chan.SetStimulus(1, chan.CreateWaveform()
-                            .Step(0.70 * tc.SR.PTT, 9.9 * 60))
+                            .Step(pressure, 9.9 * 60))
     dev.ConfigurePressureOutput(0, dev.ChannelIDs.CH01)
     dev.ConfigurePressureOutput(1, dev.ChannelIDs.NoChannel)
     dev.StartStimulation(dev.StopCriterions.WhenButtonPressed, True)
 
-    tc.Log.Information("Starting conditioning: {intensity}", 0.70 * tc.SR.PTT)
+    tc.Log.Information("Starting conditioning: {intensity}", pressure)
     return True
 
 def Stop(tc):
-    tc.Instruments.Algometer.StopStimulation()
+    tc.Instruments.PressureAlgometer.StopStimulation()
     return True    
 ```
 
