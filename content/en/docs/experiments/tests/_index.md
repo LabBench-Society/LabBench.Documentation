@@ -29,8 +29,8 @@ Tests implements experimental procedures with code that can be configured throug
 |               | [Arbitrary Temporal Summation](docs/experiments/tests/algometry/arbitrarytemporalsummation/) | Psychophysical rating of pressure stimuli that evoke temporal summation. These stimuli are given in quick succession, where the timing and intensity of each stimulus can be specified. |
 |               | [Static Temporal Summation](docs/experiments/tests/algometry/statictemporalsummation/) | Psychophysical rating of a rectangular static pressure stimulus. |
 |               | [Conditioned Pain Modulation](docs/experiments/tests/algometry/conditionedpainmodulation/) | Psychophysical rating of linearly increasing pressure that is being conditioned by a second continuous pressure stimulus until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
-|               | [Stimulus Rating](docs/experiments/tests/algometry/stimulusrating/) | |
-|               | [Conditioned Pain Modulation Rating](docs/experiments/tests/algometry/conditionedpainmodulationrating/) | |
+|               | [Stimulus Rating](docs/experiments/tests/algometry/stimulusrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure. Participants indicate the thresholds through button presses. |
+|               | [Conditioned Pain Modulation Rating](docs/experiments/tests/algometry/conditionedpainmodulationrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure conditioned by a second static pressure. Participants indicate the thresholds through button presses. |
 | [Thermal](docs/experiments/tests/thermal/) | [Rated Stimulation](docs/experiments/tests/thermal/ratedstimulation/) | |
 |               | [Threshold Estimation](docs/experiments/tests/thermal/thresholdestimation/) | |
 |               | [Plate Setup](docs/experiments/tests/thermal/platesetup/) | |
