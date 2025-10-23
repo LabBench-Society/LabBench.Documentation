@@ -235,9 +235,9 @@ The `<annotation>` property does not influence how a test is executed. Instead, 
     </bools>
     <integer name="NumberOfTrials" value="10">
     <integers name="StimuliInTrials">
-        <integer value="5" />
-        <integer value="6" />
-        <integer value="3" />
+        <number value="5" />
+        <number value="6" />
+        <number value="3" />
     </integers>
     <number name="ChargeBalRatio" value="4.0"/>
     <numbers name="Ts">
@@ -248,14 +248,32 @@ The `<annotation>` property does not influence how a test is executed. Instead, 
     </numbers>
     <string name="string" value="This is the value of the text string"/>
     <strings name="Labels">
-        <string value="A" />
-        <string value="B" />
-        <string value="C" />
+        <text value="A" />
+        <text value="B" />
+        <text value="C" />
     </strings>
 </annotations>    
 ```
 
-Annotations can also be added programmatically to test results from a function defined in a Python script. This can be used to add data from, for example, the start test event.
+However, while annotations can be specified in the Experiment Definition File in the format of the code listing above, the most common use of annotations is to add annotations programmatically to test results from a function defined in a Python script. Adding annotations programmatically can be used to add data from, for example, the completed test event.
+
+When tests are extended with Python code this often results in custom data that is not saved automatically, but instead must be added to the test annotations. Below is an example of how data from a Stop Signal Task to the result of a Stimulation Sequence test:
+
+```python
+class StopSignalTask:
+    def __init__(self, tc, algorithm, feedback, triggers):      
+        self.result = tc.Current
+
+        # Task setup omitted for brevity ...
+
+        self.Log.Information("Stop Signal Task [ CREATED ]")
+    
+    def Complete(self):
+        self.result.Annotations.SetIntegers("sstGoSignals", self.goSignals)
+        self.result.Annotations.SetBools("sstAnswer", self.answer)
+        self.result.Annotations.SetIntegers("sstTime", self.time)
+        self.Log.Information("Stop Signal Task [ SAVED ]")```
+```
 
 ## Test components
 
