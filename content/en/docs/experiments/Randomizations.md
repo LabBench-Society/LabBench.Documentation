@@ -14,10 +14,14 @@ Randomization variables are specified in the `<randomizations>` element:
 
 ```xml
 <randomizations>
-   <integer value="[Calculated attribute that must return an integer]" />
-   <integers value="[Calculated attribute that must return an array of integers]" />
-   <string value="[Calculated attribute that must return a string]" />
-   <strings value="[Calculated attribute that must return an array of strings]" />
+   <integer name="[Required: name of the variable]" 
+            value="[Required: Calculated attribute that must return an integer]" />
+   <integers name="[Required: name of the variable]" 
+             value="[Required: Calculated attribute that must return an array of integers]" />
+   <string name="[Required: name of the variable]" 
+           value="[Required: Calculated attribute that must return a string]" />
+   <strings name="[Required: name of the variable]" 
+            value="[Required: Calculated attribute that must return an array of strings]" />
 </randomizations>
 ```
 

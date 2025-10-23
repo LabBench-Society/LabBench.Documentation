@@ -10,7 +10,7 @@ LabBench tests are the basic building blocks of a protocol, where each test impl
 
 {{% /pageinfo %}}
 
-Tests implements experimental procedures with code that can be configured through the Experiment Definition File (`*.exox`) and extended with Python. 
+Tests implements experimental procedures with code that can be configured through the Experiment Definition File (`*.expx`) and extended with Python. 
 
 ## Test types
 
