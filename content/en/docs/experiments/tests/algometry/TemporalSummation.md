@@ -1,7 +1,7 @@
 ---
 title: Temporal Summation
-description: Instructions on how to install LabBench
-weight: 20
+description: Psychophysical rating of pressure stimuli given in quick succession that evokes temporal summation.
+weight: 2
 ---
 
 {{% pageinfo %}}

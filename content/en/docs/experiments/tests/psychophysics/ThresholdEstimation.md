@@ -1,6 +1,6 @@
 ---
 title: Threshold Estimation
-description: Instructions on how to install LabBench
+description: Estimation of thresholds and psychometric functions with adaptive algorithms where the stimuli can be automatically delivered to the subject.
 weight: 20
 ---
 

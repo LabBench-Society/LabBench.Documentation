@@ -23,10 +23,10 @@ Tests implements experimental procedures with code that can be configured throug
 |               | [Manual Threshold Estimation](docs/experiments/tests/psychophysics/manualthresholdestimation/) | Threshold estimation where LabBench cannot automatically deliver the stimuli. Instead, the experimenter is guided through an adaptive algorithm on which stimuli to present to the subject. |
 |               | [Response Recording](docs/experiments/tests/psychophysics/responserecording/) | Recording of psychophysical responses. The recording can be combined with sampling of biophysical signals, stimulus delivery, and marking of events. |
 |               | [Stimulus Presentation](docs/experiments/tests/psychophysics/stimuluspresentation/) | Manual presentation of stimuli that can be used to familiarize a subject with the stimuli and set initial stimulation intensities for subsequent tests. |
-|               | [Threshold Estimation](docs/experiments/tests/psychophysics/thresholdestimation/) | |
-| [Algometry](docs/experiments/tests/algometry/) | [Stimulus Response](docs/experiments/tests/algometry/stimulusresponse/) | |
-|               | [Temporal Summation](docs/experiments/tests/algometry/temporalsummation/) | |
-|               | [Arbitrary Temporal Summation](docs/experiments/tests/algometry/arbitrarytemporalsummation/) | |
+|               | [Threshold Estimation](docs/experiments/tests/psychophysics/thresholdestimation/) | Estimation of thresholds and psychometric functions with adaptive algorithms where the stimuli can be automatically delivered to the subject. |
+| [Algometry](docs/experiments/tests/algometry/) | [Stimulus Response](docs/experiments/tests/algometry/stimulusresponse/) | Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
+|               | [Temporal Summation](docs/experiments/tests/algometry/temporalsummation/) | Psychophysical rating of pressure stimuli given in quick succession that evokes temporal summation. |
+|               | [Arbitrary Temporal Summation](docs/experiments/tests/algometry/arbitrarytemporalsummation/) | Psychophysical rating of pressure stimuli that evoke temporal summation. These stimuli are given in quick succession, where the timing and intensity of each stimulus can be specified. |
 |               | [Static Temporal Summation](docs/experiments/tests/algometry/statictemporalsummation/) | |
 |               | [Conditioned Pain Modulation](docs/experiments/tests/algometry/conditionedpainmodulation/) | |
 |               | [Stimulus Rating](docs/experiments/tests/algometry/stimulusrating/) | |
