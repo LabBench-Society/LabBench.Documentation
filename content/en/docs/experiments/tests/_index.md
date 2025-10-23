@@ -209,6 +209,18 @@ By default, selecting a completed test will display its results; however, this b
 
 #### Instructions to the participants
 
+All tests support displaying instructions to participants on a secondary monitor (ImageDisplay) when the test is not in the `running` state. The `<subject-instructions>` element is used to enable the showing of instructions to the participant:
+
+
+```xml
+<subject-instructions default="[Optional: default instructions]"
+                      blocked="[Optional: instructions when the test is in the blocked state]"
+                      ready="[Optional: instructions when the test is in the ready state]"
+                      excluded="[Optional: instructions when the test is in the excluded state]"
+                      completed="[Optional: instructions when the test is in the completed state]" />
+```
+
+The `<subject-instructions>` element support showing different instructions depending on the test state, where each instruction is defined by an attribute named after the test state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return an image.
 
 #### Test annotations
 
