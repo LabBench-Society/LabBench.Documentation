@@ -152,7 +152,7 @@ For example, if we wanted to see how a simultaneous painful stimulus influences 
 
 The `start`test event could be used, for example, to initialize a random sequence of visual stimuli or similar, or if we want to add custom information to the log system, custom data to the data set, then that can also be accomplished with test events. 
 
-### Properties
+## Test Properties
 
 The `<properties>` element is an optional element that can be used for modifying the execution of tests. The code listing below provides an overview of all possible test properties and their attributes:
 
@@ -167,7 +167,7 @@ The `<properties>` element is an optional element that can be used for modifying
     <annotations> <!-- Contents omitted for brevity --> </annotations>
 </properties>    
 ```
-#### Selecting the next test in the protocol
+### Selecting the next test in the protocol
 
 The `<next>` element is included to support the logical flow of the protocol when tests have been excluded. By default, when a test is completed, LabBench will select the next test in the protocol unless the `<next>` element is used for the completed test. 
 
@@ -175,19 +175,42 @@ If the `<next>` element is used, its `id` attribute must be the ID of the next t
 
 Consequently, if the results of, for example, a `<questionnaire>` test have caused a test to be excluded, then the `<next>` element can be used to select the correct next test in the protocol instead of the test that has been excluded.
 
-#### Auto start
+### Auto start
 
 The `<auto-start>` property can be used to chain tests. LabBench will automatically select the test in the protocol when a test is completed. Setting the value attribute to `true` on the `<auto-start>` attribute will cause the test to start automatically when it is selected after the previous test has been completed. 
 
 Combined with the `<next>` property, this can be used to create protocols that run automatically from their beginning to their end.
 
-#### Extended data collection
+### Extended data collection
 
 The effect of the `<extended-data-collection>` property depends on the type of test. Certain tests support an extended collection of data that will be enabled if this property is true.
 
-#### Time constraint
+### Time constraint
 
-#### Instructions to the experienter
+Time constraints can be placed on the execution of tests with the use of the `<time-constraint>´ element:
+
+```xml
+<time-constraint test-id="[Required: ID of the test on which the constraint is relative to]" 
+                  min="[Optional: minimal time that must pass before the test can be started]"
+                  max="[Optional: maximal time that can pass whithin which the test can still be started]" 
+                  notification="[Optional: true or false]"
+                  time-reference="[Optional: is the time-constraint relative to a tests start or completion]" />
+```
+
+Time constraints limit when a test can be started based on the time elapsed since either the start or completion of another test in the protocol. The test that this limit is relative to is specified by the test-id attribute. 
+
+The min and max attributes specify the time limit for the start of the test:
+
+| Min | Max | Time limit |
+|-----|-----|------------|
+| Yes | Yes | The test can first be started when `min` time has elapsed, and must be started before `max` time has elapsed. |
+| Yes | No  | The test can first be started when `min` time has elapsed. |
+| No  | Yes | The test must be started before `max` time has elapsed. |
+| No  | No  | Invalid: a `<time-constraint>` element must specify either a min or a max time, or both. |
+
+The `notification` attribute controls whether a notification is provided (a beep) when the test changes state from being prevented from being started to being able to be started. The `time-reference` attribute controls whether the time constraint is relative to the start (`start`) or completion (`end`) of the test specified with the `test-id` attribute.
+
+### Instructions to the experienter
 
 All tests support displaying information to the researcher when they are selected and not running. 
 
@@ -207,7 +230,7 @@ The `<instructions>` element support showing different instructions depending on
 
 By default, selecting a completed test will display its results; however, this behaviour can be overridden by the `override-results` attribute to true, which will always display instructions when the test has been completed. The `start-instruction` property can be used to modify the instruction given to the researcher when a test is selected and can start. By default, LabBench will display “Test is ready to start” when a test can be started, but if the `start-instruction` attribute is used, then this can be used to display a custom message. As this attribute can be scripted, this message can also depend on previous results recorded in the protocol. 
 
-#### Instructions to the participants
+### Instructions to the participants
 
 All tests support displaying instructions to participants on a secondary monitor (ImageDisplay) when the test is not in the `running` state. The `<subject-instructions>` element is used to enable the showing of instructions to the participant:
 
@@ -222,7 +245,7 @@ All tests support displaying instructions to participants on a secondary monitor
 
 The `<subject-instructions>` element support showing different instructions depending on the test state, where each instruction is defined by an attribute named after the test state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return an image.
 
-#### Test annotations
+### Test annotations
 
 The `<annotation>` property does not influence how a test is executed. Instead, it can add information to the test that will be exported with the results. This can be used, for example, if a strength-duration curve is determined to specify the duration of the stimuli used in the test. Adding numbers, Boolean values, text strings, and a list of numbers as annotations to a test is possible. The listing below provides an example of all possible test annotations:
 
