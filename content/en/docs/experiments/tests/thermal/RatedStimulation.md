@@ -1,7 +1,7 @@
 ---
 title: Rated Stimulation
-description: Instructions on how to install LabBench
-weight: 20
+description: Psychophysical rating of cutaneous thermal stimuli.
+weight: 1
 ---
 
 {{% pageinfo %}}

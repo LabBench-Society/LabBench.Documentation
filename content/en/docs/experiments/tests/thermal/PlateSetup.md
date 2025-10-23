@@ -1,7 +1,7 @@
 ---
 title: Plate Setup
-description: Instructions on how to install LabBench
-weight: 20
+description: Control of hot/cold pressor plates.
+weight: 3
 ---
 
 {{% pageinfo %}}

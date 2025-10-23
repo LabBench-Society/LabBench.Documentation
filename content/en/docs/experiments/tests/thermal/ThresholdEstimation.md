@@ -1,7 +1,7 @@
 ---
 title: Threshold Estimation
-description: Instructions on how to install LabBench
-weight: 20
+description: Determination of hot/cold pain detection and tolerance thresholds.
+weight: 2
 ---
 
 {{% pageinfo %}}
