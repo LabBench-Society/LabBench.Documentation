@@ -224,21 +224,34 @@ The `<subject-instructions>` element support showing different instructions depe
 
 #### Test annotations
 
-The \verb|<annotation>| property does not influence how a test is executed. Instead, it can add information to the test that will be exported with the results. This can be used, for example, if a strength-duration curve is determined to specify the duration of the stimuli used in the test. Adding numbers, Boolean values, text strings, and a list of numbers as annotations to a test is possible. Listing~\ref{lst:annotations} provides an example of all possible test annotations.
+The `<annotation>` property does not influence how a test is executed. Instead, it can add information to the test that will be exported with the results. This can be used, for example, if a strength-duration curve is determined to specify the duration of the stimuli used in the test. Adding numbers, Boolean values, text strings, and a list of numbers as annotations to a test is possible. The listing below provides an example of all possible test annotations:
 
 ```xml
 <annotations>
-    <number name="ChargeBalRatio"
-            value="4"/>
-    <bool name="ChargeBalanced"
-          value="true"/>
-    <string name="string" value="This is the value of the text string"/>
+    <bool name="ChargeBalanced" value="true"/>
+    <bools name="IncludedInTest">
+        <bool value="true" />
+        <bool value="false" />
+    </bools>
+    <integer name="NumberOfTrials" value="10">
+    <integers name="StimuliInTrials">
+        <integer value="5" />
+        <integer value="6" />
+        <integer value="3" />
+    </integers>
+    <number name="ChargeBalRatio" value="4.0"/>
     <numbers name="Ts">
         <number value="0.1"/>
         <number value="0.2"/>
         <number value="0.5"/>
         <number value="1.0"/>
     </numbers>
+    <string name="string" value="This is the value of the text string"/>
+    <strings name="Labels">
+        <string value="A" />
+        <string value="B" />
+        <string value="C" />
+    </strings>
 </annotations>    
 ```
 
