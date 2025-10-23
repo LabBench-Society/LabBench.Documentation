@@ -277,9 +277,15 @@ class StopSignalTask:
 
 ## Test components
 
+Functionality for the generation of stimuli (`Stimulator` instrument), triggers (`TriggerGenerator` instrument), and sampling of psychophysical responses (`RatioScale`, `IntervalScale`, `OrdinalScale`, `Button` instruments) is implemented not by the individual tests but by test components that are called from the tests.
+
+The use of test components ensures that stimuli, triggers, and the sampling of psychophysical constants are specified in the same format across all tests in the LabBench Language.
+
 ### Stimulation
 
 ### Trigger generation
 
 ### Psychophysical responses
+
+## Test results
 
