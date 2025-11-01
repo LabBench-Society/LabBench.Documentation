@@ -311,5 +311,11 @@ The use of test components ensures that stimuli, triggers, and the sampling of p
 
 ### Psychophysical responses
 
+## Scripting
+
+### Properties
+
+### Functions
+
 ## Test results
 
