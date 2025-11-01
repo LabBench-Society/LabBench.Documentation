@@ -6,9 +6,15 @@ weight: 20
 
 {{% pageinfo %}}
 
-
+The response recording test implements computerized psychophysical ratings that allow a subject to rate a sensation sampled continuously for either a fixed time or a time determined by events during the test. Computerized psychophysical ratings allow time-dependent quantification of psychophysiological responses, such as the area under the curve, the maximal rating, or the time of maximal rating. Optionally, the test can be amended to include simultaneous recording of signals, either stimuli (e.g., stimulation pressure) or biophysical signals (e.g., heart rate or galvanic skin response). It is also possible to define events that can occur during the test; this will allow the experimenter to mark the times these events occur in the test's recorded data.
 
 {{% /pageinfo %}}
+
+The test window for the `<psychophysics-response-recording>` test is shown in Figure 1. The test window consists of three areas for; the recorded responses, the recorded signals, and events that can be marked by the operator. Please note that the recorded signals and events are only shown if there are signals or events defined for the test, respectively.
+
+![](/images/experiments/tests/response-recording/ResponseRecordingUI.png)
+*Figure 1: Test window of the response recording test*
+
 
 
 ## Test definition
@@ -25,6 +31,9 @@ A Response Recording test can be defined with the `<psychophysics-response-recor
       experimental-setup-id="vas" />
 ```
 
+
+
+
 ## Examples of experimental setups
 
 ### LabBench I/O
@@ -37,6 +46,11 @@ A Response Recording test can be defined with the `<psychophysics-response-recor
 ## Psychophysical Rating Scales
 
 ### Ratio Rating Scales
+
+![](/images/experiments/tests/response-recording/VASRecording.png)
+*Figure 2: Computerized recording of visual analog ratings.*
+
+
 
 ```xml
 <composite-scale id="vas"
@@ -58,6 +72,10 @@ A Response Recording test can be defined with the `<psychophysics-response-recor
 
 ### Interval Rating Scales
 
+![](/images/experiments/tests/response-recording/NRSRecording.png)
+*Figure 2: Computerized recording of numerical ratings.*
+
+
 ```xml
 <composite-scale id="nrs"
       experimental-setup-id="nrs"
@@ -78,6 +96,10 @@ A Response Recording test can be defined with the `<psychophysics-response-recor
 
 
 ### Categorical Rating Scales
+
+![](/images/experiments/tests/response-recording/CRSRecording.png)
+*Figure 2: Computerized recording of categorical ratings.*
+
 
 ```xml
 <composite-scale id="crs"
@@ -203,3 +225,6 @@ def CreateRandomWalk(tc):
 ### Functions
 
 ## Test results
+
+
+## Example protocols
