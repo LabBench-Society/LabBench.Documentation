@@ -17,6 +17,7 @@ The test window for the `<psychophysics-response-recording>` test is shown in Fi
 
 
 
+
 ## Test definition
 
 A Response Recording test can be defined with the `<psychophysics-response-recording>` element within the <test> element in the Experiment Definition File (`*.expx`):
