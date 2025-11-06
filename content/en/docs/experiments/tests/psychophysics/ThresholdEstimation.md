@@ -6,5 +6,26 @@ weight: 20
 
 {{% pageinfo %}}
 
+The threshold estimation test uses adaptive methods to efficiently estimate a participant’s perceptual threshold or full psychometric function. Instead of presenting a fixed set of stimulus intensities, adaptive methods adjust stimulus levels in real time based on the participant’s responses. Adaptive methods allow the experimenter to concentrate trials around the most informative stimulus range—typically near the participant’s threshold—thereby reducing the total number of trials needed compared to non-adaptive (e.g., method of constant stimuli) approaches.
 
 {{% /pageinfo %}}
+
+
+
+## Test definition
+
+
+
+## Adaptive methods
+
+### Up/Down 
+
+### Psi-Method
+
+
+## Response tasks
+
+
+
+## Stimulation
+
