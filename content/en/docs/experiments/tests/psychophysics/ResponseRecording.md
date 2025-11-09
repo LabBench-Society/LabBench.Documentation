@@ -51,10 +51,49 @@ To use the Psychophysical Rating test, the experimental setup must contain devic
 
 ### LabBench I/O and LabBench DISPLAY
 
+This experimental setup is illustrated in Figure 2. It consists of: a) a LabBench I/O to which a LabBench SCALE is attached to response port 1, b) a secondary monitor that is used to display the psychophysical rating scale to the subject, and c) a laboratory computer that runs LabBench.
+
 ![](/images/experiments/tests/response-recording/SetupLIO.png)
 
 *Figure 2: Computerized recording of visual analog ratings.*
 
+The subject uses the LabBench scale to control the rating scale displayed on the monitor. However, it is not used as a rating scale by itself, only to control rating scales that are defined for the secondary monitor (LabBench Display):
+
+```xml
+<display id="display" 
+   position="fullscreen" 
+   screen="secondary" 
+   fiducial-position="upper-right" 
+   normative-distance="40">
+
+   <monitor diagonal-size="35.5" distance="40" />
+   <fiducial x="17" y="17" size="10"/>                    
+
+   <configurations>
+      <composite-scale id="vas"
+            experimental-setup-id="vas"
+            controller-device="lio.scale">
+            <visual-analog-scale id="pain" length="10">
+               <anchors>
+                  <modality text="Pain" />
+                  <top-anchor text="10/Worst possible pain" />
+                  <bottom-anchor text="0/No pain" />
+               </anchors>
+            </visual-analog-scale>
+      </composite-scale>
+   </configurations>
+</display>
+```
+
+Assigning the device to the Scales instrument name will make Psychophysical Rating tests use this VAS scale for recording the psychophysical ratings. This is accomplies with the following `<device-assigmment>` in the `<device-mapping>` element in the experimental setup:
+
+```xml
+<device-mapping>
+      <device-assignment device-id="display.vas" instrument-name="Scales"  />
+</device-mapping>
+```
+
+Using a LabBench SCALE as the controlling device provides a better haptic feedback and more intuitive control of the ratings than with a USB Joystick based setup.
 
 ### USB Joystick
 
