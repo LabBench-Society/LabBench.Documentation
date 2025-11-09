@@ -15,25 +15,35 @@ The test window for the `<psychophysics-response-recording>` test is shown in Fi
 ![](/images/experiments/tests/response-recording/ResponseRecordingUI.png)
 *Figure 1: Test window of the response recording test*
 
-The recorded signals section of the test UI is displayed only if signals are defined and the `signal-weight` attribute is set to a non-zero value. The test allows simultaneous sampling at the same sample rate as for the psychophysical ratings. Consequently, these sampled signals are intended for low-frequency time series signals, such as heart rate, stimulus intensity, etc.
+The recorded signals section of the test UI is displayed if signals are defined and the `signal-weight` attribute is set to a non-zero value. The test allows simultaneous sampling at the same sample rate as for the psychophysical ratings. Consequently, these sampled signals are intended for low-frequency time series signals, such as heart rate, stimulus intensity, etc.
 
+The third section of the test UI is displayed if events are defined. Events are events that can be marked in the recording by the operator while the test is running. Events can be used to implement experimental procedures, such as a cold pressor test, where an event could mark when the hand is submerged in water, and a second event could mark when the hand is withdrawn from the water due to reaching the participant's pain tolerance.
 
 ## Test definition
 
-A Response Recording test can be defined with the `<psychophysics-response-recording>` element within the <test> element in the Experiment Definition File (`*.expx`):
+A Response Recording test can be defined with the `<psychophysics-response-recording>` element within the `<test>` element in the Experiment Definition File (`*.expx`):
 
 ```xml
 <psychophysics-response-recording id="vasRecording" 
       name="Recording (Visual Analog Scale)"
       duration="60" 
       sample-rate="4"
-      response-weight="1"
-      signal-weight="0"
       experimental-setup-id="vas" />
 ```
+*Listing 1: Definition of a psychophysical recording test*
 
+The test definition in Listing 1 is the simplest test definition possible. We will later show how this test definition can be extended with signals and events.
 
+Listing 1 has two  test specific attributes:
 
+| Attribute   | Type                    | Specification |
+|-------------|-------------------------|---------------|
+| duration    | double = Calculated(tc) | The duration for which ratings will be sampled. |
+| sample-rate | double = Calculated(tc) | The sample rate by which ratings will be sampled. |
+
+The general test attribute `experimental-setup-id` indirectly controls which type of psychophysical rating scale will be sampled. The test requires a Scales instrument to be assigned in the `<device-mapping>` element by the `<experimental-setup>`. 
+
+The Scales instrument can contain a set of psychophysical rating scales, such as Visual Analog Scales, Numerical Rating Scales, and Categorical Rating Scales. The Psychophysical Rating Test will sample all scales within the Scales instrument. Consequently, it is possible to sample multiple rating scales simultaneously; for example, it would be possible to sample two modalities, such as Itch and Pain. Please note that it is also possible to sample simultaneously different types of rating scales.
 
 ## Examples of experimental setups
 
