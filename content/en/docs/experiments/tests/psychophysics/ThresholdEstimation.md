@@ -11,6 +11,9 @@ The threshold estimation test uses adaptive methods to efficiently estimate a pa
 {{% /pageinfo %}}
 
 
+![](/images/experiments/tests/threshold-estimation/ThesholdEstimationUI.png)
+*Figure 1: Test window of the threshold estimation test*
+
 
 ## Test definition
 
@@ -25,7 +28,37 @@ The threshold estimation test uses adaptive methods to efficiently estimate a pa
 
 ## Response tasks
 
+### Yes/No 
+
+### Forced Yes/No
+
+### Manual Yes/No
+
+### Interval Forced Choice
+
+### Alternatives Forced Choice
+
+### Ratio Rating
+
+### Numerical Rating 
+
+### Manual Numerical Rating
+
+### Categorical Rating
+
+### Manual Categorical Rating
 
 
 ## Stimulation
 
+
+## Scripting
+
+### Properties
+
+### Functions
+
+## Test results
+
+
+## Example protocols
