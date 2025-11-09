@@ -10,12 +10,12 @@ The response recording test implements computerized psychophysical ratings that 
 
 {{% /pageinfo %}}
 
-The test window for the `<psychophysics-response-recording>` test is shown in Figure 1. The test window consists of three areas for; the recorded responses, the recorded signals, and events that can be marked by the operator. Please note that the recorded signals and events are only shown if there are signals or events defined for the test, respectively.
+The test window for the `<psychophysics-response-recording>` test is shown in Figure 1. The test window consists of three areas: recorded responses, recorded signals, and events that the operator can mark. The primary purpose of the test is to record psychophysical ratings from a participant continuously. Consequently, the Recorded Responses part of the UI is always present regardless of the test definition. Recording psychophysical ratings continuously is what is termed **co**mputerized psychophysical rating **scale**s (CoSCALE), and allows for quantifications that are not possible with conventional psychophysical ratings, such as calculation of area under the curve (AUC), time of maximal rating, maximal rating, and similar measures that require a time series of ratings from the participant.
 
 ![](/images/experiments/tests/response-recording/ResponseRecordingUI.png)
 *Figure 1: Test window of the response recording test*
 
-
+The recorded signals section of the test UI is displayed only if signals are defined and the `signal-weight` attribute is set to a non-zero value. The test allows simultaneous sampling at the same sample rate as for the psychophysical ratings. Consequently, these sampled signals are intended for low-frequency time series signals, such as heart rate, stimulus intensity, etc.
 
 
 ## Test definition
