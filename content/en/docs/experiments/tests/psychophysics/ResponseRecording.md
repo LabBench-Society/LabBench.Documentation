@@ -47,11 +47,20 @@ The Scales instrument can contain a set of psychophysical rating scales, such as
 
 ## Examples of experimental setups
 
-### LabBench I/O
+To use the Psychophysical Rating test, the experimental setup must contain devices that allow a participant to control and see the rating scales. In this section, two example setups are demonstrated: one setup based on the LabBench I/O and one based on a standard USB Joystick. In both examples, the scale is displayed on a second monitor, which is connected as the secondary monitor to the laboratory computer and placed in front of the participant.
+
+### LabBench I/O and LabBench DISPLAY
+
+![](/images/experiments/tests/response-recording/SetupLIO.png)
+
+*Figure 2: Computerized recording of visual analog ratings.*
 
 
 ### USB Joystick
 
+![](/images/experiments/tests/response-recording/SetupJoystick.png)
+
+*Figure 3: Computerized recording of visual analog ratings.*
 
 
 ## Psychophysical Rating Scales
@@ -59,7 +68,7 @@ The Scales instrument can contain a set of psychophysical rating scales, such as
 ### Ratio Rating Scales
 
 ![](/images/experiments/tests/response-recording/VASRecording.png)
-*Figure 2: Computerized recording of visual analog ratings.*
+*Figure 4: Computerized recording of visual analog ratings.*
 
 
 
@@ -84,7 +93,8 @@ The Scales instrument can contain a set of psychophysical rating scales, such as
 ### Interval Rating Scales
 
 ![](/images/experiments/tests/response-recording/NRSRecording.png)
-*Figure 2: Computerized recording of numerical ratings.*
+
+*Figure 5: Computerized recording of numerical ratings.*
 
 
 ```xml
@@ -109,7 +119,8 @@ The Scales instrument can contain a set of psychophysical rating scales, such as
 ### Categorical Rating Scales
 
 ![](/images/experiments/tests/response-recording/CRSRecording.png)
-*Figure 2: Computerized recording of categorical ratings.*
+
+*Figure 6: Computerized recording of categorical ratings.*
 
 
 ```xml

@@ -5,6 +5,8 @@ magick Slide1.PNG  -trim ../../assets/images/experiments/tests/response-recordin
 magick Slide2.PNG  -trim ../../assets/images/experiments/tests/response-recording/VASRecording.png 
 magick Slide3.PNG  -trim ../../assets/images/experiments/tests/response-recording/NRSRecording.png 
 magick Slide4.PNG  -trim ../../assets/images/experiments/tests/response-recording/CRSRecording.png 
+magick Slide5.PNG  -trim ../../assets/images/experiments/tests/response-recording/SetupLIO.png 
+magick Slide6.PNG  -trim ../../assets/images/experiments/tests/response-recording/SetupJoystick.png 
 
 cd ..
 
