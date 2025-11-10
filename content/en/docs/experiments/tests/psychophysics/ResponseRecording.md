@@ -93,23 +93,39 @@ Assigning the device to the Scales instrument name will make Psychophysical Rati
 </device-mapping>
 ```
 
-Using a LabBench SCALE as the controlling device provides a better haptic feedback and more intuitive control of the ratings than with a USB Joystick based setup.
+Using a LabBench SCALE as the controlling device provides a better haptic feedback and more intuitive control of the ratings than with a USB Joystick based setup. For studies involving stimuli, a LabBench I/O-based setup also enables control of electrical stimulators and precise synchronization between visual stimuli and other stimulus modalities, such as pressure or thermal stimuli.
+
+An implementation of this experimental setup can be seen in the [Introduction to Computerized Psychophysical Rating Scales (CoScale)](https://github.com/LabBench-Society/Protocols/blob/main/intro.ratings/intro.ratings.expx) (_please note clicking this link will leave this site_) protocol in the LabBench Protocol Repository.
 
 ### USB Joystick
+
+USB-based experimental setups provide a low-cost, highly versatile solution for recording psychophysical ratings. This setup is illustrated in Figure 2 and consists of: a) a standard USB-based joystick, b) a secondary monitor that is used to display the psychophysical rating scale to the subject, and c) a laboratory computer that runs LabBench.
+
 
 ![](/images/experiments/tests/response-recording/SetupJoystick.png)
 
 *Figure 3: Computerized recording of visual analog ratings.*
 
+The definition of the LabBench DISPLAY (secondary monitor) is identical to its configuration in a LabBench I/O-based experimental setup; the only difference is that its `controller-device` is set to a joystick instead of a response device (LabBench SCALE or LabBench PAD) attached to a LabBench I/O.
 
-## Psychophysical Rating Scales
+An implementation of this experimental setup can be seen in the [Introduction to Computerized Psychophysical Rating Scales (CoScale)](https://github.com/LabBench-Society/Protocols/blob/main/intro.ratings/intro.ratings.expx) (_please note clicking this link will leave this site_) protocol in the LabBench Protocol Repository.
 
-### Ratio Rating Scales
+### LabBench I/O
+
+It is also possible to use an experimental setup consisting of only a LabBench I/O and an attached LabBench SCALE. In that case, only Visual Analog Ratings can be recorded, and the scale must be attached to the LabBench SCALE.
+
+## Psychophysical rating scales
+
+The type of Psychophysical Ratings that are sampled by the test is controlled by which scales are defined for the Scales instrument that is assigned to the test in the `<device-mapping>` element of the `<experimental-setup>`. In this section, it is assumed that the scales will be shown on an external monitor and, consequently, will be defined in the `<configurations>` element of a LabBench DISPLAY (`<display>` element) in the experimental setup. 
+
+### Ratio rating Scales
+
+The most widely used implementation of a ratio rating scale is the Visual Analog Scale (VAS), illustrated in Figure 4. The subfigure on the left shows what will be displayed to the subject, and the subfigure on the right shows the test UI during VAS rating recording.
 
 ![](/images/experiments/tests/response-recording/VASRecording.png)
 *Figure 4: Computerized recording of visual analog ratings.*
 
-
+The code listing below shows how this scale is defined in the Experiment Definition File for the [Introduction to Computerized Psychophysical Rating Scales (CoScale)](https://github.com/LabBench-Society/Protocols/blob/main/intro.ratings/intro.ratings.expx) (_please note clicking this link will leave this site_) protocol.
 
 ```xml
 <composite-scale id="vas"
@@ -129,12 +145,15 @@ Using a LabBench SCALE as the controlling device provides a better haptic feedba
 ```
 
 
-### Interval Rating Scales
+### Interval rating scales
+
+The most widely used implementation of a interval rating scale is the Numerical Rating Scale (NRS), illustrated in Figure 5. The subfigure on the left shows what will be displayed to the subject, and the subfigure on the right shows the test UI during NRS rating recording.
 
 ![](/images/experiments/tests/response-recording/NRSRecording.png)
 
 *Figure 5: Computerized recording of numerical ratings.*
 
+The code listing below shows how this scale is defined in the Experiment Definition File for the [Introduction to Computerized Psychophysical Rating Scales (CoScale)](https://github.com/LabBench-Society/Protocols/blob/main/intro.ratings/intro.ratings.expx) (_please note clicking this link will leave this site_) protocol.
 
 ```xml
 <composite-scale id="nrs"
@@ -155,12 +174,15 @@ Using a LabBench SCALE as the controlling device provides a better haptic feedba
 ```
 
 
-### Categorical Rating Scales
+### Categorical rating scales
+
+A categorical rating scale (CRS), illustrated in Figure 6. The subfigure on the left shows what will be displayed to the subject, and the subfigure on the right shows the test UI during CRS rating recording.
 
 ![](/images/experiments/tests/response-recording/CRSRecording.png)
 
 *Figure 6: Computerized recording of categorical ratings.*
 
+The code listing below shows how this scale is defined in the Experiment Definition File for the [Introduction to Computerized Psychophysical Rating Scales (CoScale)](https://github.com/LabBench-Society/Protocols/blob/main/intro.ratings/intro.ratings.expx) (_please note clicking this link will leave this site_) protocol.
 
 ```xml
 <composite-scale id="crs"
@@ -186,6 +208,10 @@ Using a LabBench SCALE as the controlling device provides a better haptic feedba
 
 ## Sampling of signals
 
+The response recording test provides a mechanism for sampling a set of signals simultaneously with the psychophysical ratings. Sampling signals is specified in the `<signals>` element, allowing the definition of a calculated parameter (`sample`) that is called each time the ratings are sampled.
+
+The definition of a signal to be sampled is illustrated in the code listing below:
+
 ```xml
 <psychophysics-response-recording id="vasSignals" 
       name="Recording ratings and signals (Visual Analog Scale)"
@@ -202,6 +228,14 @@ Using a LabBench SCALE as the controlling device provides a better haptic feedba
       </signals>
 </psychophysics-response-recording>
 ```
+
+In this example, a method `Sample` is called on an object named `Walk`, which must return an array with the same number of elements and in the same order as the `<signal>` elements that are defined within the `<signals>` element. For plotting purpose the minimum and maximal values for all of these signals are specified with the `min` and `max` attributes, respectively.
+
+Each sampled signal is defined with a `<signal>` element within the `<signals>` element. The `<signal>` element has three attributes: `id`: an identifier that will be used to identify the signal in the data set and from calculated parameters, `name`: a readable name that will be used for plotting the signals in the test UI, and `unit`: the unit of the signal.
+
+The `Sample` class method uses a rating from a Ratio Scale as the control input for a random walk process that simulates a biological signal. The Rating Scale instrument becomes available to the calculated parameter by adding it as a required instrument to the `<test-events>` for the test. Please note that in this case, no actual test events are implemented; the `<test-events>` element is used only to declare instruments for the `<signals>` element. 
+
+The Python code that implements this random walk process is shown below:
 
 ```python
 import random
@@ -222,15 +256,21 @@ def CreateRandomWalk(tc):
    return RandomWalk(tc)
 ```
 
+This RandomWalk class is created as a `define` in the protocol, as shown below:
+
 ```xml
 <defines>
    <define name="Walk" value="func: Script.CreateRandomWalk(tc)" />
 </defines>
 ```
 
-
+The code in this example is contrived, so its example protocol would not require any additional equipment beyond what is needed for psychophysical ratings. More real-world examples are shown in the example protocols below, which demonstrate how this test can be used, for example, to implement offset analgesia protocols with a cuff pressure algometer or an electrical stimulator.
 
 ## Marking of events
+
+Recorded ratings can be annotated with events, which the operator manually inserts when they observe them or when the participant communicates them. These events can be used to end a recording manually (`completed=true`), meaning the recording time can vary depending on the test outcome. Events are grouped into `<group>` elements, where each event can specify with its `next-group attribute` which group will become active when an event occurs. Event groups are used to enforce logical sequences of event occurrences. If there is no logical sequence of events, but all events can occur at any time, then only one group is defined in the `<event-markers>` element. 
+
+Below is an example of events defined for a cold-pressor test:
 
 ```xml
 <psychophysics-response-recording id="vasEvents" 
@@ -252,6 +292,7 @@ def CreateRandomWalk(tc):
 </psychophysics-response-recording>
 ```
 
+Signals can be recorded together with events being marked, which can be accomplished by defining both `<signals>` and `<events-makrer>` elements for the test definition. This is illustrated in the code listing below:
 
 ```xml
 <psychophysics-response-recording id="vasCombined" 
@@ -265,13 +306,7 @@ def CreateRandomWalk(tc):
          <instrument interface="ratio-scale" />
       </test-events>
       <events-makers>
-         <group id="PDT">
-            <marker id="PDT" name="Pain Detected" next-group="PTT" />
-            <marker id="STOP" name="Hand withdrawn" complete="true" />
-         </group>
-         <group id="PTT">
-            <marker id="STOP" name="Hand withdrawn" complete="true" />
-         </group>
+         <!-- Event definitions are omited for brevity. -->
       </events-makers>
       <signals sample="Walk.Sample()" min="0" max="10">
          <signal id="CTRL" name="Control Signal" unit="cm" />
@@ -279,13 +314,56 @@ def CreateRandomWalk(tc):
 </psychophysics-response-recording>
 ```
 
-## Scripting
+## Scripting (Properties)
 
-### Properties
+In addition to the properties that are common to all test results, the test result for the response recording test has the following test specific properties:
 
-### Functions
+| Name | Type | Specification |
+|------|------|---------------|
+| `NumberOfSamples` | int | Specified number of samples. The actual number of recorded samples might be lower if the recording has been ended by an event marker |
+| `SampleRate` | double | Sample rate for the ratings and if defined signals. |
+| `Responder` | bool | True if the recording has been ended with an event marker. |
+| `Recordings` | `List<ResponseRecording>` | List of recorded responses. |
+| `SignalRecordings` | `List<SignalRecording>` | List of recorded signals. |
+| `Markers` | `List<EventMarkerRecording>` | List of marked events. |
+| `Time` | `double[]` | Time points for the recorded ratings and signals. |
 
-## Test results
+ ### ResponseRecording
 
+| Name          | Type     | Specification                                                  |
+|---------------|----------|----------------------------------------------------------------|
+| `Modality`    | `string` | Modality of the ratings (for example, Pain, Itch, or similar). |
+| `ScaleType`   | `string` | Either _Ordinal_, _Interval_, or _Ratio_.                      |
+| `SampleRate`  | `double` | Sample rate for the ratings.                                   |
+| `Length`      | `int`    | Number of samples in the recording.                            |
+| `[n]`         | `double` | Returns the n'th sample, where n must be less than Length.     |
+| `Area`        | `double` | Area under the curve.                                          |
+| `Maximum`     | `double` | Maximum rating during the recording.                           |
+| `TimeMaximum` | `double` | Time of the maximum rating.                                    |
+| `Duration`    | `double` | Time where the rating was different from zero.                 |
+
+ ### SignalRecording
+
+| Name      | Type           | Specification |
+|-----------|----------------|---------------|
+| `ID`      | `string`       | ID of the signal as specified in its `<signal>` element. |
+| `Name`    | `string`       | Name of the signal as specified in its `<signal>` element. |
+| `Minimum` | `double`       | Minimum for all signals as specified in the `<signals>` element. |
+| `Maximum` | `double`       | Maximum for all signals as specified in the `<signals>` element. |
+| `Unit`    | `string`       | Stimulus unit as specified in its `<signal>` element. |
+| `Values`  | `List<double>` | Recorded signal values. |
+
+### EventMarkerRecording
+
+| Name   | Type     | Specification |
+|--------|----------|---------------|
+| `ID`   | `string` | ID of the signal as specified in its `<marker>` element. |
+| `Name` | `string` | Name of the signal as specified in its `<marker>` element. |
+| `Time` | `double` | Time that the event occured. |
+<!--
+### Test results
+-->
 
 ## Example protocols
+
+* [Introduction to Computerized Psychophysical Rating Scales (CoScale)](https://github.com/LabBench-Society/Protocols/blob/main/intro.ratings/intro.ratings.expx) (_please note clicking this link will leave this site_).
