@@ -1,5 +1,10 @@
 ---
 title: Scheduler
-description: Instructions on how to install LabBench
+description: Schedule tasks to run in the background
 weight: 20
 ---
+
+{{% pageinfo %}}
+
+
+{{% /pageinfo %}}
