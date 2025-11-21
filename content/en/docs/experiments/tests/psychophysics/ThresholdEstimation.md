@@ -19,6 +19,10 @@ The threshold estimation test uses adaptive methods to efficiently estimate a pa
 
 
 
+## Psychometric Functions
+
+
+
 ## Adaptive methods
 
 ### Up/Down 
