@@ -54,7 +54,12 @@ Listing 1 has the following test specific attributes:
 
 ### Anchor points for the visual analog scale (`stop-mode`)
 
-This attribute determines whether the VAS scale has two (2) or three anchor points (3). When set to stop-on-maximal-rating the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)). When set to stop-when-button-pressed the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
+This attribute determines whether the VAS scale has two (2) or three anchor points (3):
+
+- When set to `stop-on-maximal-rating` the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)). 
+- When set to `stop-when-button-pressed` the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
+
+The effect of the `stop-mode` on determination of the PDT, PTT, and PTL thresholds is shown in Figure 2.
 
 ![](/images/experiments/tests/algometry/StimulusResponseStopMode.png)
 
