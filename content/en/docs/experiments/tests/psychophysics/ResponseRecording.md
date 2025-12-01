@@ -34,7 +34,7 @@ A Response Recording test can be defined with the `<psychophysics-response-recor
 
 The test definition in Listing 1 is the simplest test definition possible. We will later show how this test definition can be extended with signals and events.
 
-Listing 1 has two  test specific attributes:
+Listing 1 has two test specific attributes:
 
 | Attribute   | Type                    | Specification |
 |-------------|-------------------------|---------------|
