@@ -15,12 +15,15 @@ From this stimulus-response curve, several psychophysical parameters can be dete
 The determined parameters depend on the test configuration and the subject's instructions.
 {{% /pageinfo %}}
 
+The test window for the `<algometry-stimulus-response>` test is shown in Figure 1. The test window consists of two areas: applied pressure and recorded responses. The purpose of the test is to determine Pain Detection Thresholds (PDT), Pain Tolerance Thresholds (PTT), and Pain Tolerance Limit (PTL) to cuff pressure.
 
 ![](/images/experiments/tests/algometry/StimulusResponseUI.png)
 
 *Figure 1: Test window of the stimulus response test*
 
+The applied pressure area will display a legend indicating which cuff outlet(s) will be active and will plot the applied pressure over time. The pressure is annotated with the Pain Detection Threshold (PDT) and Pain Tolerance Threshold (PTT) if determined by the test.
 
+The psychophysical ratings area will show the recorded ratings for the applied pressure, together with the VAS threshold `vas-pdt` for the Pain Detection Threshold and the estimated value for the Pain Tolerance Limit if determined by the test.
 
 ## Test definition
 
