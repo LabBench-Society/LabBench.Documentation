@@ -27,6 +27,8 @@ The psychophysical ratings area will show the recorded ratings for the applied p
 
 ## Test definition
 
+A Response Recording test can be defined with the `<algometry-stimulus-response>` element within the `<test>` element in the Experiment Definition File (*.expx):
+
 ```xml
 <algometry-stimulus-response id="AP2SR01" name="Stimulus Response (Stop on VAS 10) [Cuff 1]"
    delta-pressure="1"
@@ -67,6 +69,8 @@ The effect of the `stop-mode` on determination of the PDT, PTT, and PTL threshol
 
 ### Spatial Summation (`second-cuff`)
 
+Spatial summation can be studied by placing two cuffs adjacent to each other and inflating the cuffs in parallel. Inflating the cuffs in parallel can be achieved by setting the `second-cuff` attribute to `true`. The effect of setting the `second-cuff` attribute to `true` is shown in Figure 3.
+
 ![](/images/experiments/tests/algometry/StimulusResponseSecondCuff.png)
 
 *Figure 3: Illustration of how the `second-cuff` attribute can be used for spatial summation tests.*
@@ -82,27 +86,84 @@ The effect of the `stop-mode` on determination of the PDT, PTT, and PTL threshol
 ### LabBench CPAR+
 
 ```xml
+<experimental-setup name="LabBench CPAR+">
+<devices>
+      <cpar-plus id="dev"/>
+</devices>
+<device-mapping>
+   <device-assignment instrument-name="PressureAlgometer" device-id="dev" />
+</device-mapping>
+</experimental-setup>        
 ```
 
-### LabBench CPAR+ with external rating device
-
-```xml
-```
+An implementation of this experimental setup can be seen in the [Introduction to Cuff Pressure Algometry](https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx) (_please note clicking this link will leave this site_).
 
 
 ### LabBench CPAR+ and LabBench DISPLAY
 
 
 ```xml
+<experimental-setup name="LabBench CPAR+ (Scale on secondary monitor)">
+<devices>
+   <cpar-plus id="dev"/>
+
+   <display id="display"
+      screen="secondary"
+      position="fullscreen"
+      active-color="rgb(255,0,0)"
+      background-color="rgb(255,255,255)"
+      inactive-color="rgb(16,16,16)"
+      normative-distance="40">
+
+      <monitor diagonal-size="53.34" distance="40" />
+
+         <configurations>
+            <visual-analog-scale id="vas"
+                  experimental-setup-id="vas"
+                  length="10"
+                  controller-device="dev">
+                  <anchors>
+                     <modality text="" />
+                     <top-anchor text="10/Worst imaginable pain" />
+                     <bottom-anchor text="0/No pain" />
+                  </anchors>
+            </visual-analog-scale>
+         </configurations>
+      </display>
+   </devices>
+   <device-mapping>
+      <device-assignment instrument-name="PressureAlgometer" device-id="dev" />
+   </device-mapping>
+</experimental-setup>    
 ```
+
+An implementation of this experimental setup can be seen in the [Introduction to Cuff Pressure Algometry](https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx) (_please note clicking this link will leave this site_).
+
 
 ## Scripting (Properties)
 
 In addition to the properties that are common to all test results, the test result for the stimulus response test has the following test specific properties:
 
-| Name | Type | Specification |
-|------|------|---------------|
-| | | |
+| Name                        | Type           | Specification |
+|-----------------------------|----------------|---------------|
+| `Responder`                 | `bool`         | |
+| `PDT`                       | `double`       | |
+| `PTT`                       | `double`       | |
+| `PTL`                       | `double`       | |
+| `SecondCuff`                | `bool`         | |
+| `PrimaryChannel`            | `int`          | |
+| `VASPainDetectionThreshold` | `double`       | |
+| `MaximalPressure`           | `double`       | |
+| `MaximalTime`               | `double`       | |
+| `StimulationPressure`       | `List<double>` | |
+| `VAS`                       | `List<double>` | | 
+| `Time`                      | `List<double>` | |
+
+## Scripting (Methods)
+
+### `double GetPressureFromPerception(double score)`
+
+### `bool IsScoreAvailable(double score)`
 
 ## Example protocols
 
