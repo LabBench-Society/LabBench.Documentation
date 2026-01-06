@@ -213,17 +213,54 @@ The method is configured with the following attributes:
 
 | Attribute              | Type                    | Specification |
 |------------------------|-------------------------|---------------|
-
-
+| `initial-intensity`    | double = Calculated(tc) | This attribute is used to select the initial intensity from the set of allowed intensities ('intensities'). The initial intensity will be selected as the intensity in the set of allowed intensities closest to the value of this initial intensity attribute. If this attribute is not defined, the initial intensity will be set based on the initial direction. If the initial direction is upward, the smallest allowed intensity will be used; otherwise, the largest allowed intensity will be used.| 
+| `initial-direction`    | enum                    | Initial direction for the intensity change. |
+| `initial-step-size`    | int = Calculated(tc)    | Sets the initial step size. The initial step size can be set to a value larger than one (1) to initially rapidly approach the threshold. Once a reversal has occurred, the step size will be set to one (1). |
+| `stop-rule`            | int = Calculated(tc)    | Number of reversals required before the algorithm is completed.|
+| `skip-rule`            | int = Calculated(tc)    | The number of initial reversals that are skipped when calculating the threshold as the average of the intensity at the reversals. Consequently, if this `skip-role` attribute is set to one (3) and the stop-rule is set to nine (9), the threshold will be calculated from the last six (6) reversals. The default value is zero (0). |
+| `intensities`          | double[] = Calculated(tc) | The discrete set of allowed stimulus intensities in the form of an array of doubles. These values must be ordered from the smallest to the largest and must be within the bounds of the Imin and Imax attributes for the stimulus channel. |
+  
 ### Psi-Method
+
+The Psi method is a Bayesian adaptive procedure for efficiently estimating the parameters of a psychometric function. Unlike staircase methods, which primarily converge to a single threshold value, the Psi method explicitly models the entire psychometric function and selects stimulus intensities that maximize expected information gain on each trial. At each iteration, the Psi method evaluates the expected posterior entropy for all candidate stimulus intensities and selects the one that minimizes this entropy, thereby maximizing the expected reduction in uncertainty about the psychometric parameters.
+
+For each trial, the Psi method performs the following steps:
+
+1. **Posterior prediction**: For each candidate stimulus intensity, the method predicts the probability of a correct response under the current posterior.
+2. **Expected entropy computation**: The expected posterior entropy is computed for each candidate intensity, marginalizing over possible responses.
+3. **Optimal stimulus selection**: The stimulus intensity that minimizes expected entropy is selected for the next trial.
+4. **Posterior update**: After observing the actual response, Bayes’ rule is used to update the posterior distribution over psychometric parameters.
+
+This process is repeated until the predefined number of trials is reached. This method is illustrated in figure 4.
 
 ![](/images/experiments/tests/threshold-estimation/PsiMethod.png)
 
 *Figure 4:*
 
-```xml
+#### Stimulus Intensity Normalization in the Psi Method
+
+In the Psi method, stimulus intensities are normalized to the unit interval [0,1]. This normalization applies both to the candidate stimulus intensities considered by the algorithm and to the threshold parameter (𝛼) of the psychometric function. Normalization is a conceptual and computational step that separates the estimation logic of the Psi method from the physical units of the stimulus. 
+
+The normalized intensity x ∈ [0,1] is mapped to a physical stimulus intensity (Istimulus) internally using the stimulus channel’s minimum and maximum intensities:
 
 ```
+Istimulus = (Imax - Imin) * x + Imin
+```
+
+This mapping is performed automatically by LabBench and is transparent to the user once the stimulus range is defined. Intensity normalization significantly simplifies experiment design and reduces configuration errors.
+
+#### Test definition 
+
+```xml
+<psi-method number-of-trials="30">
+    <quick lambda="0.05" gamma="0.33" />
+    <beta type="linspace" x0="-1.2" x1="1.2" n="24"/>
+    <alpha type="linspace" x0="0" x1="1" n="100" />
+    <intensity type="linspace" x0="0" x1="1" n="50" />
+</psi-method>
+```
+
+*Listing 4: Definition of the Psi method*
 
 ## Response tasks
 
