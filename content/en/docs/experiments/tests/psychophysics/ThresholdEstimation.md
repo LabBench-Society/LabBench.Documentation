@@ -251,6 +251,8 @@ This mapping is performed automatically by LabBench and is transparent to the us
 
 #### Test definition 
 
+A stimulus channel `<channel>` can be configured to use the Psi estimation method with the `<psi-method>` element:
+
 ```xml
 <psi-method number-of-trials="30">
     <quick lambda="0.05" gamma="0.33" />
@@ -261,6 +263,21 @@ This mapping is performed automatically by LabBench and is transparent to the us
 ```
 
 *Listing 4: Definition of the Psi method*
+
+The method is configured with the following attributes:
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
+| `number-of-trials`     | int = Calculated(tc) | Number of trials that are performed with the algorithm.|
+
+The method is configured with the following elements:
+
+| Element              | Specification |
+|----------------------|---------------|
+| `<quick>`     | The psychometric function that links stimulus intensity to the probability of a correct or “yes” response, providing a quantitative model of perceptual sensitivity. <br /><br /> Only the guess rate (gamma) and lapse Rate (lambda) are used, if alpha and beta are specified they are ignored. <br /><br /> The guess rate (gamma/γ) specifies the probability of a correct response in the absence of any usable stimulus information. It defines the lower asymptote of the psychometric function. The lapse rate (lambda/λ) models stimulus-independent errors that occur even at high stimulus intensities. |
+| `<beta>`      | The <beta> element defines the discrete grid of candidate slope values of the psychometric function used by the Psi method. <br /><br /> During the adaptive procedure, the Psi method updates a posterior distribution over these slope values, allowing it to jointly estimate response sensitivity (threshold) and response consistency (slope) rather than assuming a fixed steepness of the psychometric function. |
+| `<alpha>`     | The <alpha> element defines the discrete grid of candidate threshold values used by the Psi method when estimating the psychometric function. <br /><br /> During the experiment, the Psi method maintains and updates a posterior probability distribution over these candidate values, and final threshold estimates are derived from this posterior. |
+| `<intensity>` | The <intensity> element defines the set of candidate stimulus intensities that the Psi method may select from on each trial. <br /><br /> For each trial, the Psi algorithm evaluates all candidate intensities in this grid and selects the one expected to provide the greatest reduction in uncertainty about the psychometric parameters, ensuring efficient and principled stimulus selection throughout the experiment. |
 
 ## Response tasks
 
