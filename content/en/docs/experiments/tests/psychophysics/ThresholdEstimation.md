@@ -84,11 +84,76 @@ The `<psychophysics-threshold-estimation>` test has X test specific elements:
 
 ### Up/Down 
 
+The up/down method (also known as a staircase procedure) is one of the most widely used adaptive methods in psychophysics for estimating perceptual thresholds. The method dynamically adjusts stimulus intensity based on the participant’s responses, focusing trials on the threshold region where responses transition from mostly incorrect to mostly correct.
+
+The up/down method operates on the following principle:
+
+* Correct response → decrease stimulus intensity
+* Incorrect response → increase stimulus intensity
+
+By repeatedly applying this rule, the stimulus intensity oscillates around the participant’s threshold, producing a sequence of reversals that can be used to estimate the threshold value. The Up/Down method is illustrated in *Figure 2*.
+
+![](/images/experiments/tests/threshold-estimation/UpDown.png)
+
+*Figure 2:*
+
+#### Reversals and Threshold Estimation
+
+A reversal is defined as a change in the direction of stimulus adjustment. For example:
+
+* Incorrect → Correct (intensity switches from increasing to decreasing)
+* Correct → Incorrect (intensity switches from decreasing to increasing)
+
+After an initial transient phase, the stimulus values at reversal points cluster around the participant’s threshold. The threshold estimate is typically computed as: The mean of the reversal intensities, excluding a configurable number of initial reversals (the skip rule)
+
+
+#### Step Size and Step Size Reduction
+
+The step size determines how much the stimulus intensity changes after each response. Larger step sizes allow rapid convergence toward the threshold early in the procedure, while smaller step sizes improve precision near the threshold.
+
+LabBench supports adaptive step size reduction, where: The step size is multiplied by a reduction factor \(R_n\) after each reversal. A lower bound (max-step-size-reduction) prevents the step size from becoming too small. This strategy combines fast convergence with stable threshold estimation.
+
+#### Variants and Target Performance Level
+
+The simplest up/down method (1-up/1-down) converges to the stimulus intensity corresponding to approximately 50% correct performance. More advanced variants (e.g., n-up/m-down or unequal up/down stepsizes) can target other points on the psychometric function (e.g., 70.7% or 79.4% correct).
+
+In LabBench, the up/down method is currently implemented in a form optimized for binary response tasks and threshold estimation near the detection limit.
+
+#### Definition of the method
+
+A stimulus channel `<channel>` can be configured to use the Up/Down estimation method with the `<up-down-method>` element:
+
+```xml
+<up-down-method 
+    start-intensity="Stimulator.Range/2 + Stimulator.Imin"
+    initial-direction="decreasing"
+    reversal-rule="1"
+    skip-rule="1"
+    stop-rule="7"
+    step-size="0.15"
+    max-step-size-reduction="0.25"
+    step-size-reduction="0.5" />
+```
+
+*Listing 2: Definition of the Up/Down method*
+
+
+### Discrete Up/Down
+
+![](/images/experiments/tests/threshold-estimation/DiscreteUpDown.png)
+
+*Figure 3:*
+
+
 ```xml
 
 ```
 
 ### Psi-Method
+
+![](/images/experiments/tests/threshold-estimation/PsiMethod.png)
+
+*Figure 4:*
 
 ```xml
 
@@ -121,11 +186,20 @@ LabBench includes several built-in response tasks that can be configured and use
 
 ### Manual Yes/No
 
+![](/images/experiments/tests/threshold-estimation/TaskManualYesNo.png)
+
+*Figure 5:*
+
+
 ```xml
 
 ```
 
 ### Forced Yes/No
+
+![](/images/experiments/tests/threshold-estimation/TaskFYN.png)
+
+*Figure 6:*
 
 ```xml
 
@@ -133,11 +207,19 @@ LabBench includes several built-in response tasks that can be configured and use
 
 ### Interval Forced Choice
 
+![](/images/experiments/tests/threshold-estimation/TaskIFC.png)
+
+*Figure 7:*
+
 ```xml
 
 ```
 
 ### Alternatives Forced Choice
+
+![](/images/experiments/tests/threshold-estimation/TaskAFC.png)
+
+*Figure 8:*
 
 ```xml
 
@@ -145,11 +227,19 @@ LabBench includes several built-in response tasks that can be configured and use
 
 ### Ratio Rating
 
+![](/images/experiments/tests/threshold-estimation/TaskVAS.png)
+
+*Figure 9:*
+
 ```xml
 
 ```
 
 ### Numerical Rating 
+
+![](/images/experiments/tests/threshold-estimation/TaskNRS.png)
+
+*Figure 10:*
 
 ```xml
 
@@ -157,11 +247,19 @@ LabBench includes several built-in response tasks that can be configured and use
 
 ### Manual Numerical Rating
 
+![](/images/experiments/tests/threshold-estimation/TaskManualNRS.png)
+
+*Figure 11:*
+
 ```xml
 
 ```
 
 ### Categorical Rating
+
+![](/images/experiments/tests/threshold-estimation/TaskCRS.png)
+
+*Figure 12:*
 
 ```xml
 
@@ -169,6 +267,10 @@ LabBench includes several built-in response tasks that can be configured and use
 
 ### Manual Categorical Rating
 
+![](/images/experiments/tests/threshold-estimation/TaskManualCRS.png)
+
+*Figure 13:*
+ 
 ```xml
 
 ```
