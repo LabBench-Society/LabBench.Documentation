@@ -63,6 +63,23 @@ A Response Recording test can be defined with the `<psychophysics-threshold-esti
 
 *Listing 1: Definition of a psychophysical threshold estimation test*
 
+The `<psychophysics-threshold-estimation>` test has two test specific attributes:
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
+| `stimulus-update-rate` | int = Calculated(tc) | |
+| `trigger-update-rate`  | int = Calculated(tc) | |
+
+The `<psychophysics-threshold-estimation>` test has X test specific elements:
+
+| Element              | Specification |
+|----------------------|---------------|
+| `<update-rate-deterministic>`, or `update-rate-random` | The inter-stimulus interval is the time between when stimuli and /or questions are presented to the subject. This element is only required for automatic response tasks. |
+| `<configuration>` | Trigger configuration for the generation of stimuli and triggers. |
+| `<manual-yes-no-task>`, `<yes-no-task>`, `<forced-yes-no-task>`, `<manual-interval-rating-task>`, `<interval-rating-task>`, `<manual-categorical-rating-task>`, `<categorical-rating-task>`, `<ratio-rating-task>`, `<interval-forced-choice-task>`, or `<alternative-forced-choice-task>` |  |
+| `<stimulation-scripts>` | |
+| `<channels>` | |
+
 
 ## Adaptive methods
 
