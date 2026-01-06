@@ -155,14 +155,65 @@ Please note not all of these attributes are shown in the code example above.
 
 ### Discrete Up/Down
 
+The discrete up/down method is a variant of the classical staircase procedure in which stimulus intensity is restricted to a finite, predefined set of discrete values. Instead of continuously adjusting the stimulus intensity by adding or subtracting a step size, the algorithm moves up or down within a list of allowed intensity levels.
+
+This method is particularly useful when:
+
+* The stimulus hardware only supports a limited set of intensity values
+* The experiment requires standardized, repeatable stimulus levels
+* The stimulus dimension is inherently categorical or ordinal
+
+Conceptually, the discrete up/down method follows the same adaptive logic as the continuous version, but replaces arithmetic intensity updates with index-based transitions between predefined intensity levels. The Up/Down method is illustrated in *Figure 3*.
+
 ![](/images/experiments/tests/threshold-estimation/DiscreteUpDown.png)
 
 *Figure 3:*
 
+#### Discrete Intensity Set
+
+The key defining feature of the discrete up/down method is the intensity set, provided as an ordered list:
 
 ```xml
-
+intensities="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
 ```
+
+The algorithm always selects intensities from this list and never interpolates between values.
+
+#### Step Size in Discrete Space
+
+Unlike the continuous up/down method, the step size in the discrete variant is defined in terms of index jumps within the intensity list.
+
+For example: initial-step-size="2" means the algorithm moves two positions up or down the intensity list after each response. Once a reversal has occured, the  step size is reduced to one.
+
+This approach allows rapid initial convergence while maintaining strict control over the allowed intensity values.
+
+#### Reversals and Threshold Estimation
+
+Reversals are detected when the direction of index movement changes. After discarding a configurable number of initial reversals (the skip rule), the remaining reversal intensities are used to estimate the threshold.
+
+The threshold is computed as the mean of the intensities at the reversal points
+
+#### Definition of the method
+
+A stimulus channel `<channel>` can be configured to use the Up/Down estimation method with the `<discrete-up-down-method>` element:
+
+```xml
+<discrete-up-down-method 
+    stop-rule="7" 
+    initial-intensity="10" 
+    initial-step-size="2"
+    initial-direction="increasing"
+    skip-rule="1"
+    intensities="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]" />
+```
+
+*Listing 3: Definition of the Discrete Up/Down method*
+
+The method is configured with the following attributes:
+
+| Attribute              | Type                    | Specification |
+|------------------------|-------------------------|---------------|
+
 
 ### Psi-Method
 
