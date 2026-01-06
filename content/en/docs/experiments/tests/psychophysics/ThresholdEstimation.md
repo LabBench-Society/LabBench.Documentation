@@ -111,13 +111,11 @@ After an initial transient phase, the stimulus values at reversal points cluster
 
 The step size determines how much the stimulus intensity changes after each response. Larger step sizes allow rapid convergence toward the threshold early in the procedure, while smaller step sizes improve precision near the threshold.
 
-LabBench supports adaptive step size reduction, where: The step size is multiplied by a reduction factor \(R_n\) after each reversal. A lower bound (max-step-size-reduction) prevents the step size from becoming too small. This strategy combines fast convergence with stable threshold estimation.
+LabBench supports adaptive step size reduction, where: The step size is multiplied by a reduction factor after each reversal. A lower bound (max-step-size-reduction) prevents the step size from becoming too small. This strategy combines fast convergence with stable threshold estimation. If adaptive step size reduction is used the threshold average will be weighted with the inverse of the step sizes at the reversals.
 
 #### Variants and Target Performance Level
 
-The simplest up/down method (1-up/1-down) converges to the stimulus intensity corresponding to approximately 50% correct performance. More advanced variants (e.g., n-up/m-down or unequal up/down stepsizes) can target other points on the psychometric function (e.g., 70.7% or 79.4% correct).
-
-In LabBench, the up/down method is currently implemented in a form optimized for binary response tasks and threshold estimation near the detection limit.
+The simplest up/down method (1-up/1-down) converges to the stimulus intensity corresponding to approximately 50% correct performance. More advanced variants (e.g., n-up/m-down or unequal up/down stepsizes) can target other points on the psychometric function.
 
 #### Definition of the method
 
@@ -137,6 +135,23 @@ A stimulus channel `<channel>` can be configured to use the Up/Down estimation m
 
 *Listing 2: Definition of the Up/Down method*
 
+The method is configured with the following attributes:
+
+| Attribute              | Type                    | Specification |
+|------------------------|-------------------------|---------------|
+| `start-intensity`      | double = Calculated(tc) | Initial intensity for the algorithm.        |
+| `initial-direction`    | enum                    | Initial direction for the intensity change. |
+| `reversal-rule`        | int = Calculated(tc)    | The number of times the participants must either succeed or fail for the intensity change to change direction. This attribute is used for both upward and downward directions unless either the `up-rule` or the `down-rule` is defined, respectively. The default value for this attribute is one (1). |
+| `up-rule`              | int = Calculated(tc)    | The number of times the participants must succeed when the intensity is increased upward for the intensity change to change direction. The default value for this attribute is one (1). |
+| `down-rule`            | int = Calculated(tc)    | The number of times the participants must fail when the intensity is decreased upward for the intensity change to change direction. The default value for this attribute is one (1). |
+| `step-size`            | double = Calculated(tc) | Will be used as the initial step size in both the up and down directions, unless the step-size-up or step-size-down is defined. Default value is 0.1. |
+| `step-size-up`         | double = Calculated(tc) | Will be used as the initial step size in the upward direction. If it is undefined, the step-size attribute will be used instead as the initial step size for the up direction. |
+| `step-size-down` | double = Calculated(tc) | Will be used as the initial step size in the downward direction. If it is undefined, the step-size attribute will be used instead as the initial step size for the downward direction. |
+| `step-size-reduction` | double = Calculated(tc) | Used to configure adaptive step sizes. The step size after a reversal will be `new-step-size` = (1 - `step-size-reduction`) * `old-step-size`. The default value is 0.5. |
+| `max-step-size-reduction` | double = Calculated(tc) | The maximum by which step sizes will be reduced when adaptive step sizes are enabled by setting the `step-size-reduction` attribute to a non-zero value. |
+| `step-size-type` | enum | Type of step size: absolute, the step size is added or subtracted to the current intensity, or relative, the step size is relative to the current intensity. |
+
+Please note not all of these attributes are shown in the code example above.
 
 ### Discrete Up/Down
 
