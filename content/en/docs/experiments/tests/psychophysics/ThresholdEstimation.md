@@ -313,9 +313,9 @@ A threshold estimation test `<threshold-estimation-test>` can be configured to u
 
 This element has the following attributes.
 
-| Attribute              | Type                 | Specification |
-|------------------------|----------------------|---------------|
-| | | |
+| Attribute     | Type   | Specification |
+|---------------|--------|---------------|
+| `instruction` | string | Question that the experimenter must ask the subject that the subject must answer with either a Yes or No response. |
 
 As a manual task the task requires no instruments.
 
