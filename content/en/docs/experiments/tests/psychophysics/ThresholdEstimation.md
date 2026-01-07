@@ -264,13 +264,19 @@ The instruction given to the subject is therefore straightforward: **If you can 
 
 A key limitation of the Yes/No response task is that it is prone to response bias. Because the subject decides internally whether a stimulus was present or not, their responses can be influenced by non-sensory factors such as expectation, motivation, risk tolerance, or misunderstanding of instructions. In a Yes/No task, these biases directly affect the measured detection rate and can shift the estimated threshold independently of actual sensory sensitivity. The task therefore conflates perceptual sensitivity with decision criteria.
 
-A threshold estimation test `<threshold-estimation-test>` can be configured to use the Psi estimation method with the `<yes-no-task>` element:
+#### Task definition
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Yes/No response task with the `<yes-no-task>` element:
 
 ```xml
 <yes-no-task />
 ```
 
-This element has no attributes or child elements. When used a `Button` instrument must be defined in the experimental setup and assigned to the test. A press on any button configured to `button-01` will be interpreted by the response task as a positive response by the subject. Below is an example of how a Joystick can be configured to be used by a Yes/No response task:
+This element has no attributes or child elements. 
+
+### Required instruments
+
+When used a `Button` instrument must be defined in the experimental setup and assigned to the test. A press on any button configured to `button-01` will be interpreted by the response task as a positive response by the subject. Below is an example of how a Joystick can be configured to be used by a Yes/No response task:
 
 ```xml
 <joystick id="joystick">
@@ -304,7 +310,10 @@ Removing the response time constraint has important implications for both respon
 
 However, like all Yes/No paradigms, the manual task remains susceptible to response bias. The subject still applies an internal decision criterion when answering the question, and this criterion may be influenced by expectation, confidence, or interaction with the operator. In some cases, the absence of time pressure may encourage more deliberation, thereby increasing response bias.
 
-A threshold estimation test `<threshold-estimation-test>` can be configured to use the Psi estimation method with the `<manual-yes-no-task>` element:
+#### Task definition
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Manual Yes/No response task with the `<manual-yes-no-task>` element:
+
 
 ```xml
 <manual-yes-no-task instruction="Did the subject feel the stimulus?" />
@@ -352,7 +361,16 @@ In an IFC task, a sequence of interval cues is presented to the subject. A visua
 
 In an interval forced-choice task with 𝑁 intervals, chance performance is 1/𝑁. If the subject cannot perceive the stimulus, their response is assumed to be random across intervals. For example, in a four-interval forced choice (4IFC) task, the probability of a correct response by chance alone is 25%. This known chance level (gamma) allows performance to be interpreted directly in terms of perceptual sensitivity and provides a natural lower bound for the psychometric function.
 
-A significant advantage of the IFC task is that it strongly reduces response bias. Because the subject must choose one of the presented intervals on every trial, there is no explicit “yes” or “no” decision and no opportunity to adopt a liberal or conservative response criterion. The subject’s internal decision criterion primarily affects which interval is chosen, not whether a response is made.
+A significant advantage of the IFC task is that it strongly reduces response bias. Because the subject must choose one of the presented intervals on every trial, there is no explicit “yes” or “no” decision and no opportunity to adopt a liberal or conservative response criterion, meaning;
+
+* A liberal response bias leads the subject to press the button whenever they are uncertain, increasing false positives.
+* A conservative response bias leads the subject to respond only when they are very certain, increasing false negatives.
+
+The subject’s internal decision criterion primarily affects which interval is chosen, not whether a response is made.
+
+#### Task definition
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
 
 
 ```xml
@@ -371,19 +389,67 @@ A significant advantage of the IFC task is that it strongly reduces response bia
 
 This element has the following attributes.
 
-| Attribute              | Type                 | Specification |
-|------------------------|----------------------|---------------|
+| Attribute          | Type                   | Specification |
+|--------------------|------------------------|---------------|
+| `probe`            | Image = Calculated(tc) | Image that will be used to probe the subject for an answer to which stimulus interval the stimulus was presented when the cue was shown. |
+| `display-duration` | int                    | The duration in milliseconds that the cue will be displayed to the subject. |
+| `display-interval` | int                    | The duration in milliseconds between the display of cues or the prompt. The display-interval value must be greater than the display-duration value. |
+| `pause`            | int                    | The delay in milliseconds between when the subject answered the question and the next stimulus is presented. |
 
-each child `<interval>` element defines a stimulus interval with the following attributes:
+Where each child `<interval>` element defines a stimulus interval with the following attributes:
 
-| Attribute              | Type                 | Specification |
-|------------------------|----------------------|---------------|
+| Attribute | Type                   | Specification |
+|-----------|------------------------|---------------|
+| `id`      | string                 | ID of the stimulus interval. |
+| `image`   | Image = Calculated(tc) | Cue to be shown to subject in the stimulus interval. |
+| `button`  | enum                   | Button that the subject will use to indicate that the stimulus was present in the stimulus interval. |
+
+The stimuli must be generated so it is only delivered in the selected stimulus interval. For all but the selected stimulus interval the intensity `x` will be zero, meaning stimuli can usually be defined without any special consideration to it being used for a Forced Choice Interval task. For example, stimulus for the example above is defined as:
+
+```xml
+<stimulus>
+    <sine 
+        Is="x"
+        Ts="750" 
+        Tdelay="0"
+        Frequency="1000" />
+</stimulus>
+```
+
+However, if the stimulus must be generated with consideration to whether or not it is being generated for the selected stimulus interval, the `id` of the selected stimulus interval and currently active stimulus interval is available. The currently active stimulus interval and selected stimulus interval are available as the `StimulusInterval` and `SelectedStimulusInterval` parameters, respectively. These parameters contain the stimulus interval IDs.
+
+### Required instruments
+
+When used `Button` and `ImageDisplay` instruments must be defined in the experimental setup and assigned to the test. The buttons for all intervals must be defined in the button `<map>` for the `Button` instrument.
+
+```xml
+<joystick id="joystick">
+    <map experimental-setup-id="image">
+        <button-assignment code="1" button="button-01" label="Button 1"/>
+        <button-assignment code="2" button="button-02" label="Button 2"/>
+        <button-assignment code="4" button="button-04" label="Button 4"/>
+        <button-assignment code="8" button="button-03" label="Button 3"/>
+    </map>
+</joystick>
+```
+
+These instruments must then be assigned to the test in the `<device-mapping>` element of the experimental setup. Below is an example of the simplest device assignment, which will assign this Joystick and ImageDisplay to all tests that requires a `Button` and `ImageDisplay` instruments in the protocol including Threshold Estimation Tests:
+
+```xml
+<device-assignment device-id="joystick" instrument-name="Button" />
+<device-assignment device-id="display.image" instrument-name="ImageDisplay" />
+```
+
 
 ### Alternatives Forced Choice
 
 ![](/images/experiments/tests/threshold-estimation/TaskAFC.png)
 
 *Figure 8:*
+
+#### Task definition
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Alternatives Forced Choice response task with the `<alternative-forced-choice-task>` element:
 
 ```xml
 <alternative-forced-choice-task 
@@ -409,11 +475,34 @@ each child `<alternative>` element defines a stimulus alternative with the follo
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
 
+### Required instruments
+
+When used `Button` and `ImageDisplay` instruments must be defined in the experimental setup and assigned to the test. The buttons for all intervals must be defined in the button `<map>` for the `Button` instrument.
+
+```xml
+<joystick id="joystick">
+    <map experimental-setup-id="image">
+        <button-assignment code="1" button="button-01" label="Button 1"/>
+        <button-assignment code="2" button="button-02" label="Button 2"/>
+        <button-assignment code="8" button="button-03" label="Button 3"/>
+    </map>
+</joystick>
+```
+
+These instruments must then be assigned to the test in the `<device-mapping>` element of the experimental setup. Below is an example of the simplest device assignment, which will assign this Joystick and ImageDisplay to all tests that requires a `Button` and `ImageDisplay` instruments in the protocol including Threshold Estimation Tests:
+
+```xml
+<device-assignment device-id="joystick" instrument-name="Button" />
+<device-assignment device-id="display.image" instrument-name="ImageDisplay" />
+```
+
 ### Ratio Rating
 
 ![](/images/experiments/tests/threshold-estimation/TaskVAS.png)
 
 *Figure 9:*
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
 
 ```xml
 <ratio-rating-task target="2"/>
@@ -430,6 +519,8 @@ This element has the following attributes.
 
 *Figure 10:*
 
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
+
 ```xml
 <interval-rating-task target="2"/>
 ```
@@ -444,6 +535,8 @@ This element has the following attributes.
 ![](/images/experiments/tests/threshold-estimation/TaskManualNRS.png)
 
 *Figure 11:*
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
 
 ```xml
 <manual-interval-rating-task 
@@ -464,6 +557,8 @@ This element has the following attributes.
 
 *Figure 12:*
 
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
+
 ```xml
 <categorical-rating-task target="2" />
 ```
@@ -479,6 +574,8 @@ This element has the following attributes.
 
 *Figure 13:*
  
+ A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
+
 ```xml
 <manual-categorical-rating-task
     target="1 if ChannelID == 'CH01' else 2">
