@@ -566,11 +566,53 @@ This element has the following attributes.
 |------------------------|----------------------|---------------|
 | `target` | double = Calculated(tc) | Target rating for the response task |
 
-### Numerical Rating 
+#### Required instruments
+
+When used a `RatioScale` instrument must be defined in the experimental setup and assigned to the test.
+
+```xml
+<display id="display"
+    screen="secondary"
+    position="fullscreen"
+    normative-distance="40">
+
+    <configurations>
+        <visual-analog-scale id="vas"
+            experimental-setup-id="vas"
+            controller-device="joystick"
+            length="10">
+            <anchors>
+                <top-anchor text="Maximal Sound" />
+                <bottom-anchor text="Minimal Sound" />
+            </anchors>
+        </visual-analog-scale>
+    </configurations>
+</display>
+```
+
+These instruments must then be assigned to the test in the `<device-mapping>` element of the experimental setup, an example of such a device assignment is shown below:
+
+```xml
+<device-assignment 
+    device-id="display.vas" 
+    test-type="psychophysics-threshold-estimation" 
+    test-id="VAS"
+    instrument-name="RatioScale" />
+```
+
+
+### Interval Rating 
+
+The Interval Rating response task is a psychophysical paradigm used to estimate the stimulus intensity required to elicit a specified perceptual rating on a numerical (interval) rating scale. Like the Ratio Rating task, it is designed to find a supra-threshold criterion, rather than a detection threshold, by determining the stimulus intensity at which the participant’s reported sensation reliably reaches or exceeds a predefined target value.
+
+In each trial, a stimulus is presented, and the participant rates the perceived intensity using a numerical rating scale with evenly spaced categories (e.g., 0–10). If the reported rating meets or exceeds the target value, the response task returns True; otherwise, it returns False. The adaptive estimation algorithm then adjusts stimulus intensity to converge on the level required to exceed the target criterion.
+
 
 ![](/images/experiments/tests/threshold-estimation/TaskNRS.png)
 
 *Figure 10:*
+
+#### Task definition
 
 A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
 
@@ -582,14 +624,58 @@ This element has the following attributes.
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| target | int = Calculated(tc) | Target rating for the response task. |
 
-### Manual Numerical Rating
+#### Required instruments
+
+When used a `IntervalScale` instrument must be defined in the experimental setup and assigned to the test.
+
+```xml
+<display id="display"
+    screen="secondary"
+    position="fullscreen"
+    normative-distance="40">
+
+    <configurations>
+        <numerical-scale id="nrs"
+            experimental-setup-id="nrs"
+            minimum="0"
+            maximum="10"
+            controller-device="joystick">
+            <anchors>
+                <top-anchor text="Maximal Sound" />                                
+                <bottom-anchor text="Minimal Sound" />
+            </anchors>
+        </numerical-scale>
+    </configurations>
+</display>
+```
+
+These instruments must then be assigned to the test in the `<device-mapping>` element of the experimental setup, an example of such a device assignment is shown below:
+
+```xml
+<device-assignment device-id="display.nrs" 
+    test-type="psychophysics-threshold-estimation" 
+    test-id="NRS"
+    instrument-name="IntervalScale" />
+```
+
+
+### Manual Interval Rating
+
+The Manual Interval Rating response task is a manual variant of the Interval Rating task and is conceptually identical in terms of the perceptual judgment made by the subject. A stimulus is presented, after which the operator verbally asks the subject to provide a numerical rating of the perceived stimulus intensity using a predefined interval (numerical) rating scale (e.g., 0–10). The subject responds verbally, and the operator enters the reported rating manually into LabBench.
+
+If the entered rating meets or exceeds the specified target value, the response task returns True; otherwise, it returns False. As with other manual response tasks, the test waits indefinitely until the operator records the subject’s response. This task is illustrated in *Figure 11*.
 
 ![](/images/experiments/tests/threshold-estimation/TaskManualNRS.png)
 
 *Figure 11:*
 
-A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
+By removing the requirement for a time-limited motor response, the Manual Interval Rating task eliminates time pressure on the subject. Removal of the time limit is advantageous for participants with slower reaction times, motor impairments, or difficulties interacting with input devices. As a result, missed responses due to delayed action are minimized, thereby reducing the effective lapse rate compared to the automatic version of the task.
+
+#### Task definition
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Manual Interval Rating task with the `<interval-forced-choice-task >` element:
 
 ```xml
 <manual-interval-rating-task 
@@ -603,12 +689,24 @@ This element has the following attributes.
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| `instruction` | string | Question that the experimenter must ask to prompt the subject to rate the sensation on the interval rating scale. |
+| `target` | int = Calculated(tc) | Target rating for the response task. |
+| `minimum` | int | Minimum rating on the interval rating scale. Default is 0. |
+| `maximum` | int | Maximal rating on the interval rating scale. Default is 10. |
 
 ### Categorical Rating
+
+The Categorical Rating response task is a psychophysical paradigm in which participants rate the perceived quality or intensity of a stimulus using a categorical (ordinal) scale composed of a finite set of labeled categories (e.g., none, slight, moderate, strong, intense). Unlike numerical or ratio rating tasks, categorical ratings provide ordered but not quantitatively spaced response options.
+
+In each trial, a stimulus is presented, and the participant selects the category that best describes their perceptual experience. The selected category is then evaluated relative to a predefined target category. If the chosen category meets or exceeds the target, the response task returns True; otherwise, it returns False. The adaptive estimation algorithm uses this binary outcome to adjust stimulus intensity and converge on the level required to elicit the target categorical percept. This task is illustrated in *Figure 12*.
 
 ![](/images/experiments/tests/threshold-estimation/TaskCRS.png)
 
 *Figure 12:*
+
+Categorical rating scales are ordinal, meaning that while categories have a defined order, the perceptual distance between categories is not assumed to be equal. For example, the difference between weak and moderate may not be perceptually equivalent to the difference between moderate and strong. As a result, categorical rating tasks are best suited for identifying thresholds for qualitative perceptual transitions, rather than for fine-grained psychometric modeling.
+
+#### Task definition
 
 A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
 
