@@ -718,8 +718,54 @@ This element has the following attributes.
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| target | int = Calculated(tc) | Target rating for the response task. |
+
+#### Required instruments
+
+When used a `OrdinalScale` instrument must be defined in the experimental setup and assigned to the test.
+
+```xml
+<display id="display"
+    screen="secondary"
+    position="fullscreen"
+    normative-distance="40">
+
+    <configurations>
+        <categorical-scale id="crs"
+            experimental-setup-id="crs"
+            controller-device="joystick">
+            <anchors>
+                <top-anchor text="Maximal Sound" />                                
+                <bottom-anchor text="Minimal Sound" />
+            </anchors>
+            <categories>
+                <category text="No Sound" />
+                <category text="Slight Sound" />
+                <category text="Moderate Sound" />
+                <category text="Strong Sound" />
+                <category text="Intense Sound" />
+            </categories>
+        </categorical-scale>
+    </configurations>
+</display>
+```
+
+These instruments must then be assigned to the test in the `<device-mapping>` element of the experimental setup, an example of such a device assignment is shown below:
+
+```xml
+<device-assignment 
+    device-id="display.crs" 
+    test-type="psychophysics-threshold-estimation" 
+    test-id="CRS"
+    instrument-name="OrdinalScale" />
+```
+
 
 ### Manual Categorical Rating
+
+The Manual Categorical Rating response task is a manual variant of the Categorical Rating task and is conceptually identical in terms of the perceptual judgment made by the subject. A stimulus is presented, after which the operator verbally asks the subject to describe their perception using a predefined categorical scale (e.g., none, slight, moderate, strong, intense). The participant responds verbally, and the operator enters the selected category manually into LabBench.
+
+If the entered category meets or exceeds the specified target category, the response task returns True; otherwise, it returns False. As with other manual response tasks, the test waits indefinitely until the operator records the participant’s response. This task is illustrated in *Figure 13*.
 
 ![](/images/experiments/tests/threshold-estimation/TaskManualCRS.png)
 
@@ -742,6 +788,7 @@ This element has the following attributes.
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| target | int = Calculated(tc) | Target rating for the response task. |
 
 
 each child `<category>` element defines a category with the following attributes:
