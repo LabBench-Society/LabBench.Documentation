@@ -259,20 +259,65 @@ LabBench includes several built-in response tasks that can be configured and use
 
 ### Yes/No
 
+The Yes/No response task is the most straightforward response task available in LabBench and is commonly used for basic detection experiments. In this task, a stimulus is presented to the subject, followed by a predefined response interval during which the subject may indicate perception of the stimulus by pressing a button. If the subject presses the button within this interval, the response task returns True, indicating that the stimulus was perceived. If no button press is detected before the response window closes, the task returns False, indicating that the stimulus was not perceived.
+
+The instruction given to the subject is therefore straightforward: **If you can feel the stimulus, press the button.** Because the response is time-limited and binary, this task is well-suited for adaptive threshold estimation procedures and automated experiments with minimal operator involvement. 
+
+A key limitation of the Yes/No response task is that it is prone to response bias. Because the subject decides internally whether a stimulus was present or not, their responses can be influenced by non-sensory factors such as expectation, motivation, risk tolerance, or misunderstanding of instructions. In a Yes/No task, these biases directly affect the measured detection rate and can shift the estimated threshold independently of actual sensory sensitivity. The task therefore conflates perceptual sensitivity with decision criteria.
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Psi estimation method with the `<yes-no-task>` element:
+
 ```xml
 <yes-no-task />
 ```
 
+This element has no attributes or child elements. When used a `Button` instrument must be defined in the experimental setup and assigned to the test. A press on any button configured to `button-01` will be interpreted by the response task as a positive response by the subject. Below is an example of how a Joystick can be configured to be used by a Yes/No response task:
+
+```xml
+<joystick id="joystick">
+    <map experimental-setup-id="image">
+        <button-assignment code="16" button="button-01" label="Button 1"/>
+        <button-assignment code="32" button="button-01" label="Button 2"/>
+    </map>
+</joystick>
+```
+
+It must then be assigned to the test in the `<device-mapping>` element of the experimental setup. Below is an example of the simplest device assignment, which will assign this Joystick to all tests that requires a `Button` instrument in the protocol including Threshold Estimation Tests:
+
+```xml
+<device-assignment device-id="joystick" instrument-name="Button" />
+```
+
+
 ### Manual Yes/No
+
+The Manual Yes/No response task is a manual variant of the standard Yes/No detection task and is conceptually identical in the decision made by the subject. A stimulus is presented, after which the operator verbally asks the subject a Yes/No question (e.g., **“Did you feel the stimulus?”**). The subject responds verbally, and the operator then enters the response manually into LabBench, which returns True for Yes (stimulus perceived) or False for No (stimulus not perceived). 
+
+How the operator is required to enter the response of the subject is shown in *Figure 5*.
 
 ![](/images/experiments/tests/threshold-estimation/TaskManualYesNo.png)
 
 *Figure 5:*
 
+Unlike the automatic Yes/No task, the manual version does not impose a response time window. The test will wait indefinitely until the operator records the subject’s response. This lack of a response time window removes time pressure on the subject. It makes the task suitable for populations that may have slower reaction times, difficulty using response devices, or require additional time to consider their response.
+
+Removing the response time constraint has important implications for both response bias and lapse rate. Because the subject is not required to respond within a fixed interval, the likelihood of missed responses due to delayed motor execution is reduced. This lack of response time constraint typically leads to a lower effective lapse rate, particularly in participants with variable reaction times or reduced motor control.
+
+However, like all Yes/No paradigms, the manual task remains susceptible to response bias. The subject still applies an internal decision criterion when answering the question, and this criterion may be influenced by expectation, confidence, or interaction with the operator. In some cases, the absence of time pressure may encourage more deliberation, thereby increasing response bias.
+
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Psi estimation method with the `<manual-yes-no-task>` element:
 
 ```xml
-
+<manual-yes-no-task instruction="Did the subject feel the stimulus?" />
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
+| | | |
+
+As a manual task the task requires no instruments.
 
 ### Forced Yes/No
 
@@ -281,8 +326,17 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 6:*
 
 ```xml
-
+<forced-yes-no-task 
+    probe="Images.ProbeFYN" 
+    cue="Images.CueFYN" 
+    yes-button="right" 
+    no-button="left" />
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Interval Forced Choice
 
@@ -291,8 +345,28 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 7:*
 
 ```xml
+<interval-forced-choice-task 
+    probe="Images.ProbeIFC"
+    display-duration="750"
+    display-interval="1000"
+    pause="1000">
 
+    <interval id="A" image="Images.Cue01" button="button-01" />
+    <interval id="B" image="Images.Cue02" button="button-02" />
+    <interval id="C" image="Images.Cue03" button="button-03" />
+    <interval id="D" image="Images.Cue04" button="button-04" />
+</interval-forced-choice-task>
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
+
+each child `<interval>` element defines a stimulus interval with the following attributes:
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Alternatives Forced Choice
 
@@ -301,8 +375,28 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 8:*
 
 ```xml
+<alternative-forced-choice-task 
+    probe="Images.ProbeAFC"
+    cue="Images.CueAFC"
+    display-duration="2000"
+    display-interval="3000"
+    pause="1000">
 
+    <alternative id="A" button="button-01" />
+    <alternative id="B" button="button-02" />
+    <alternative id="C" button="button-03" />
+</alternative-forced-choice-task>
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
+
+each child `<alternative>` element defines a stimulus alternative with the following attributes:
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Ratio Rating
 
@@ -311,8 +405,13 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 9:*
 
 ```xml
-
+<ratio-rating-task target="2"/>
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Numerical Rating 
 
@@ -321,8 +420,13 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 10:*
 
 ```xml
-
+<interval-rating-task target="2"/>
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Manual Numerical Rating
 
@@ -331,8 +435,17 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 11:*
 
 ```xml
-
+<manual-interval-rating-task 
+    instruction="What is the sound level"
+    minimum="0"
+    maximum="10"
+    target="1 if ChannelID == 'CH01' else 2"/>
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Categorical Rating
 
@@ -341,8 +454,13 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 12:*
 
 ```xml
-
+<categorical-rating-task target="2" />
 ```
+
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ### Manual Categorical Rating
 
@@ -351,9 +469,26 @@ LabBench includes several built-in response tasks that can be configured and use
 *Figure 13:*
  
 ```xml
-
+<manual-categorical-rating-task
+    target="1 if ChannelID == 'CH01' else 2">
+    <category text="No Sound" />
+    <category text="Slight Sound" />
+    <category text="Moderate Sound" />
+    <category text="Strong Sound" />
+    <category text="Intense Sound" />
+</manual-categorical-rating-task>              
 ```
 
+This element has the following attributes.
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
+
+
+each child `<category>` element defines a category with the following attributes:
+
+| Attribute              | Type                 | Specification |
+|------------------------|----------------------|---------------|
 
 ## Stimulation
 
