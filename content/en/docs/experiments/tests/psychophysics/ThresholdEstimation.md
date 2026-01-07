@@ -443,9 +443,17 @@ These instruments must then be assigned to the test in the `<device-mapping>` el
 
 ### Alternatives Forced Choice
 
+The Alternatives Forced Choice (AFC) response task is a bias-reduced psychophysical paradigm in which the participant must identify which of several possible stimulus alternatives was presented on each trial. Unlike interval-based forced choice tasks, the AFC task varies a stimulus property (e.g., frequency, spatial location, orientation, or pattern) rather than the timing of the stimulus.
+
+In each trial, one stimulus alternative is randomly selected from a predefined set and presented to the participant, along with a corresponding visual cue. This cue informs the participant that a stimulus is being presented, but not which alternative is active. After stimulus presentation, a probe screen is shown that instructs the participant how to respond and presents the available response options. The participant must then select the alternative they believe was delivered. The response task returns True if the selected alternative matches the delivered stimulus alternative, and False otherwise. This task is illustrated in *Figure 8*.
+
 ![](/images/experiments/tests/threshold-estimation/TaskAFC.png)
 
 *Figure 8:*
+
+In an AFC task with 𝑁 alternatives, chance performance is 1/𝑁. If the participant cannot reliably perceive the stimulus property that distinguishes the alternatives, their response is assumed to be random. For example, in a three-alternative forced choice (3AFC) task, the probability of a correct response by chance is approximately 33%. As stimulus intensity increases and the distinguishing feature becomes perceptually salient, the participant’s probability of selecting the correct alternative increases accordingly.
+
+A significant strength of the AFC task is its strong resistance to response bias. Because the participant must always choose one of the alternatives, there is no subjective decision about whether a stimulus was present or absent. Instead, the task forces a comparative judgment between alternatives, which substantially reduces criterion-based biases such as conservative or liberal responding. As a result, AFC tasks provide threshold estimates that more closely reflect true sensory sensitivity rather than decision strategy.
 
 #### Task definition
 
@@ -469,11 +477,42 @@ This element has the following attributes.
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| `probe` | Image = Calculated(tc) | Image that will be used to probe the subject for an answer to which stimulus alternative was presented when the cue was shown. |
+| `cue` | Image = Calculated(tc) | Image that will be used to cue the subject to pay attention to the stimulus. |
+| `display-duration` | int | The duration in milliseconds that the cue will be displayed to the subject. |
+| `display-interval` | int | The duration in milliseconds between the display of the cue and the display of the prompt. The display-interval value must be greater than the display-duration value. |
+| `pause` | int | The delay in milliseconds between when the subject answered the question and the next stimulus is presented. |
 
 each child `<alternative>` element defines a stimulus alternative with the following attributes:
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| `id` | string | Unique ID of the stimulus alternative. |
+| `button` | enum | Button that the subject will use to indicate if they felt this specific stimulus alternative. |
+
+The stimuli must be generated so that the selected stimulus alternative will be generated. The ID of the selected stimulus alternative is available in the `StimulusAlternative` variable, which can be used to generate parameters and stimuli using Python scripts. The stimulus definition below demonstrates how the `StimulusAlternative` variable is used to generate the three-tone stimulus alternatives used in the task example above.
+
+```xml
+<stimulus>
+    <combined>
+        <sine 
+            Is="50 + x if StimulusAlternative == 'A' else 50"
+            Ts="500" 
+            Tdelay="0"
+            Frequency="1000" />
+        <sine 
+            Is="50 + x if StimulusAlternative == 'B' else 50"
+            Ts="500" 
+            Tdelay="1000"
+            Frequency="1000" />
+        <sine 
+            Is="50 + x if StimulusAlternative == 'C' else 50"
+            Ts="500" 
+            Tdelay="2000"
+            Frequency="1000" />
+    </combined>
+</stimulus>
+```
 
 ### Required instruments
 
