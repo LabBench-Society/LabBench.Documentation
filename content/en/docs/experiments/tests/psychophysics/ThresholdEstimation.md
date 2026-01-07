@@ -248,7 +248,6 @@ LabBench includes several built-in response tasks that can be configured and use
 |----------------------------|-----------|-------------|----------------------|
 | Yes/No                     | Automatic | In a Yes/No response task, the subject is asked to press the button each time a stimulus is felt. This response is timed, meaning that if the subject does not press the button before the next stimulus is given, then it will be assumed that the stimulus was not felt. | Button |
 | Manual Yes/No              | Manual    | In a Manual Yes/No response task, the experimenter asks the subject after each stimulation whether they felt the stimulus. This response is then entered into the algorithm manually by the experimenter. Consequently, the test will wait indefinitely until the subject has answered the experimenter. | None |
-| Forced Yes/No              | Manual    | In the forced yes/no task, the stimulus is first presented to the subject, along with a cue that prompts the subject to attend to it. <br /><br /> Then a probe image is presented to the subject, with instructions to answer Yes or No to a stimulus quality; for example, if one or two stimuli could be felt, the subject presses one button for Yes and another for No. The task will wait indefinitely until the subject has answered the question. <br /><br /> This task is usually used for stimuli that are always felt but whose quality changes with increasing intensity. Examples of such stimuli are two-point stimuli or stimuli used to determine a just noticeable difference. | None |
 | Interval Forced Choice     | Automatic | Configuration of a stimulus interval. Stimuli will be generated for each stimulus interval in the order they are defined; when the stimulus is generated, the cue for that stimulus interval will be shown to the subject. <br /><br />     For each trial, one stimulus interval will be randomly selected as the one in which the stimulus is to be present. For that interval, the stimulus intensity (x) will be set to the current intensity determined by the estimation algorithm; for all other intervals, the stimulus intensity (x) will be set to Imin for the stimulus channel. <br /><br /> For calculated parameters, the currently active stimulus interval and selected stimulus interval are also available as the StimulusInterval and SelectedStimulusInterval parameters, respectively. These parameters contain the stimulus interval IDs. | Button, ImageDisplay |
 | Alternatives Forced Choice | Automatic | Configuration of a stimulus alternative where each is a different variant of the stimulus. For example, in a test that determines the just noticeable difference between three audible tones, there will be three different stimulus alternatives, for which either the first, middle, or last tone will be of a different intensity than the other tones. <br /><br /> For each trial, one stimulus alternative will be selected at random and presented to the subject. The selected one is available to calculated parameters in the StimulusAlternative parameter, whose value is the id attribute of the selected stimulus alternative. | Button, ImageDisplay |
 | Ratio Rating               | Automatic | In the Ratio Rating Task, the subject is asked to rate the stimuli's sensations on a ratio rating scale/visual analog scale. If the subject rate exceeds the target, the response task is successful and returns True; otherwise, it returns False. | RatioScale |
@@ -319,6 +318,7 @@ This element has the following attributes.
 
 As a manual task the task requires no instruments.
 
+<!--
 ### Forced Yes/No
 
 ![](/images/experiments/tests/threshold-estimation/TaskFYN.png)
@@ -338,11 +338,22 @@ This element has the following attributes.
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
 
+-->
+
 ### Interval Forced Choice
+
+The Interval Forced Choice (IFC) response task is a bias-reduced detection paradigm in which the stimulus is presented within one of several predefined temporal intervals, and the participant is required to indicate which interval it occurred in. Rather than deciding whether a stimulus was present or absent, the subject must always make a choice, even when unsure.
+
+In an IFC task, a sequence of interval cues is presented to the subject. A visual cue signals each interval, and the stimulus is delivered randomly exactly once in one of these intervals. After all intervals have been presented, a probe screen is shown that instructs the subject how to respond and provides the available response options. The subject then selects the interval in which they believe the stimulus was presented. The response task returns True if the selected interval matches the interval in which the stimulus was actually delivered, and False otherwise. This task is illustrated in *Figure 7*.
 
 ![](/images/experiments/tests/threshold-estimation/TaskIFC.png)
 
 *Figure 7:*
+
+In an interval forced-choice task with 𝑁 intervals, chance performance is 1/𝑁. If the subject cannot perceive the stimulus, their response is assumed to be random across intervals. For example, in a four-interval forced choice (4IFC) task, the probability of a correct response by chance alone is 25%. This known chance level (gamma) allows performance to be interpreted directly in terms of perceptual sensitivity and provides a natural lower bound for the psychometric function.
+
+A significant advantage of the IFC task is that it strongly reduces response bias. Because the subject must choose one of the presented intervals on every trial, there is no explicit “yes” or “no” decision and no opportunity to adopt a liberal or conservative response criterion. The subject’s internal decision criterion primarily affects which interval is chosen, not whether a response is made.
+
 
 ```xml
 <interval-forced-choice-task 
