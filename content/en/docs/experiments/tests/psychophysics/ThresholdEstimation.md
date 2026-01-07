@@ -708,7 +708,7 @@ Categorical rating scales are ordinal, meaning that while categories have a defi
 
 #### Task definition
 
-A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
+A threshold estimation test `<threshold-estimation-test>` can be configured to use the Categorical Rating response task with the `<categorical-rating-task>` element:
 
 ```xml
 <categorical-rating-task target="2" />
@@ -771,7 +771,7 @@ If the entered category meets or exceeds the specified target category, the resp
 
 *Figure 13:*
  
- A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
+ A threshold estimation test `<threshold-estimation-test>` can be configured to use the Manual Categorical Rating response task with the `<manual-categorical-rating-task>` element:
 
 ```xml
 <manual-categorical-rating-task
@@ -789,23 +789,54 @@ This element has the following attributes.
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
 | target | int = Calculated(tc) | Target rating for the response task. |
+| instruction | string | Question that the experimenter must ask to prompt the subject to rate the sensation on the categorical rating scale.|
 
 
 each child `<category>` element defines a category with the following attributes:
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| text | Dynamic Text | Description of the category. |
 
 ## Stimulation
 
+### Stimulation Channels
+
+Stimulation channels allow the estimation of psychometric functions and/or thresholds for multiple stimuli concurrently within a single threshold estimation test. Each channel represents an independent stimulus condition with its own adaptive estimation algorithm and stimulus definition. 
+
+During the experiment, LabBench alternates between channels on successive trials, interleaving stimulus presentations so that each channel progresses toward its own threshold or psychometric estimate.
+
+This interleaving ensures that multiple stimulus categories or conditions can be assessed efficiently without running separate tests, while maintaining an independent estimation state for each stimulus.
+
+```xml
+<channels>
+    <channel id="CH01" name="Category 1">
+        <up-down-method 
+            start-intensity="(Stimulator.Imax - Stimulator.Imin)/2 + Stimulator.Imin"
+            initial-direction="decreasing"/>
+
+        <stimulus>
+            <sine Is="x" Ts="200" Frequency="1000" />
+        </stimulus>
+    </channel>
+    <channel id="CH02" name="Category 2">
+        <up-down-method 
+            start-intensity="(Stimulator.Imax - Stimulator.Imin)/2 + Stimulator.Imin"
+            initial-direction="decreasing"/>
+
+        <stimulus>
+            <sine Is="x" Ts="400" Frequency="1000" />
+        </stimulus>
+    </channel>
+</channels>
+```
+
+### Custom Stimulations
 
 ## Scripting
 
 ### Properties
 
 ### Functions
-
-## Test results
-
 
 ## Example protocols
