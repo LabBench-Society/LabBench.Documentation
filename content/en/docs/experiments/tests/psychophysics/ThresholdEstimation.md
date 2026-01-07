@@ -274,7 +274,7 @@ A threshold estimation test `<threshold-estimation-test>` can be configured to u
 
 This element has no attributes or child elements. 
 
-### Required instruments
+#### Required instruments
 
 When used a `Button` instrument must be defined in the experimental setup and assigned to the test. A press on any button configured to `button-01` will be interpreted by the response task as a positive response by the subject. Below is an example of how a Joystick can be configured to be used by a Yes/No response task:
 
@@ -418,7 +418,7 @@ The stimuli must be generated so it is only delivered in the selected stimulus i
 
 However, if the stimulus must be generated with consideration to whether or not it is being generated for the selected stimulus interval, the `id` of the selected stimulus interval and currently active stimulus interval is available. The currently active stimulus interval and selected stimulus interval are available as the `StimulusInterval` and `SelectedStimulusInterval` parameters, respectively. These parameters contain the stimulus interval IDs.
 
-### Required instruments
+#### Required instruments
 
 When used `Button` and `ImageDisplay` instruments must be defined in the experimental setup and assigned to the test. The buttons for all intervals must be defined in the button `<map>` for the `Button` instrument.
 
@@ -514,7 +514,7 @@ The stimuli must be generated so that the selected stimulus alternative will be 
 </stimulus>
 ```
 
-### Required instruments
+#### Required instruments
 
 When used `Button` and `ImageDisplay` instruments must be defined in the experimental setup and assigned to the test. The buttons for all intervals must be defined in the button `<map>` for the `Button` instrument.
 
