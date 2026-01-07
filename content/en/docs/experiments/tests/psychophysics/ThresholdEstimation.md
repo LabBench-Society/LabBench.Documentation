@@ -537,9 +537,22 @@ These instruments must then be assigned to the test in the `<device-mapping>` el
 
 ### Ratio Rating
 
+The Ratio Rating response task is a psychophysical paradigm used to estimate the stimulus intensity required to elicit a specified supra-threshold perceptual response, rather than the minimum intensity required for detection. In this task, the subject rates the perceived magnitude of a stimulus using a ratio rating scale (i.e., a visual analog scale with ratio properties), and the response is evaluated relative to a predefined target value.
+
+For each trial, a stimulus is presented, and the subject provides a rating of its perceived intensity. If the reported rating meets or exceeds the target value, the response task returns True; otherwise, it returns False. The target, therefore, defines a criterion level of perceived magnitude, and the adaptive estimation algorithm adjusts stimulus intensity to find the level required to exceed this criterion reliably.
+
 ![](/images/experiments/tests/threshold-estimation/TaskVAS.png)
 
 *Figure 9:*
+
+It is essential to distinguish between perception thresholds and supra-threshold perception response thresholds:
+
+* A perception threshold is the minimum stimulus intensity that can be reliably detected, typically corresponding to a low probability of correct detection (e.g., 50–75%).
+* A supra-maximal threshold, as estimated by the ratio rating task, refers to the stimulus intensity required to evoke a specified magnitude of sensation, well above the detection limit.
+
+In other words, perception thresholds answer the question **“Can the stimulus be detected?”**, whereas supra-maximal thresholds answer **“How strong must the stimulus be to feel like this much?”**
+
+#### Task definition
 
 A threshold estimation test `<threshold-estimation-test>` can be configured to use the Interval Forced Choice response task with the `<interval-forced-choice-task >` element:
 
@@ -551,6 +564,7 @@ This element has the following attributes.
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
+| `target` | double = Calculated(tc) | Target rating for the response task |
 
 ### Numerical Rating 
 
