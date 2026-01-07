@@ -113,10 +113,6 @@ The step size determines how much the stimulus intensity changes after each resp
 
 LabBench supports adaptive step size reduction, where: The step size is multiplied by a reduction factor after each reversal. A lower bound (max-step-size-reduction) prevents the step size from becoming too small. This strategy combines fast convergence with stable threshold estimation. If adaptive step size reduction is used the threshold average will be weighted with the inverse of the step sizes at the reversals.
 
-#### Variants and Target Performance Level
-
-The simplest up/down method (1-up/1-down) converges to the stimulus intensity corresponding to approximately 50% correct performance. More advanced variants (e.g., n-up/m-down or unequal up/down stepsizes) can target other points on the psychometric function.
-
 #### Definition of the method
 
 A stimulus channel `<channel>` can be configured to use the Up/Down estimation method with the `<up-down-method>` element:
@@ -155,43 +151,13 @@ Please note not all of these attributes are shown in the code example above.
 
 ### Discrete Up/Down
 
-The discrete up/down method is a variant of the classical staircase procedure in which stimulus intensity is restricted to a finite, predefined set of discrete values. Instead of continuously adjusting the stimulus intensity by adding or subtracting a step size, the algorithm moves up or down within a list of allowed intensity levels.
-
-This method is particularly useful when:
-
-* The stimulus hardware only supports a limited set of intensity values
-* The experiment requires standardized, repeatable stimulus levels
-* The stimulus dimension is inherently categorical or ordinal
-
-Conceptually, the discrete up/down method follows the same adaptive logic as the continuous version, but replaces arithmetic intensity updates with index-based transitions between predefined intensity levels. The Up/Down method is illustrated in *Figure 3*.
+The discrete up/down method is a variant of the classical staircase procedure in which stimulus intensity is restricted to a finite, predefined set of discrete values. Instead of continuously adjusting the stimulus intensity by adding or subtracting a step size, the algorithm moves up or down within a list of allowed intensity levels. Conceptually, the discrete up/down method follows the same adaptive logic as the continuous version, but replaces arithmetic intensity updates with index-based transitions between predefined intensity levels. The Up/Down method is illustrated in *Figure 3*.
 
 ![](/images/experiments/tests/threshold-estimation/DiscreteUpDown.png)
 
 *Figure 3:*
 
-#### Discrete Intensity Set
-
-The key defining feature of the discrete up/down method is the intensity set, provided as an ordered list:
-
-```xml
-intensities="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100]"
-```
-
-The algorithm always selects intensities from this list and never interpolates between values.
-
-#### Step Size in Discrete Space
-
-Unlike the continuous up/down method, the step size in the discrete variant is defined in terms of index jumps within the intensity list.
-
-For example: initial-step-size="2" means the algorithm moves two positions up or down the intensity list after each response. Once a reversal has occured, the  step size is reduced to one.
-
-This approach allows rapid initial convergence while maintaining strict control over the allowed intensity values.
-
-#### Reversals and Threshold Estimation
-
-Reversals are detected when the direction of index movement changes. After discarding a configurable number of initial reversals (the skip rule), the remaining reversal intensities are used to estimate the threshold.
-
-The threshold is computed as the mean of the intensities at the reversal points
+Unlike the continuous up/down method, the step size in the discrete variant is defined in terms of index jumps within the intensity list. Reversals are detected when the direction of index movement changes. After discarding a configurable number of initial reversals (the skip rule), the remaining reversal intensities are used to estimate the threshold. The threshold is computed as the mean of the intensities at the reversal points
 
 #### Definition of the method
 
@@ -223,13 +189,6 @@ The method is configured with the following attributes:
 ### Psi-Method
 
 The Psi method is a Bayesian adaptive procedure for efficiently estimating the parameters of a psychometric function. Unlike staircase methods, which primarily converge to a single threshold value, the Psi method explicitly models the entire psychometric function and selects stimulus intensities that maximize expected information gain on each trial. At each iteration, the Psi method evaluates the expected posterior entropy for all candidate stimulus intensities and selects the one that minimizes this entropy, thereby maximizing the expected reduction in uncertainty about the psychometric parameters.
-
-For each trial, the Psi method performs the following steps:
-
-1. **Posterior prediction**: For each candidate stimulus intensity, the method predicts the probability of a correct response under the current posterior.
-2. **Expected entropy computation**: The expected posterior entropy is computed for each candidate intensity, marginalizing over possible responses.
-3. **Optimal stimulus selection**: The stimulus intensity that minimizes expected entropy is selected for the next trial.
-4. **Posterior update**: After observing the actual response, Bayes’ rule is used to update the posterior distribution over psychometric parameters.
 
 This process is repeated until the predefined number of trials is reached. This method is illustrated in figure 4.
 
