@@ -41,9 +41,49 @@ The `ImageCanvas` has the following properties:
 
 ## Image functions
 
-### `byte[] GetImage()`
+The image functions of `ImageCanvas` are responsible for **extracting and exporting** the rendered contents of the canvas for use outside the drawing API. An `ImageCanvas` accumulates drawing commands into an internal image buffer. Image functions provide controlled access to this buffer by encoding it into standard image representations, without altering the canvas state. This design allows the same canvas to be rendered, inspected, and exported multiple times during protocol execution.
 
-### `IAsset GetAsset()`
+`ImageCanvas` supports implicit conversion to a byte array representing a PNG-encoded image. This implicit conversion means that any LabBench function or API expecting a `byte[]` image parameter can receive an `ImageCanvas` instance directly, without explicitly calling `GetImage()`.
+
+This design simplifies protocol code and reinforces the idea that a canvas *is* an image once rendering is complete, while still allowing drawing operations to remain expressive and stateful.
+
+### GetImage()
+
+Encodes the current contents of the canvas into a PNG image and returns it as a byte array.
+
+This function captures a snapshot of the canvas at the moment it is called, including all previously drawn elements, and encodes it using lossless PNG compression. The returned byte array can be stored, transmitted, or passed directly to other LabBench components that consume image data.
+
+Calling this function does not modify the canvas and can be done multiple times to retrieve intermediate or final rendering states.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| — | — | This function takes no parameters. |
+
+#### Return Value
+
+Returns a `bytes` object containing the PNG-encoded image data representing the current canvas contents.
+
+
+### GetAsset()
+
+Wraps the current canvas image in a LabBench image asset and returns it as an `IAsset`.
+
+This function converts the rendered canvas into a memory-backed image asset that can be used directly by LabBench components expecting assets. The image data is generated from the current canvas state at the time the asset is created.
+
+Calling this function does not modify the canvas and can be done multiple times to retrieve intermediate or final rendering states.
+
+#### Parameters
+
+| Name | Type | Description |
+|------|------|-------------|
+| — | — | This function takes no parameters. |
+
+#### Return Value
+
+Returns an `IAsset` representing the current canvas image, suitable for use wherever LabBench image assets are required.
+
 
 ## Style functions
 
