@@ -5,8 +5,7 @@ weight: 10
 ---
 
 {{% pageinfo %}}
-
-
+`ImageCanvas` is a lightweight, stateful 2D drawing surface used in LabBench protocols to construct precise and reproducible visual stimuli. It provides an immediate-mode graphics API that separates styling, geometry, text, and image export, allowing complex stimuli to be built procedurally with clear intent. The canvas maintains an internal drawing state that applies consistently across operations and can be exported seamlessly as image data or LabBench assets.
 {{% /pageinfo %}}
 
 An `ImageCanvas` can be created with one of the `GetCanvas()` functions in the Image toolkit. Below is an example, where an `ImageCanvas` is created to generate and display a visual stimulus for the Stroop Task:
