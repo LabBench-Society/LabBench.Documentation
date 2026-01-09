@@ -1,11 +1,11 @@
 ---
 title: Toolkits
-description: Information on how call python code from LabBench protocols.
+description: Information about toolkits provided by LabBench.
 weight: 10
 ---
 
 {{% pageinfo %}}
 
-The purpose of this section is to provide information on how to administer a LabBench system.
+Toolkits in LabBench are **domain-specific, scriptable capability modules** that expose carefully scoped functionality to experimental protocols. 
 
 {{% /pageinfo %}}
