@@ -10,364 +10,363 @@ The purpose of this section is to provide information on how to administer a Lab
 
 {{% /pageinfo %}}
 
-Throughout this guide, we have already used attributes extensively. For example, in Listing 7, attributes provide the data for the test annotations. Each attribute has a name and is assigned a value in the form of:
 
-\verb|name_of_attribute="value of attribute"|. 
+This section provides information on how to automate experimental protocols with calculated parameters and extend the functionality of LabBench with Python scripts.
 
-An attribute also has a type; for example, the value attribute of the number element in Listing~\ref{lst:assets} is of type float that represents rational numbers of the form 0.1, 1.2, etc. The LabBench Language has simple types for integers, floats (rational numbers), Boolean values, text strings, and value lists (enums). 
+The concepts described here apply uniformly across all LabBench protocols and are independent of any specific test type.
 
-\subsection{Simple types}
+## Attributes and types
+Attributes are the primary mechanism for configuring experiments in LabBench. 
 
-\subsubsection{Integers}
+Each attribute has:
+- A **name**
+- A **value**
+- An associated **type**
 
-An integer is a whole number, meaning it is a number that does not have any fractional or decimal parts. Integers can be either positive, negative, or zero. They represent values that can be counted or measured in whole units without fractions or decimals.
+The LabBench Language supports a set of simple and structured types used across attributes, calculated expressions, and scripts.
 
-\verb|Example: 1, 2, 3, 4, -10|
-\subsubsection{Floating numbers}
+### Simple Types
+| Type | Description | Examples |
+|-----|------------|----------|
+| **Integer** | Whole numbers without fractional parts; may be positive, negative, or zero. | `1`, `2`, `42`, `-7` |
+| **Floating-point** | Rational numbers represented with decimal precision. | `0.1`, `2.75`, `-1.2` |
+| **Text** | Sequences of characters used to represent textual data (strings). | `"This is a text string"` |
+| **Boolean** | Logical truth values with exactly two possible states. | `true`, `false` |
+| **Enumeration (enum)** | A fixed set of named, discrete values representing categorical options. | `single-sample` |
 
-A float represents a rational number, which is a number that can be expressed as the quotient or fraction of two integers, where the numerator is an integer and the denominator is a non-zero integer.
+### Structured Types
 
-\verb|Example: 2.8, -1.2, 0.1|
-\subsubsection{Text}
+In addition to simple scalar types, LabBench supports **structured types** that allow complex data to be grouped, indexed, and accessed programmatically. Structured types can be used in:
 
-Text variables, often referred to as a "string variable," are data types used to store and manipulate sequences of characters. 
+- Calculated attributes
+- Python scripts
 
-\verb|Example: 'This is text string'|
-\subsubsection{Boolean}
+The primary structured types are **lists** and **dictionaries**.
 
-Boolean variables can only hold one of two possible values: "true" or "false."
-v
-\verb|Example: true, false (and nothing else)|
+#### Lists
 
-\subsubsection{Enumerations}
+A list is an ordered collection of values accessed by a zero-based index. All elements in a list share the same type, which may be a simple or another structured type.
 
-An \verb|enum|, short for "enumeration," is a data type in computer programming that defines a set of named constant values. Enumerations create a collection of symbolic names (enumerators) that represent a finite list of related, distinct values or options.
+Lists are typically used when:
+- Order matters
+- Values are accessed by position
+- The number of elements is fixed or known
 
-\verb|Example: single-sample|
+Type notation:
+```
+type[]
+```
+Definition Example:
 
-\subsection{Data structures}
-Besides the simple types in table TBD there are also types for structuring data. Data can be structured as lists (array), dictionaries (dict), and structures (struct).
+```xml
+<define name="StimulusLevels" value="[0.1, 0.2, 0.3, 0.4]"/>
+```
 
-\subsubsection{Arrays}
+Access from a Single-Line Calculated Attribute:
 
-An array holds a list of values that are accessed by their index in the list. Each of the values in the array can be either a simple type or another structured type.
+```xml
+stimulus-intensity="StimulusLevels[0]"
+max-intensity="max(StimulusLevels)"
+```
+Access from Python Script:
 
-Nomenclature: \verb|array<type>|
+```python
+def ExampleFunction(tc):
+    first_level = tc.StimulusLevels[0]
+    last_level  = tc.StimulusLevels[-1]
+    return first_level
+```
 
-Examples: \verb|intensity[2]|, \verb|answer[3]|
-  
-\subsubsection{Dictionaries}
+#### Dictionaries
+A dictionary stores values as key–value pairs. Elements are accessed using a key rather than a numeric index. Keys are simple types (most commonly text), and values may be simple or structured types.
 
-A dictionary holds a set of (key, value) pairs where elements in the set is accessed by their key, and the value can be either a simple type or another structured type. The key is always a simple type, most often a text type.
+Dictionaries are typically used when:
+- Semantic labels identify values
+- Order is not important
+- Configuration or lookup tables are needed
 
-Nomenclature: \verb|dictionary<key_type, value_type>|
+Type notation:
 
-Examples: \verb|SETUP[‘RECT’]|
+```
+key_type<value_type>
+```
 
-\subsubsection{Structures}
 
-A set of values where each value in the set is named. Each of the values in the array can be either a simple type or another structured type.
+Definition Example:
 
-Nomenclature: \verb|struct(name1<type>,name2<type>,…,nameN<type>)|
+```xml
+<define name="Thresholds" value="{'low': 0.2, 'medium': 0.5, 'high': 0.8}"/>
+```
 
-Examples: \verb|SR.PTT, SR.PDT|
+Access from a Single-Line Calculated Attribute:
 
-\subsection{Calculated attributes}
+```xml
+stimulus-intensity="Thresholds['medium']"
+upper-limit="min(Thresholds['high'], Device.Imax)"
+```
 
-Most attributes are calculated, meaning they can be specified in a protocol with a mathematical expression. Calculated attributes in a protocol allow the LabBench Language to automate manual tasks during an experiment. As attributes configure tests, it is possible to configure tests from the results of previous tests in the protocol. 
+Access from Python Script:
 
-The following example illustrates this. In our protocol on the relationship between DASS scores and pain sensitivity, we wish to determine the temporal summation of pressure stimuli. The intensity of the pressure stimuli must be set to 70\% of the Pain Tolerance Threshold (PTT) to linearly increasing pressure, which is determined by the <algometry-stimulus-response> test with ID="SR01". To do this, we will set the pressure of the stimuli (pressure-stimulate) in the <algometry-temporal-summation> test to:
+```python
+def ExampleFunction(tc):
+    medium_threshold = tc.Thresholds['medium']
+    return medium_threshold
+```
 
-\verb|pressure-stimulate="0.7 * SR01.PTT"|
 
-We can do this because the text that is between the “ ” quotes of a calculated attribute is a single-line Python statement, which gets evaluated by the LabBench Runner, and when the code is specified in the Experiment Definition File, this is termed as a single-line calculated attribute, in contrast to a script calculated attribute that is evaluated by calling a Python function in a script. A second reason why calculated attributes can automate manual tasks is that from calculated parameters, we have access to a set of variables:
+#### Nested Structured Types
 
-\begin{longtable}{|p{0.2\textwidth}|p{0.25\textwidth}|p{0.45\textwidth}|}
-\hline
-Variables & Name & Description \\
-\hline
-\endfirsthead
+Structured types may be nested arbitrarily. For example, a dictionary may contain lists, and a list may contain dictionaries.
 
-Results of tests in the protocol
-& 
-The ID of the test 
-& 
-Results of tests in the protocol. These variables are available to all calculated attributes except attributes of defines.
 
-Examples:
+Access from a Single-Line Calculated Attribute:
 
-pressure-stimulate="0.7 * SR01.PTT"
+```xml
+stimulus-intensity="Results['Test01']['Metrics']['mean'][0]"
+```
 
-conditional-pressure="0.7 * SR02.PTT"
+Access from Python Script:
 
- \\
-\hline
-Instruments
+```python
+def ExampleFunction(tc):
+    value = tc.Results['Test01']['Metrics']['mean'][0]
+    return value
+```
 
-  & ID within the test of the instrument.
+#### Summary
 
-  & Instruments that are used by the test. These variables are only available for calculated attributes of tests. Knowing their names requires looking up their names in the LabBench Language Specification [REF] to which Instruments each type of test requires and their ID within that specific type of test.
+| Structured Type | Access Syntax | Typical Use Case |
+|----------------|--------------|------------------|
+| List | `values[index]` | Ordered collections |
+| Dictionary | `values[key]` | Named lookup |
 
- Example:
+Lists and dictionaries can be used when writing both **single-line calculated attributes** and **Python scripts** for LabBench protocols. 
 
-Imax="Stimulator.Imax"
 
-  \\
-\hline
+## Calculated Attributes
+Most attributes in LabBench can be *calculated*, meaning their values are specified as expressions rather than fixed literals. 
+
+Calculated attributes allow experiments to:
+- Automate configuration steps
+- React to results from earlier parts of the experiment
+- Adapt dynamically during execution
+
+A calculated attribute is written as a **single-line Python expression** enclosed in quotes. This expression is evaluated by the LabBench runtime.
+
+Example:
+
+```python
+parameter="0.7 * PreviousTest.Result"
+```
+
+Calculated attributes make it possible to derive new values directly from:
+
+- Results of earlier tests
+- Instrument properties
+- Defined constants
+- Mathematical functions
+
+### Available Variables in Calculated Attributes
+Depending on where a calculated attribute is used, the following variables may be available:
+
+- Results from previous tests (referenced by test ID)
+- Instruments used by the test (referenced by instrument ID)
+- Defines declared in the protocol
+- Mathematical functions such as: exp, round, log, log10, sin, cos, tan, abs, sqrt, max, min, pow
+- Free parameter x, when applicable (e.g., in tests that evaluate responses as a function of a changing parameter)
+- Language, if the experiment is localized
+- SESSION_NAME and SESSION_TIME, describing the active session
+
+### Calculated attribute types
+Calculated attributes must declare the type of value they return and the function signature when called from a Python script:
+
+```
+int calculated(tc) or int calculated(tc,x) – must return an integer
+double calculated(tc) – must return a floating-point number
+float[] calculated(tc) – must return a list of floats
+any = calculated(tc) – may return any supported type
+```
+
+Returning a value of the wrong type or calling a Python function with the wrong function signature will result in a runtime error.
+
+## Dynamic Text Attributes
+
+Text is used extensively in experiments (instructions, labels, prompts). In many cases, text must be dynamic—depending on language, experimental state, or recorded results. Using full Python expressions for all text would require quoting text strings inside Python syntax, which is error-prone. 
+
+To address this, LabBench introduces dynamic text attributes.
+
+### Literal Text
+
+Literal text can be written directly:
+
+```xml
+instruction= "Please respond when ready"
+``` 
+
+### Dynamic Text
+
+If the text value begins with the keyword dynamic:, it is evaluated as a calculated text expression:
+
+```xml
+instruction="dynamic: Text['INSTRUCTION_01']"
+```
+
+This mechanism allows seamless mixing of literal text and calculated text without forcing all text to be expressed as Python strings.
+
+## Defines
+
+Experiments often require the same value to be reused across multiple attributes. Repeating literal values increases the risk of inconsistencies and errors. LabBench addresses this using defines, which implement the "Don't Repeat Yourself" (DRY) principle.
+
+Defines are declared once and can then be referenced throughout the protocol, calculated attributes, and scripts.
+
+Each define have:
+- A **name** (used as the variable name)
+- A **value** (literal or calculated)
+
+Conceptually, defines act as global constants or configuration variables for the experiment.
+
+Defines are available:
+- In calculated attributes (by name)
+- In Python scripts (via the test context)
+
+## Python Scripts
+Single-line calculated attributes are ideal for simple expressions, but they are insufficient for:
+
+- Complex logic
+- Conditional branching
+- Reusable algorithms
+- Extending test behavior
+
+In these cases, LabBench supports Python scripts that can be called from calculated attributes. LabBench provides access to a full Python runtime, including the standard library.
+
+### Calling Script Functions
+
+To call a Python function from a calculated attribute, prefix the value with the keyword func::
+
+```xml
+attribute= "func: ScriptID.FunctionName(tc)"
+```
+Depending on the calculated parameter, a free parameter x can be passed :
+
+```xml
+attribute= "func: ScriptID.FunctionName(tc, x)"
+```
+
+Where:
+- **ScriptID**: is the ID of the script as declared in the experiment assets
+- **FunctionName**: is the Python function to call
+- **tc** is the test context (always provided)
+- **x** is a free parameter, such as stimulus intensity, etc.
+
+Each calculated parameter specifies whether they expect a (tc) or (tc,x) function signature.
+
+### Defining Functions
+
+Functions callable by LabBench must:
+- Be defined at the top level of the script
+- Accept the test context (tc) or (tc,x) as their arguments depending on the expected function signature of the calculated parameter.
+- Return a value compatible with the calculated attribute's declared type
+
+Example structure:
+
+```python
+def ExampleFunction(tc):
+    # custom logic
+    return result
+```
+
+Returning an incorrect type will cause a runtime error during experiment execution.
+
+## The Test Context (tc)
+
+When a Python function is called, LabBench passes it a test context object (tc). 
+
+This context provides structured access to all relevant information needed for advanced logic.
+
+The test context includes:
 Defines
+All protocols defines are accessible as fields on tc, named after their define IDs:
+tc.MyDefine
+Results
+Results from completed tests are accessible via the results namespace or directly when exposed by the test:
+tc.[TestID].[Property or function of the result]
+Parameters
+Some tests expose additional parameters to simplify configuration logic. These are available as scoped defines that are only available for relevant calculated parameters:
+tc.NumberOfStimuli
+Devices
+Instruments used by a test are accessible via the Devices struct:
+tc.Instruments.Stimulator
+tc.Instruments.Trigger
+tc.Instruments.Display
+Assets
+Files and other assets declared in the experiment are accessible via:
+tc.Assets.[Asset ID]
+Localization and Session Information
+If applicable, the test context also provides:
+tc.Language
+tc.SESSION_NAME
+tc.SESSION_TIME
+
+
+## How-to guides
+
+### Constructing Strings with `str.format()` 
+
+In LabBench, `str.format()` is the preferred way to construct clear and maintainable strings in calculated parameters and Python scripts. It replaces placeholders in a string with values provided explicitly, avoiding manual string concatenation and type conversions. Here is an example of its syntax  with positional placeholders:
+
+``` python
+"Hello {}, you have {} messages".format(name, count)
+```
+
+-   `{}` marks insertion points
+- Arguments are applied in order
+- Values are converted to strings automatically
+
+Named placeholders can also be used and is recommended for complex strings:
+
+``` python
+"User {user} has {count} messages".format(user=name, count=count)
+```
+
+Using named placeholders makes format strings more readable than positional placeholders, allows arguments to be reordered freely, and reduces the risk of errors when the string changes over time. A second advantage is that values can be reused:
+
+``` python
+"{x} + {x} = {result}".format(x=2, result=4)
+```
+
+Values are formatted with format specifiers:
+
+``` python
+"Value: {:.2f}".format(3.14159)   # 'Value: 3.14'
+"Hex: {:x}".format(255)           # 'Hex: ff'
+```
+
+Format specifiers: 
+
+| Specifier | Meaning | Example | Result |
+|----------|---------|---------|--------|
+| `{}` | Default formatting | `"{}".format(42)` | `42` |
+| `{s}` | String (same as default) | `"{:s}".format("hi")` | `hi` |
+| `{d}` | Decimal integer | `"{:d}".format(42)` | `42` |
+| `{b}` | Binary integer | `"{:b}".format(5)` | `101` |
+| `{o}` | Octal integer | `"{:o}".format(8)` | `10` |
+| `{x}` | Hexadecimal (lowercase) | `"{:x}".format(255)` | `ff` |
+| `{X}` | Hexadecimal (uppercase) | `"{:X}".format(255)` | `FF` |
+| `{f}` | Fixed-point float | `"{:f}".format(3.14)` | `3.140000` |
+| `{.nf}` | Float with `n` decimals | `"{:.2f}".format(3.14159)` | `3.14` |
+| `{e}` | Scientific notation | `"{:e}".format(1000)` | `1.000000e+03` |
+| `{g}` | General format (compact) | `"{:g}".format(3.14000)` | `3.14` |
+| `{c}` | Character from int | `"{:c}".format(65)` | `A` |
+| `{%}` | Percentage | `"{:.1%}".format(0.25)` | `25.0%` |
+| `{n}` | Number with locale | `"{:n}".format(1000000)` | `1,000,000`* |
+| `{width}` | Minimum field width | `"{:5d}".format(42)` | `   42` |
+| `{<width}` | Left-aligned | `"{:<5d}".format(42)` | `42   ` |
+| `{>width}` | Right-aligned | `"{:>5d}".format(42)` | `   42` |
+| `{^width}` | Center-aligned | `"{:^5d}".format(42)` | ` 42  ` |
+| `{0width}` | Zero-padded | `"{:05d}".format(42)` | `00042` |
+| `{+}` | Always show sign | `"{:+d}".format(42)` | `+42` |
+| `{-}` | Show minus only | `"{:-d}".format(-42)` | `-42` |
+| `{}` with attributes | Object attribute access | `"{u.name}".format(u=user)` | value |
+| `{}` with keys | Dict key access | `"{cfg[port]}".format(cfg=cfg)` | value |
 
-  & ID of the define 
 
-  & Defines holds values used in multiple calculated attributes in a protocol. They are named after their ID in the list of defines.
-
- Example:
-
-delta-pressure="DeltaPressure"
-
-  \\
-\hline
-Mathematical functions
-
-  & exp, round, log, log10, sin, sinh, asin, cos, cosh, tan, tanh, abs, sqrt, max, min, pow
-
-  & Common mathematical functions.
-
- Examples:
-
-exp(10)
-
-round(1.67)
-
-min(4 * SETUP[‘RECT’], Stimulator.Imax) \\
-\hline
-Free parameter
-
-  & x & Only used tests for which a response is determined for a change in a free parameter. For example, the calculated attributes for a stimulus in a threshold estimation test will have access to the free parameter x.
-
- Example:
-
-Is="x"
-
-Is="-x/5"
-
-  \\
-\hline
-Language & Language & If the experiment is localized with a <languages> element, then the selected language will be available as a variable named Language.
-
- Example:
-
-Language == ‘en’
-
-  \\
-\hline
-Session ID & SESSION\_NAME & ID of the current session. The type of the variable is text.
-
-  \\
-\hline
-Session time & SESSION\_TIME & Time that the current session was started. The type of the variable is text.
-
-  \\
-\hline
-
-\end{longtable}
-
-A short note on nomenclature. Throughout the LabBench documentation, it is necessary to specify the types of attributes. A calculated attribute will be required to return either 1) a simple type, 2) a list, dictionary, or structure of simple types, or 3) a value of any type. 
-
-The calculated attribute is specified as \verb|calculated<type>|, meaning that:
-
-\begin{itemize}
-    \item \verb|calculated<int>| is a calculated parameter that must return an integer, and
-    \item \verb|calculated<list<float>>| is a calculated parameter that must return a list of floats and 
-    \item \verb|calculated<any>| is a calculated attribute can return any type.
-\end{itemize}
- 
-\subsection{Dynamic text attributes}
-
-Text is used extensively in Experiment Definition Files and may be needed to customize the text based on either the localization of the protocol or results that have been recorded. These could be achieved with calculated attributes. However, in many cases, only literal text strings are needed. If calculated attributes were used directly for text attributes, then all text attributes would need to be specified as attribute-name=”’test’” because the value of the attribute would be a Python statement and, within Python, text is specified with single quotes (i.e.‘example text’). Using Python syntax for all the text that needs to be customized would be an inconvenience and a source of error because it would be very easy to forget the single quotes ’ within the double quotes “.
-
-To solve this problem, the LabBench Language has a special calculated attribute type called dynamic text, which allows literal text to be specified as:
-
-\verb|instruction="What is the reason for skipping the pressure tests?"|
-
-But if a dynamic: keyword is added before the text, then it will be evaluated as a calculated<text> attribute:
-
-\verb|instruction="dynamic: Text['I01']"|
-
-Which, in the above example, returns the text that is stored in the dictionary Text under the key ‘I01’.
-
-\subsection{Defines}
-
-Often, you will need to use the same value for a parameter for multiple attributes in an Experiment Definition File. When the same values are repeated in multiple places, it is a common error that this value will be wrong in one or more places. A common principle in programming is the “Don’t Repeat Yourself” (DRY) principle. The DRY principle states that if you need the same information at multiple sites, a mechanism must be available to avoid that. 
-
-To avoid this problem, the LabBench Language allows you to define variables in a protocol that can be used in subsequent definitions, tests, and post-session actions. 
-
-Each define has two attributes: 1) a \verb|name| attribute that is the name the variable can be referred to in calculated attributes and scripts, and 2) its \verb|value|. Listing~\ref{lst:defines} provides an example of how three variables can be defined:
-
-\begin{lstlisting}[language=XML, caption=The defines that are used in our protocol., label={lst:defines}]
-<defines>
-    <define name="DeltaPressure" value="1"/>
-    <define name="VasPDT" value="0.1"/>
-    <define name="Text" value="func: TEXT.CreateText(tc)"/>
-</defines>
-\end{lstlisting}
-
-The variables defined in the \verb|<defines>| element can subsequently be used in defines, tests, and post-session actions. Below is an example of how the DeltaPressure variable is used in a \verb|<|algometry-stimulus-response\verb|>| test:
-
-\begin{lstlisting}[language=XML, caption=Example of test attributes where the defines are used.]
-<algometry-stimulus-response ID="SR01"
-                             name="Stimulus-Response (Cuff 1)"
-                             experimental-setup-id="blank"
-                             delta-pressure="DeltaPressure"
-                             pressure-limit="100"
-                             primary-cuff="func: Setup.StimulatingCuff(tc)"
-                             second-cuff="false"
-                             stop-mode="STOP_CRITERION_ON_BUTTON_PRESSED"
-                             vas-pdt="VasPDT">
-    <!-- Content omitted for brevity -->
-</algometry-stimulus-response>
-\end{lstlisting}
-
-\subsection{Scripts}
-
-Single-line calculated attributes allow for simple calculations of attributes but fall short of implementing complex logic or extending the base functionality of tests. For more complex calculations and actions, you will need to use a Python script called from the Experiment Definition File.
-
-\subsubsection{Calling a script}
-
-LabBench provides access to a full Python scripting engine with the ability to use the Python standard library. This access makes it possible to call functions defined in a script from calculated attributes. Below is an example where a function is called to set which cuff to use as the primary cuff in an <algometry-stimulus-response> test:
-
-\verb|primary-cuff="func: Setup.StimulatingCuff(tc)"|
-
-The keyword \verb|func:| tells LabBench to call a function in a Python script instead of treating it as a single-line calculated attribute. When the value of the calculated attribute starts with this keyword, it will require that the rest of the line is of the form:
-
-\verb|[ID of Script].[Function Name](tc)|, or 
-
-\verb|[ID of Script].[Function Name](tc,x)|. 
-
-The ID of the script is the ID of the script assigned to it in its \verb|<|file-asset\verb|>| element in the \verb|<assets>| section of the protocol. 
-
-\subsubsection{Defining functions}
-
-The StimulatingCuff function is defined in a script included in the Experiment Definition File that is implemented as:
-
-\begin{lstlisting}[language=Python, caption=Definition of a function that can be called by LabBench.]
-def StimulatingCuff(tc):
-    retValue = 0
-    
-    if tc.SUBJECT['CLEARING'] == 3:   # Both sides cleared
-        if tc.SUBJECT['HAND'] == 1:   # Right hand is dominant
-            retValue = 2
-        elif tc.SUBJECT['HAND'] == 2: # Left hand is dominant
-            retValue = 1
-        else:                         # Both hands are dominant
-            retValue = 2
-    elif tc.SUBJECT['CLEARING'] == 2: # Left side cleared
-        retValue = 1
-    elif tc.SUBJECT['CLEARING'] == 1: # Right side cleared
-        retValue = 2
-    
-    return retValue;
-\end{lstlisting}
-
-This defines a function that must be called with one parameter, the test context (tc), and returns an integer. As this function is used for the calculated<int> primary-cuff attribute of the \verb|<|algometry-stimulus-response\verb|>| this will control which cuff will be inflated by the test based on the handedness of the subject and whether the subject is cleared for pressure algometry on both sides, the right or left side.
-
-Since functions are always called from calculated attributes, all functions must return the correct type for the calculated attribute from which they are called. Returning the wrong type may result in an error when the experiment is performed.
-
-\subsubsection{Test context}
-
-For single-line calculated attributes, results, defines, and instruments can be used from the single-line statement as individual variables; however, for script calculated attributes, these variables and more are accessible through the Test Context. When the function is called, the test context (tc) is always passed as a parameter to the function, followed by the free parameter “x” if that variable is available to the calculated attribute.
-
-The test context is a struct variable that gives access to the following variables:
-
-\begin{longtable}{|p{0.2\textwidth}|p{0.25\textwidth}|p{0.45\textwidth}|}
-\hline
-Variable & Description & Access \\
-\hline
-\endfirsthead
-
-defines &
-Defines from the \verb|<defines>| element in the \verb|<protocol>|. &
-Each define is a variable in the tc struct named by their id attribute in the \verb|<define>| element.
-
-Example:
-\verb|tc.DeltaPressure|
-
-\\
-\hline
-results &
-Results from each test in the protocol. &
-Each result is a variable in the tc struct named by their id attribute in the \verb|<test>| element.
-
-Example:
-
-\verb|tc.SUBJECT['CLEARING']|
-(the result from the ‘CLEARING’ question in the questionnaire with id=”SUBJECT”.
-
-\\
-\hline
-parameters &
-Parameters added by tests that make it easier to configure the tests based on other parts of its configuration. &
-Each test-specific parameter is a variable in the tc struct with a name automatically assigned by the test.
-
-Example:
-
-\verb|tc.NumberOfStimuli|
-(the number of stimuli in the stimulus set of an \verb|<|psychophysics-evoked-potentials\verb|>| test.
-
-\\
-\hline
-devices &
-Instruments that are used by the test. &
-These instruments are available through a Devices variable in the tc structure. This Device variable is itself a struct where each instrument is named by the name it is identified within the test.
-
-Examples:
-
-\verb|tc.Devices.Stimulator|
-
-\verb|tc.Devices.Trigger|
-
-\verb|tc.Devices.Display|
-\\
-\hline
-assets &
-Assets from the \verb|<|assets\verb|>| element in the Experiment Definition file. &
-Assets are available through a Assets variable ni the tc structure. This Assets variable is itself a struct where each Asset is named by its id attribute in its <file-asset> element.
-
-Example:
-
-\verb|tc.Assets.Images|
-
-\\
-\hline
-Language &
-If the experiment is localized the selected Language will be available. &
-The selected language is available as a variable named Language in the tc struct.
-
-Example:
-
-\verb|tc.Language|
-
-\\
-\hline
-Session ID &
-The ID of the session. &
-The session ID is available as a variable named \verb|SESSION_NAME| in the tc struct.
-
-Example:
-
-\verb|tc.SESSION_NAME|
-
-\\
-\hline
-Session time &
-The time the session was started. &
-The session starting is available as a variable named \verb|SESSION_TIME| in the tc struct.
-
-Example:
-
-\verb|tc.SESSION_TIME|
-
-\\
-\hline
-\end{longtable}
-
-As variables cannot have the same name, it will be an error to give defines and tests the same ID, and it must be ensured that the IDs of defines, and tests are not the same as parameters and devices added automatically by the tests. As the names of parameters and devices are constant and given by the tests, there might be IDs that cannot be used based on which tests are included in the protocol. For example, the <psychophysics-threshold-estimation> test will add its Stimulator and Trigger devices to the test context, and this implies that defines and tests cannot have Stimulator or Trigger as their ID when the \verb|<|psychophysics-threshold-estimation\verb|>| test is used. 
