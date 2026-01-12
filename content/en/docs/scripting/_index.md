@@ -6,14 +6,19 @@ weight: 70
 
 {{% pageinfo %}}
 
-The purpose of this section is to provide information on how to administer a LabBench system.
+Scripting in LabBench allows you to add executable logic to otherwise declarative XML protocols, enabling dynamic parameter computation, conditional flow control, adaptive stimulus selection, and real-time interaction with experiment state and hardware. Using embedded IronPython, scripts can access and modify the .NET objects created from the protocol—such as stimuli, channels, devices, and state variables—making it possible to implement psychophysical methods, trial randomization, and closed-loop experimental logic directly within a .expx file or associated script assets, without changing or recompiling the LabBench application itself.
 
 {{% /pageinfo %}}
 
+## Scripting in LabBench
 
-This section provides information on how to automate experimental protocols with calculated parameters and extend the functionality of LabBench with Python scripts.
+Scripting in LabBench provides a powerful way to extend and customize experimental behavior beyond what is possible with static XML configuration alone. While protocols (.expx files) are formally defined and validated using an XSD schema, many XML attributes can contain executable logic in the form of single-line Python expressions (calculated parameters) or references to Python functions defined in external script files. Together, this allows protocols to remain declarative and readable, while still supporting adaptive procedures, conditional logic, and dynamic parameter updates that are essential in modern psychophysics and neuroscience experiments.
 
-The concepts described here apply uniformly across all LabBench protocols and are independent of any specific test type.
+Under the hood, LabBench is a .NET application that embeds IronPython as its scripting engine. XML elements are deserialized into strongly typed .NET objects, which are then exposed directly to the IronPython runtime. This tight integration makes it easy to access and manipulate experiment state, stimuli, devices, and parameters from Python code, all while staying within the execution model of LabBench. Script files are included explicitly in a protocol via the <file-assets> element, ensuring that experiments are self-contained and reproducible.
+
+This scripting approach makes it straightforward to use LabBench functionality: protocol writers can automate protocols and extend the functionality of LabBench without modifying the core application. At the same time, it is essential to understand the limitations of the environment. IronPython does not use CPython and therefore does not support native extension modules or the broader ecosystem of packages typically installed via pip. Only pure-Python code and libraries compatible with IronPython—and the .NET framework—can be used. **The scripting system is thus best viewed as a domain-specific extension layer tightly coupled to LabBench, rather than a general-purpose Python environment.**
+
+This section provides information on how to automate experimental protocols with calculated parameters and extend the functionality of LabBench with Python scripts. The concepts described here apply uniformly across all LabBench protocols and are independent of any specific test type.
 
 ## Attributes and types
 Attributes are the primary mechanism for configuring experiments in LabBench. 
