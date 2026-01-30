@@ -1,0 +1,8 @@
+{{/* Get the file path from the shortcode parameter */}}
+{{ $filePath := .Get "path" }}
+ 
+{{/* Read the file content (path is relative to your Hugo project root) */}}
+{{ $fileContent := readFile $filePath }}
+ 
+{{/* Render the content as Markdown */}}
+{{ $fileContent | markdownify }}
