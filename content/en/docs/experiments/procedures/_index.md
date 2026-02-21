@@ -1,6 +1,6 @@
 ---
-title: Tests
-description: Tests are the main building blocks of a protocol, which specifies the experimental procedures to be performed in a study.
+title: Procedures
+description: Procedures are the main building blocks of a protocol, which specifies the experimental procedures to be performed in a study.
 weight: 30
 ---
 
@@ -12,28 +12,28 @@ LabBench tests are the basic building blocks of a protocol, where each test impl
 
 Tests implements experimental procedures with code that can be configured through the Experiment Definition File (`*.expx`) and extended with Python. 
 
-## Test types
+## Procedure types
 
-| Domain        | Test                               | Description                                                                                             |
+| Domain        | Procedure                               | Description                                                                                             |
 |---------------|------------------------------------|---------------------------------------------------------------------------------------------------------|
-| [General](docs/experiments/tests/general/) | [Questionnaire](docs/experiments/tests/general/questionnaire/) | A questionnaire is a series of questions to collect information in a consistent and organized way.      |
-|               | [Sequential](docs/experiments/tests/general/sequential/) | Custom-defined experimental procedures implemented with a state machine and functionality in Python code. |
-|               | [Stimulation Sequence](docs/experiments/tests/general/stimulationsequence/) | Sequences of stimuli where the stimuli and their pattern are known when the test is started. |
-| [Psychophysics](docs/experiments/tests/psychophysics/) | [Cold Pressor](docs/experiments/tests/psychophysics/coldpressor/) | The cold pressor test is an experimental procedure in which a participant immerses a hand or forearm in ice-cold water to induce controlled pain or stress, allowing researchers to measure physiological and behavioral responses. |
-|               | [Manual Threshold Estimation](docs/experiments/tests/psychophysics/manualthresholdestimation/) | Threshold estimation where LabBench cannot automatically deliver the stimuli. Instead, the experimenter is guided through an adaptive algorithm on which stimuli to present to the subject. |
-|               | [Response Recording](docs/experiments/tests/psychophysics/responserecording/) | Recording of psychophysical responses. The recording can be combined with sampling of biophysical signals, stimulus delivery, and marking of events. |
-|               | [Stimulus Presentation](docs/experiments/tests/psychophysics/stimuluspresentation/) | Manual presentation of stimuli that can be used to familiarize a subject with the stimuli and set initial stimulation intensities for subsequent tests. |
-|               | [Threshold Estimation](docs/experiments/tests/psychophysics/thresholdestimation/) | Estimation of thresholds and psychometric functions with adaptive algorithms where the stimuli can be automatically delivered to the subject. |
-| [Algometry](docs/experiments/tests/algometry/) | [Stimulus Response](docs/experiments/tests/algometry/stimulusresponse/) | Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
-|               | [Temporal Summation](docs/experiments/tests/algometry/temporalsummation/) | Psychophysical rating of pressure stimuli given in quick succession that evokes temporal summation. |
-|               | [Arbitrary Temporal Summation](docs/experiments/tests/algometry/arbitrarytemporalsummation/) | Psychophysical rating of pressure stimuli that evoke temporal summation. These stimuli are given in quick succession, where the timing and intensity of each stimulus can be specified. |
-|               | [Static Temporal Summation](docs/experiments/tests/algometry/statictemporalsummation/) | Psychophysical rating of a rectangular static pressure stimulus. |
-|               | [Conditioned Pain Modulation](docs/experiments/tests/algometry/conditionedpainmodulation/) | Psychophysical rating of linearly increasing pressure that is being conditioned by a second continuous pressure stimulus until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
-|               | [Stimulus Rating](docs/experiments/tests/algometry/stimulusrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure. Participants indicate the thresholds through button presses. |
-|               | [Conditioned Pain Modulation Rating](docs/experiments/tests/algometry/conditionedpainmodulationrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure conditioned by a second static pressure. Participants indicate the thresholds through button presses. |
-| [Thermal](docs/experiments/tests/thermal/) | [Rated Stimulation](docs/experiments/tests/thermal/ratedstimulation/) | Psychophysical rating of cutaneous thermal stimuli. |
-|               | [Threshold Estimation](docs/experiments/tests/thermal/thresholdestimation/) | Determination of hot/cold pain detection and tolerance thresholds. |
-|               | [Plate Setup](docs/experiments/tests/thermal/platesetup/) | Control of hot/cold pressor plates. |
+| [General](docs/experiments/procedures/general/) | [Questionnaire](docs/experiments/procedures/general/questionnaire/) | A questionnaire is a series of questions to collect information in a consistent and organized way.      |
+|               | [Sequential](docs/experiments/procedures/general/sequential/) | Custom-defined experimental procedures implemented with a state machine and functionality in Python code. |
+|               | [Stimulation Sequence](docs/experiments/procedures/general/stimulationsequence/) | Sequences of stimuli where the stimuli and their pattern are known when the test is started. |
+| [Psychophysics](docs/experiments/procedures/psychophysics/) | [Cold Pressor](docs/experiments/procedures/psychophysics/coldpressor/) | The cold pressor test is an experimental procedure in which a participant immerses a hand or forearm in ice-cold water to induce controlled pain or stress, allowing researchers to measure physiological and behavioral responses. |
+|               | [Manual Threshold Estimation](docs/experiments/procedures/psychophysics/manualthresholdestimation/) | Threshold estimation where LabBench cannot automatically deliver the stimuli. Instead, the experimenter is guided through an adaptive algorithm on which stimuli to present to the subject. |
+|               | [Response Recording](docs/experiments/procedures/psychophysics/responserecording/) | Recording of psychophysical responses. The recording can be combined with sampling of biophysical signals, stimulus delivery, and marking of events. |
+|               | [Stimulus Presentation](docs/experiments/procedures/psychophysics/stimuluspresentation/) | Manual presentation of stimuli that can be used to familiarize a subject with the stimuli and set initial stimulation intensities for subsequent tests. |
+|               | [Threshold Estimation](docs/experiments/procedures/psychophysics/thresholdestimation/) | Estimation of thresholds and psychometric functions with adaptive algorithms where the stimuli can be automatically delivered to the subject. |
+| [Algometry](docs/experiments/procedures/algometry/) | [Stimulus Response](docs/experiments/procedures/algometry/stimulusresponse/) | Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
+|               | [Temporal Summation](docs/experiments/procedures/algometry/temporalsummation/) | Psychophysical rating of pressure stimuli given in quick succession that evokes temporal summation. |
+|               | [Arbitrary Temporal Summation](docs/experiments/procedures/algometry/arbitrarytemporalsummation/) | Psychophysical rating of pressure stimuli that evoke temporal summation. These stimuli are given in quick succession, where the timing and intensity of each stimulus can be specified. |
+|               | [Static Temporal Summation](docs/experiments/procedures/algometry/statictemporalsummation/) | Psychophysical rating of a rectangular static pressure stimulus. |
+|               | [Conditioned Pain Modulation](docs/experiments/procedures/algometry/conditionedpainmodulation/) | Psychophysical rating of linearly increasing pressure that is being conditioned by a second continuous pressure stimulus until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
+|               | [Stimulus Rating](docs/experiments/procedures/algometry/stimulusrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure. Participants indicate the thresholds through button presses. |
+|               | [Conditioned Pain Modulation Rating](docs/experiments/procedures/algometry/conditionedpainmodulationrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure conditioned by a second static pressure. Participants indicate the thresholds through button presses. |
+| [Thermal](docs/experiments/procedures/thermal/) | [Rated Stimulation](docs/experiments/procedures/thermal/ratedstimulation/) | Psychophysical rating of cutaneous thermal stimuli. |
+|               | [Threshold Estimation](docs/experiments/procedures/thermal/thresholdestimation/) | Determination of hot/cold pain detection and tolerance thresholds. |
+|               | [Plate Setup](docs/experiments/procedures/thermal/platesetup/) | Control of hot/cold pressor plates. |
 
 
 ## Test states

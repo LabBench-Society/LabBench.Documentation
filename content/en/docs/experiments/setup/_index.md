@@ -32,13 +32,8 @@ Currently, LabBench supports the following devices:
 | `<lio>`           | [LabBench I/O](docs/experiments/setup/lio/)       | IStimulator, ITriggerGenerator, IScales, IButton, IRatioScale, ITriggerDetector |
 | `<cpar>`          | [Nocitech CPAR](docs/experiments/setup/cpar/)      | IPressureAlgometer, IButton, IRatioScale, IScales |
 | `<cparplus>`      | [LabBench CPAR+](docs/experiments/setup/cparplus/)     | IPressureAlgometer, IButton, IRatioScale, IScales |
-| `<daqmx>`         | [National Instrument DAQmx Cards](docs/experiments/setup/daqmx/)  | IStimulator, ISweepSampler, IButton |
 | `<sound>`         | [Standard Soundcards](docs/experiments/setup/sound/)                               | IStimulator, ISoundPlayer |
 | `<joystick>`      | [USB PC Joysticks/Gamepads](docs/experiments/setup/joystick/)                         | IButton, IJoystick, `*`ITriggerGenerator |
-| `<tactor>`        | [Engineering Acoustics Universal Tactor Controller](docs/experiments/setup/tactor/) | IStimulator |
-| `<tcs>`           | [QSTLab Thermal Cutaneous Stimulator](docs/experiments/setup/tcs/)               | IThermalStimulator, IButton, IStimulator, ISweepSampler |
-| `<thermal-plate>` | [QSTLab Thermal Plate](docs/experiments/setup/thermal-plate/)                              | IThermalPlate |
-| `<evas>`          | [QSTLab eVAS](docs/experiments/setup/evas/)                                       | IRatioScale, IScales, IButton |
 | `<display>`       | [Secondary Computer Monitors](docs/experiments/setup/display/)                       | IDisplay, IRatioScale, IIntervalScale, IOrdinalScale, IImageDisplay, IScales, IQuestionnaire |
 
 `*` Dummy implementation, no actual functionality provided.
