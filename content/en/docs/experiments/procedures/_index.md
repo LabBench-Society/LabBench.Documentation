@@ -158,8 +158,6 @@ The `<properties>` element is an optional element that can be used for modifying
 <properties>
     <next id="[Required: dynamic text]"/>
     <auto-start value="[Required: true or false]" />
-    <allow-in-session-participant-creation value="[Required: true or false]" />
-    <in-session-display-of-participants value="[Required: true or false]" />
     <time-constraint [ attributes omitted for brevity ] />
     <instructions [ attributes omitted for brevity ]/>
     <participant-instructions [ attributes omitted for brevity ] />
