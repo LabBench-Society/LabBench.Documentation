@@ -6,11 +6,11 @@ weight: 30
 
 {{% pageinfo %}}
 
-LabBench tests are the basic building blocks of a protocol, where each test implements a specific type of experimental procedure that can be configured with parameters and extended by Python scripts. These tests are the central elements of the Experiment Definition File, which describes the experimental procedure that will be performed in the experiment. These procedures are written in the `<tests>` element of the Experiment Definition File, and in the LabBench Language, experimental procedures are referred to as tests. 
+LabBench procedures are the basic building blocks of a protocol, where each procedure implements a specific type of experimental procedure that can be configured with parameters and extended by Python scripts. These procedures are the central elements of the Experiment Definition File, which describes the experimental procedures that will be performed in the experiment. These procedures are written in the `<procedures>` element of the Experiment Definition File. 
 
 {{% /pageinfo %}}
 
-Tests implements experimental procedures with code that can be configured through the Experiment Definition File (`*.expx`) and extended with Python. 
+Procedures implements experimental procedures with code that can be configured through the Experiment Definition File (`*.expx`) and extended with Python. 
 
 ## Procedure types
 
@@ -19,84 +19,82 @@ Tests implements experimental procedures with code that can be configured throug
 | [General](docs/experiments/procedures/general/) | [Questionnaire](docs/experiments/procedures/general/questionnaire/) | A questionnaire is a series of questions to collect information in a consistent and organized way.      |
 |               | [Sequential](docs/experiments/procedures/general/sequential/) | Custom-defined experimental procedures implemented with a state machine and functionality in Python code. |
 |               | [Stimulation Sequence](docs/experiments/procedures/general/stimulationsequence/) | Sequences of stimuli where the stimuli and their pattern are known when the test is started. |
-| [Psychophysics](docs/experiments/procedures/psychophysics/) | [Cold Pressor](docs/experiments/procedures/psychophysics/coldpressor/) | The cold pressor test is an experimental procedure in which a participant immerses a hand or forearm in ice-cold water to induce controlled pain or stress, allowing researchers to measure physiological and behavioral responses. |
+| [Psychophysics](docs/experiments/procedures/psychophysics/) | [Cold Pressor](docs/experiments/procedures/psychophysics/coldpressor/) | The cold pressor procedure is an experimental procedure in which a participant immerses a hand or forearm in ice-cold water to induce controlled pain or stress, allowing researchers to measure physiological and behavioral responses. |
 |               | [Manual Threshold Estimation](docs/experiments/procedures/psychophysics/manualthresholdestimation/) | Threshold estimation where LabBench cannot automatically deliver the stimuli. Instead, the experimenter is guided through an adaptive algorithm on which stimuli to present to the subject. |
 |               | [Response Recording](docs/experiments/procedures/psychophysics/responserecording/) | Recording of psychophysical responses. The recording can be combined with sampling of biophysical signals, stimulus delivery, and marking of events. |
 |               | [Stimulus Presentation](docs/experiments/procedures/psychophysics/stimuluspresentation/) | Manual presentation of stimuli that can be used to familiarize a subject with the stimuli and set initial stimulation intensities for subsequent tests. |
 |               | [Threshold Estimation](docs/experiments/procedures/psychophysics/thresholdestimation/) | Estimation of thresholds and psychometric functions with adaptive algorithms where the stimuli can be automatically delivered to the subject. |
-| [Algometry](docs/experiments/procedures/algometry/) | [Stimulus Response](docs/experiments/procedures/algometry/stimulusresponse/) | Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
+| [Algometry](docs/experiments/procedures/algometry/) | [Stimulus Response](docs/experiments/procedures/algometry/stimulusresponse/) | Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This procedure can be used to determine pressure pain detection and tolerance thresholds. |
 |               | [Temporal Summation](docs/experiments/procedures/algometry/temporalsummation/) | Psychophysical rating of pressure stimuli given in quick succession that evokes temporal summation. |
 |               | [Arbitrary Temporal Summation](docs/experiments/procedures/algometry/arbitrarytemporalsummation/) | Psychophysical rating of pressure stimuli that evoke temporal summation. These stimuli are given in quick succession, where the timing and intensity of each stimulus can be specified. |
 |               | [Static Temporal Summation](docs/experiments/procedures/algometry/statictemporalsummation/) | Psychophysical rating of a rectangular static pressure stimulus. |
-|               | [Conditioned Pain Modulation](docs/experiments/procedures/algometry/conditionedpainmodulation/) | Psychophysical rating of linearly increasing pressure that is being conditioned by a second continuous pressure stimulus until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds. |
+|               | [Conditioned Pain Modulation](docs/experiments/procedures/algometry/conditionedpainmodulation/) | Psychophysical rating of linearly increasing pressure that is being conditioned by a second continuous pressure stimulus until the pain tolerance threshold or limit is reached. This procedure can be used to determine pressure pain detection and tolerance thresholds. |
 |               | [Stimulus Rating](docs/experiments/procedures/algometry/stimulusrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure. Participants indicate the thresholds through button presses. |
 |               | [Conditioned Pain Modulation Rating](docs/experiments/procedures/algometry/conditionedpainmodulationrating/) | Determination of pain detection and/or tolerance thresholds to linearly increasing pressure conditioned by a second static pressure. Participants indicate the thresholds through button presses. |
-| [Thermal](docs/experiments/procedures/thermal/) | [Rated Stimulation](docs/experiments/procedures/thermal/ratedstimulation/) | Psychophysical rating of cutaneous thermal stimuli. |
-|               | [Threshold Estimation](docs/experiments/procedures/thermal/thresholdestimation/) | Determination of hot/cold pain detection and tolerance thresholds. |
-|               | [Plate Setup](docs/experiments/procedures/thermal/platesetup/) | Control of hot/cold pressor plates. |
 
+## Procedure states
 
-## Test states
-
-Tests can be in one of the following states:
+Procedures can be in one of the following states:
 
 | Symbol                                 | State      | Definition | 
 |:--------------------------------------:|------------|------------|
-| ![](/images/experiments/unlocked.png)  | `ready`    | The test is ready to run and has not been completed yet. |
-| ![](/images/experiments/blocked.png)   | `blocked`  | The test depends on one or more tests that has not yet been completed. Dependencies to tests is declared in the `<dependencies>` element. |
-| ![](/images/experiments/excluded.png)  | `excluded` | The test defined a condition with the `<condition>` element that must be satisfied in order for the test to be included in the session. This condition is not satisfied, and consequently, the test has been excluded from the session. |
-| ![](/images/experiments/running.png)   | `running`  | The test is currently running, which means it is in the process of performing the experimental procedure that it describes. Only one test can be running at any time, and when it is running the protocol window is locked and the test cannot be deselected in LabBench Runner. |
-| ![](/images/experiments/completed.png) | `completed`| The test has been completed, and the collected data has been automatically saved to the subject's data set. In the `completed` state, the test can be rerun, causing it to reenter the running state and record new data. If it completes, this new data will replace the currently recorded data for the test. |
+| ![](/images/experiments/unlocked.png)  | `ready`    | The procedure is ready to run and has not been completed yet. |
+| ![](/images/experiments/blocked.png)   | `blocked`  | The procedure depends on one or more procedures that has not yet been completed. Dependencies to procedures is declared in the `<dependencies>` element. |
+| ![](/images/experiments/excluded.png)  | `excluded` | The procedure defined a condition with the `<condition>` element that must be satisfied in order for the procedure to be included in the session. This condition is not satisfied, and consequently, the procedure has been excluded from the session. |
+| ![](/images/experiments/running.png)   | `running`  | The procedure is currently running, which means it is in the process of performing the experimental procedure that it describes. Only one procedure can be running at any time, and when it is running the protocol window is locked and the procedure cannot be deselected in LabBench Runner. |
+| ![](/images/experiments/completed.png) | `completed`| The procedure has been completed, and the collected data has been automatically saved to the subject's data set. In the `completed` state, the procedure can be rerun, causing it to reenter the running state and record new data. If it completes, this new data will replace the currently recorded data for the procedure. |
 
-## Test definition
+## Procedure definition
 
-Definition of tests consists of elements and attributes common to all tests regardless of their type and elements and attributes specific to the type of test being specified. The attributes and elements common for all tests are shown in the code listing below:
+Definition of procedures consists of elements and attributes common to all tests regardless of their type and elements and attributes specific to the type of procedure being specified. The attributes and elements common for all procedures are shown in the code listing below:
 
 ```xml
-<test-type id="[Required: Identifier of the test]"
-           name="[Required: Human understandable name of the test]"
-           session="[Optional: ID of the session the test belongs to]"
-           experimental-setup-id="[Optional: Experiment Setup Configuration Identifier]">
-    <test-events> <!-- Contents omitted for brevity --> </test-events>        
+<procedure-type id="[Required: Identifier of the procedure]"
+    name="[Required: Human understandable name of the procedure]"
+    session="[Optional: ID of the session the procedure belongs to]"
+    experimental-setup-id="[Optional: Experiment Setup Configuration Identifier]">
+
+    <procedure-events> <!-- Contents omitted for brevity --> </procedure-events>        
     <properties> <!-- Contents omitted for brevity --> </properties>
     <dependencies> <!-- Contents omitted for brevity --> </dependencies>
     <condition> <!-- Contents omitted for brevity --> </condition>
 
-    <!-- Additional test-specific elements -->
-</test-type>
+    <!-- Additional procedure-type-specific elements -->
+</procedure-type>
 ```
 
-Tests have four common attributes:
+Procedures have four common attributes:
 
-| Attribute               | Type   | Function                                                                                        |
-|-------------------------|--------|-------------------------------------------------------------------------------------------------|
-| `id`                    | string | This required attribute is identifier (ID) of the test in the protocol. This ID must be unique. |
-| `name`                  | string | This required attribute is the name of the test, which is the name that will be shown to the experimenter in the protocol window of the LabBench Runner program. |
-| `session`               | string | This optional attribute specifies which session the test belong to. If specified the test will only be shown in the protocol window if the active session is equeal to the session specified by this attribute. |
-| `experimental-setup-id` | string | This optional attribute sets which experimental setup device configuration that will be active while the test is running. |
+| Attribute               | Type   | Function |
+|-------------------------|--------|----------|
+| `id`                    | string | This required attribute is identifier (ID) of the procedure in the protocol. This ID must be unique. |
+| `name`                  | string | This required attribute is the name of the procedure, which is the name that will be shown to the experimenter in the protocol window of the LabBench Runner program. |
+| `session`               | string | This optional attribute specifies which session the procedure belong to. If specified the procedure will only be shown in the protocol window if the active session is equeal to the session specified by this attribute. |
+| `experimental-setup-id` | string | This optional attribute sets which experimental setup device configuration that will be active while the procedure is running. |
 
 ### Dependencies
 
-The `<dependencies>` element is used to prevent tests from running if the test depends on results from tests that have not yet been completed. 
+The `<dependencies>` element is used to prevent procedure from running if the procedure depends on results from procedures that have not yet been completed. 
 
 ### Exclusions
 
-The second common element is the `<condition>` element. This element place a condition on the inclusion of a test experimental sessions, and thus makes it possible to excludes tests from a protocol if they cannot be performed. 
+The second common element is the `<condition>` element. This element place a condition on the inclusion of a procedure in experimental sessions, and thus makes it possible to excludes procedures from a protocol if they cannot be performed. 
 
-### Test events
+### Procedure events
 
-The `<test-events>` element is used to specify Python scripts that are executed when tests are selected, started, completed, or aborted. This can be used to extend tests with functionality outside the scope of what the test was originally designed for. To illustrate their use, an example where the base functionality of a `<stimulation-sequence>` test is extended with test events is provided in the code listing below:
+The `<procedure-events>` element is used to specify Python scripts that are executed when procedures are selected, started, completed, or aborted. This can be used to extend procedures with functionality outside the scope of what the procedure was originally designed for. To illustrate their use, an example where the base functionality of a `<stimulation-sequence>` procedure is extended with procedure events is provided in the code listing below:
 
 ```xml
 <stimulation-sequence ID="Cond"
                       name="Conditioning"
                       stimulus-update-rate="20000"
                       response-collection="none">
-    <test-events start="func: Functions.Condition(tc)"
-                 abort="func: Functions.Stop(tc)"
-                 complete="func: Functions.Stop(tc)">
+    <procedure-events start="func: Functions.Condition(tc)"
+        abort="func: Functions.Stop(tc)"
+        complete="func: Functions.Stop(tc)">
+
         <instrument interface="pressure-algometer" />
-    </test-events>
+    </procedure-events>
     
     <stimulation-pattern time-base="seconds">
         <uniformly-distributed-sequence iterations="12"
@@ -115,11 +113,11 @@ The `<test-events>` element is used to specify Python scripts that are executed 
 </stimulation-sequence>
 ```
 
-The `<stimulation-sequence>` test is intended to generate evoked potentials by presenting a set of stimuli to the subject according to a given stimulation pattern. The test is intended to work only with short electrical, auditory, visual, or tactile stimuli suitable for generating an evoked potential, which can be used, for example, EEG experiments with the oddball paradigm, electrically evoked potentials, etc. 
+The `<stimulation-sequence>` procedure is intended to generate evoked potentials by presenting a set of stimuli to the subject according to a given stimulation pattern. The procedure is intended to work only with short electrical, auditory, or visual stimuli suitable for generating an evoked potential, which can be used, for example, EEG experiments with the oddball paradigm, electrically evoked potentials, etc. 
 
-One research group wanted to study how electrically evoked potentials are modulated by a conditioning pressure pain stimulus, which the built-in functionality of the  `<stimulation-sequence>` test cannot do. The built-in functionality does have any mechanism that provides a way to apply a stimulus for the entire test duration, as it is only intended for short stimuli that are applied according to a stimulation pattern. 
+One research group wanted to study how electrically evoked potentials are modulated by a conditioning pressure pain stimulus, which the built-in functionality of the  `<stimulation-sequence>` procedure cannot do. The built-in functionality does have any mechanism that provides a way to apply a stimulus for the entire procedure duration, as it is only intended for short stimuli that are applied according to a stimulation pattern. 
 
-In their study, they wanted to use a LabBench CPAR+ device to apply a conditioning pain stimulus while electrically evoked potentials were generated with a DS7 stimulator. This was made possible with a test event that ran a script starting the conditioning stimulus when the test was started and stopping it when the test was stopped or aborted. The `<test-event>` has three attributes `start`, `abort`, `complete` that is executed when the test is started, aborted, and completed, respectively. 
+In their study, they wanted to use a LabBench CPAR+ device to apply a conditioning pain stimulus while electrically evoked potentials were generated with a DS7 stimulator. This was made possible with a procedure event that ran a script starting the conditioning stimulus when the procedure was started and stopping it when the procedure was stopped or aborted. The `<procedure-event>` has three attributes `start`, `abort`, `complete` that is executed when the procedure is started, aborted, and completed, respectively. 
 
 These attributes can contain either a single-line Python statement or reference a function in a Python script. Starting and stopping the pressure stimuli is too complicated to achieve in a single Python code line. Instead, a Python function was called to start and stop the stimulation. Using Python functions, and scripting in general, is first discussed in the section “Scripting”; however, for completeness, the code for these functions is provided in code listing below:
 
@@ -129,11 +127,10 @@ def Condition(tc):
     chan = dev.Channels[0]
     pressure = 0.70 * tc.SR.PTT
 
-    chan.SetStimulus(1, chan.CreateWaveform()
-                            .Step(pressure, 9.9 * 60))
-    dev.ConfigurePressureOutput(0, dev.ChannelIDs.CH01)
-    dev.ConfigurePressureOutput(1, dev.ChannelIDs.NoChannel)
-    dev.StartStimulation(dev.StopCriterions.WhenButtonPressed, True)
+    chan.SetStimulus(1, chan.CreateWaveform().Step(pressure, 9.9 * 60))
+    dev.ConfigurePressureOutput("outlet-1", "channel-1")
+    dev.ConfigurePressureOutput("outlet-2", "none")
+    dev.StartStimulation("stop-when-button-pressed", True)
 
     tc.Log.Information("Starting conditioning: {intensity}", pressure)
     return True
@@ -145,110 +142,108 @@ def Stop(tc):
 
 In the section “Scripting”, we will introduce in detail how Python is used for scripting protocols and to extend the functionality of LabBench. Consequently, if you have never programmed in Python, the code in the listing above may be new to you. 
 
-The example in the code listing above defines (“`def`”) two functions, `Condition(tc)` and `Stop(tc)`, that is intended to start and stop the pressure stimulus, respectively. What causes these functions to be called from the `<test-event>` is that, for example, the `start` attribute contains `func: Functions.Condition(tc)`. The `func:` statement is a keyword that tells LabBench that a Python function must be called, which in this case is the `Condition(tc)` function located in the `Functions` script.
+The example in the code listing above defines (“`def`”) two functions, `Condition(tc)` and `Stop(tc)`, that is intended to start and stop the pressure stimulus, respectively. What causes these functions to be called from the `<procedure-event>` is that, for example, the `start` attribute contains `func: Functions.Condition(tc)`. The `func:` statement is a keyword that tells LabBench that a Python function must be called, which in this case is the `Condition(tc)` function located in the `Functions` script.
 
-In this case, the test event is used to condition/modulate evoked potentials. However, as test events are common to all tests, this test event could be inserted into any other LabBench test. 
+In this case, the procedure event is used to condition/modulate evoked potentials. However, as procedure events are common to all procedures, this procedure event could be inserted into any other LabBench procedure. 
 
-For example, if we wanted to see how a simultaneous painful stimulus influences the responses to the DASS scale, it could be inserted into the `<questionnaire>` test. Furthermore, test events do not need to be used to apply a stimulus to a subject. If we need general code to run when a test starts, we can run it in the `start` test event. 
+For example, if we wanted to see how a simultaneous painful stimulus influences the responses to the DASS scale, it could be inserted into the `<questionnaire>` test. Furthermore, procedure events do not need to be used to apply a stimulus to a subject. If we need general code to run when a procedure starts, we can run it in the `start` procedure event. 
 
-The `start`test event could be used, for example, to initialize a random sequence of visual stimuli or similar, or if we want to add custom information to the log system, custom data to the data set, then that can also be accomplished with test events. 
+The `start` procedure event could be used, for example, to initialize a random sequence of visual stimuli or similar, or if we want to add custom information to the log system, custom data to the data set, then that can also be accomplished with procedure events. 
 
-## Test Properties
+## Procedure Properties
 
-The `<properties>` element is an optional element that can be used for modifying the execution of tests. The code listing below provides an overview of all possible test properties and their attributes:
+The `<properties>` element is an optional element that can be used for modifying the execution of procedures. The code listing below provides an overview of all possible procedure properties and their attributes:
 
 ```xml
 <properties>
     <next id="[Required: dynamic text]"/>
     <auto-start value="[Required: true or false]" />
-    <extended-data-collection value="[Required: true or false]"/>
+    <allow-in-session-participant-creation value="[Required: true or false]" />
+    <in-session-display-of-participants value="[Required: true or false]" />
     <time-constraint [ attributes omitted for brevity ] />
     <instructions [ attributes omitted for brevity ]/>
-    <subject-instructions [ attributes omitted for brevity ] />
+    <participant-instructions [ attributes omitted for brevity ] />
     <annotations> <!-- Contents omitted for brevity --> </annotations>
 </properties>    
 ```
-### Selecting the next test in the protocol
 
-The `<next>` element is included to support the logical flow of the protocol when tests have been excluded. By default, when a test is completed, LabBench will select the next test in the protocol unless the `<next>` element is used for the completed test. 
+### Selecting the next procedure in the protocol
 
-If the `<next>` element is used, its `id` attribute must be the ID of the next test to select when the test is completed and because this property can be scripted, it is possible to select this ID at runtime depending on the previous results in the protocol. 
+The `<next>` element is included to support the logical flow of the protocol when procedures have been excluded. By default, when a procedure is completed, LabBench will select the next procedure in the protocol unless the `<next>` element is used for the completed procedure. 
 
-Consequently, if the results of, for example, a `<questionnaire>` test have caused a test to be excluded, then the `<next>` element can be used to select the correct next test in the protocol instead of the test that has been excluded.
+If the `<next>` element is used, its `id` attribute must be the ID of the next procedure to select when the procedure is completed and because this property can be scripted, it is possible to select this ID at runtime depending on the previous results in the protocol. 
+
+Consequently, if the results of, for example, a `<questionnaire>` procedure have caused a procedure to be excluded, then the `<next>` element can be used to skip this procedure and select the correct next procedure in the protocol instead of the procedure that has been excluded.
 
 ### Auto start
 
-The `<auto-start>` property can be used to chain tests. LabBench will automatically select the test in the protocol when a test is completed. Setting the value attribute to `true` on the `<auto-start>` attribute will cause the test to start automatically when it is selected after the previous test has been completed. 
+The `<auto-start>` property can be used to chain procedures. LabBench will automatically select the procedure in the protocol when a procedure is completed. Setting the value attribute to `true` on the `<auto-start>` attribute will cause the procedure to start automatically when it is selected after the previous procedure has been completed. 
 
 Combined with the `<next>` property, this can be used to create protocols that run automatically from their beginning to their end.
 
-### Extended data collection
-
-The effect of the `<extended-data-collection>` property depends on the type of test. Certain tests support an extended collection of data that will be enabled if this property is true.
-
 ### Time constraint
 
-Time constraints can be placed on the execution of tests with the use of the `<time-constraint>´ element:
+Time constraints can be placed on the execution of procedures with the use of the `<time-constraint>` element:
 
 ```xml
-<time-constraint test-id="[Required: ID of the test on which the constraint is relative to]" 
-                  min="[Optional: minimal time that must pass before the test can be started]"
-                  max="[Optional: maximal time that can pass whithin which the test can still be started]" 
-                  notification="[Optional: true or false]"
-                  time-reference="[Optional: is the time-constraint relative to a tests start or completion]" />
+<time-constraint procedure-id="[Required: ID of the procedure on which the constraint is relative to]" 
+    min="[Optional: minimal time that must pass before the procedure can be started]"
+    max="[Optional: maximal time that can pass whithin which the procedure can still be started]" 
+    notification="[Optional: true or false]"
+    time-reference="[Optional: is the time-constraint relative to a procedures' start or completion]" />
 ```
 
-Time constraints limit when a test can be started based on the time elapsed since either the start or completion of another test in the protocol. The test that this limit is relative to is specified by the test-id attribute. 
+Time constraints limit when a procedure can be started based on the time elapsed since either the start or completion of another procedure in the protocol. The procedure that this limit is relative to is specified by the procedure-id attribute. 
 
-The min and max attributes specify the time limit for the start of the test:
+The min and max attributes specify the time limit for the start of the procedure:
 
 | Min | Max | Time limit |
 |-----|-----|------------|
-| Yes | Yes | The test can first be started when `min` time has elapsed, and must be started before `max` time has elapsed. |
-| Yes | No  | The test can first be started when `min` time has elapsed. |
-| No  | Yes | The test must be started before `max` time has elapsed. |
+| Yes | Yes | The procedure can first be started when `min` time has elapsed, and must be started before `max` time has elapsed. |
+| Yes | No  | The procedure can first be started when `min` time has elapsed. |
+| No  | Yes | The procedure must be started before `max` time has elapsed. |
 | No  | No  | Invalid: a `<time-constraint>` element must specify either a min or a max time, or both. |
 
-The `notification` attribute controls whether a notification is provided (a beep) when the test changes state from being prevented from being started to being able to be started. The `time-reference` attribute controls whether the time constraint is relative to the start (`start`) or completion (`end`) of the test specified with the `test-id` attribute.
+The `notification` attribute controls whether a notification is provided (a beep) when the procedure changes state from being prevented from being started to being able to be started. The `time-reference` attribute controls whether the time constraint is relative to the start (`start`) or completion (`end`) of the procedure specified with the `test-id` attribute.
 
-### Instructions to the experienter
+### Instructions to the operator
 
-All tests support displaying information to the researcher when they are selected and not running. 
+All procedures support displaying information to the operator when they are selected and not running. 
 
-The `<instructions>` element is used to enable the showing of instructions to the researcher, which will be shown in the test window in LabBench Runner:
+The `<instructions>` element is used to enable the showing of instructions to the researcher in the procedure panel in LabBench Runner:
 
 ```xml
 <instructions default="[Optional: default instructions]"
-              blocked="[Optional: instructions when the test is in the blocked state]"
-              ready="[Optional: instructions when the test is in the ready state]"
-              excluded="[Optional: instructions when the test is in the excluded state]"
-              completed="[Optional: instructions when the test is in the completed state]"
+              blocked="[Optional: instructions in the blocked state]"
+              ready="[Optional: instructions in the ready state]"
+              excluded="[Optional: instructions in the excluded state]"
+              completed="[Optional: instructions in the completed state]"
               override-results="[Optional: true or false]"
-              start-instruction="[Optional: text for starting and restarting the test]" />
+              start-instruction="[Optional: text for starting and restarting the procedure]" />
 ```
 
-The `<instructions>` element support showing different instructions depending on the test state, where each instruction is defined by an attribute named after the test state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return either an image or an RTF document.
+The `<instructions>` element support showing different instructions depending on the procedure state, where each instruction is defined by an attribute named after the procedure state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return either an image or an RTF document.
 
-By default, selecting a completed test will display its results; however, this behaviour can be overridden by the `override-results` attribute to true, which will always display instructions when the test has been completed. The `start-instruction` property can be used to modify the instruction given to the researcher when a test is selected and can start. By default, LabBench will display “Test is ready to start” when a test can be started, but if the `start-instruction` attribute is used, then this can be used to display a custom message. As this attribute can be scripted, this message can also depend on previous results recorded in the protocol. 
+By default, selecting a completed procedure will display its results; however, this behaviour can be overridden by the `override-results` attribute to true, which will always display instructions when the procedure has been completed. The `start-instruction` property can be used to modify the instruction given to the researcher when a procedure is selected and can start. By default, LabBench will display “Procedure is ready to start” when a procedure can be started, but if the `start-instruction` attribute is used, then this can be used to display a custom message. As this attribute can be scripted, this message can also depend on previous results recorded in the protocol. 
 
-### Instructions to the participants
+### Instructions to participants
 
-All tests support displaying instructions to participants on a secondary monitor (ImageDisplay) when the test is not in the `running` state. The `<subject-instructions>` element is used to enable the showing of instructions to the participant:
+All procedures support displaying instructions to participants on a secondary monitor (ImageDisplay) when the procedure is not in the `running` state. The `<subject-instructions>` element is used to enable the showing of instructions to participants:
 
 
 ```xml
-<subject-instructions default="[Optional: default instructions]"
-                      blocked="[Optional: instructions when the test is in the blocked state]"
-                      ready="[Optional: instructions when the test is in the ready state]"
-                      excluded="[Optional: instructions when the test is in the excluded state]"
-                      completed="[Optional: instructions when the test is in the completed state]" />
+<participant-instructions default="[Optional: default instructions]"
+    blocked="[Optional: instructions in the blocked state]"
+    ready="[Optional: instructions in the ready state]"
+    excluded="[Optional: instructions in the excluded state]"
+    completed="[Optional: instructions in the completed state]" />
 ```
 
-The `<subject-instructions>` element support showing different instructions depending on the test state, where each instruction is defined by an attribute named after the test state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return an image.
+The `<participant-instructions>` element support showing different instructions depending on the procedure state, where each instruction is defined by an attribute named after the procedure state. If not defined the instructions defined with the `default` attribute will be shown, and if this attribute is not defined then no instruction  will be shown. The `default`, `blocked`, `ready`, `excluded`, `completed` attributes are all calculated attributes that must return an image.
 
-### Test annotations
+### Procedure annotations
 
-The `<annotation>` property does not influence how a test is executed. Instead, it can add information to the test that will be exported with the results. This can be used, for example, if a strength-duration curve is determined to specify the duration of the stimuli used in the test. Adding numbers, Boolean values, text strings, and a list of numbers as annotations to a test is possible. The listing below provides an example of all possible test annotations:
+The `<annotation>` property does not influence how a procedure is executed. Instead, it can add information to the procedure that will be exported with the results. This can be used, for example, if a strength-duration curve is determined to specify the duration of the stimuli used in the test. Adding numbers, Boolean values, text strings, and a list of numbers as annotations to a test is possible. The listing below provides an example of all possible procedure annotations:
 
 ```xml
 <annotations>
@@ -279,9 +274,9 @@ The `<annotation>` property does not influence how a test is executed. Instead, 
 </annotations>    
 ```
 
-However, while annotations can be specified in the Experiment Definition File in the format of the code listing above, the most common use of annotations is to add annotations programmatically to test results from a function defined in a Python script. Adding annotations programmatically can be used to add data from, for example, the completed test event.
+However, while annotations can be specified in the Experiment Definition File in the format of the code listing above, the most common use of annotations is to add annotations programmatically to procedure results from a function defined in a Python script. Adding annotations programmatically can be used to add data from, for example, the completed procedure event.
 
-When tests are extended with Python code this often results in custom data that is not saved automatically, but instead must be added to the test annotations. Below is an example of how data from a Stop Signal Task to the result of a Stimulation Sequence test:
+When procedures are extended with Python code this often results in custom data that is not saved automatically, but instead must be added to the test annotations. Below is an example of how data from a Stop Signal Task to the result of a Stimulation Sequence procedure:
 
 ```python
 class StopSignalTask:
@@ -296,14 +291,14 @@ class StopSignalTask:
         self.result.Annotations.SetIntegers("sstGoSignals", self.goSignals)
         self.result.Annotations.SetBools("sstAnswer", self.answer)
         self.result.Annotations.SetIntegers("sstTime", self.time)
-        self.Log.Information("Stop Signal Task [ SAVED ]")```
+        self.Log.Information("Stop Signal Task [ SAVED ]")
 ```
 
-## Test components
+## Procedure components
 
-Functionality for the generation of stimuli (`Stimulator` instrument), triggers (`TriggerGenerator` instrument), and sampling of psychophysical responses (`RatioScale`, `IntervalScale`, `OrdinalScale`, `Button` instruments) is implemented not by the individual tests but by test components that are called from the tests.
+Functionality for the generation of stimuli (`Stimulator` instrument), triggers (`TriggerGenerator` instrument), and sampling of psychophysical responses (`RatioScale`, `IntervalScale`, `OrdinalScale`, `Button` instruments) is implemented not by the individual tests but by procedure components that are called from the tests.
 
-The use of test components ensures that stimuli, triggers, and the sampling of psychophysical constants are specified in the same format across all tests in the LabBench Language.
+The use of procedure components ensures that stimuli, triggers, and the sampling of psychophysical constants are specified in the same format across all tests in the LabBench Language.
 
 ### Stimulation
 

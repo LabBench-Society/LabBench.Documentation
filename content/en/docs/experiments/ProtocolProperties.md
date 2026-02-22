@@ -18,6 +18,8 @@ Protocol properties is specified with the `<properties>` element in the `<protoc
                  require-reason="[true or false]"
                  force-warning="[true or false]" />
    <incomplete-protocol-warning value="[true or false]" />
+   <allow-in-session-participant-creation value="[Required: true or false]" />
+   <in-session-display-of-participants value="[Required: true or false]" />
 </properties>
 ```
 
@@ -34,3 +36,11 @@ The `force-warning` attribute only applies to tests that do not display a warnin
 ## Incomplete protocol warning
 
 If a session is closed and not all the tests in the session have been completed, then LabBench Runner will display an incomplete protocol warning. This incomplete protocol warning will not be displayed if the `incomplete-protocol-warning` element sets its `value` to false.
+
+## Allow in session participant creation
+
+By default, participants can be created in LabBench Runner via the Startup Wizard by specifying a participant identifier (ID) that does not exist. However, this introduces a risk of accidentally creating a wrong participant identifier due to mistyping or operator error.
+
+To reduce the chance of this error, participant identifiers can be validated with regular expressions. However, participant creation in LabBench Runner can also be turned off by setting the `<allow-in-session-participant-creation>` element to false. When participant creation in LabBench Runner is turned off, participants must be created in the Data tab on the Experiment page in LabBench Designer.
+
+## In session display of participants
