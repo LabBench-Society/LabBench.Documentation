@@ -6,7 +6,7 @@ weight: 20
 
 {{% pageinfo %}}
 
-Persistent variables share characteristics with `variables` and can be used throughout a protocol wherever a variable can be used. However, unlike variables that are created each time a session is started, persistent variables are only created once when a participant is created and stay invariant for all sessions in a protocol. Furthermore, persistent variables are saved to the resulting data set and are available for data analysis scripts. Saving to the data set means that persistent variables have restrictions on their types, whereas `variables` can be of any type created by Python code. As the name indicates, `persistent-variables` are primarily intended for randomizing protocol elements, but they can be used for any purpose.
+Persistent variables share characteristics with `variables` and can be used throughout a protocol wherever a variable can be used. However, unlike variables that are created each time a session is started, persistent variables are only created once when a participant is created and stay invariant for all sessions in a protocol. Furthermore, persistent variables are saved to the resulting data set and are available for data analysis scripts. Saving to the data set means that persistent variables have restrictions on their types, whereas `variables` can be of any type created by Python code. Persistent variables `<persistent-variables>` are primarily intended for randomizing protocol elements, but they can be used for any purpose.
 
 {{% /pageinfo %}}
 

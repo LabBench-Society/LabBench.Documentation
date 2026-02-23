@@ -44,3 +44,9 @@ By default, participants can be created in LabBench Runner via the Startup Wizar
 To reduce the chance of this error, participant identifiers can be validated with regular expressions. However, participant creation in LabBench Runner can also be turned off by setting the `<allow-in-session-participant-creation>` element to false. When participant creation in LabBench Runner is turned off, participants must be created in the Data tab on the Experiment page in LabBench Designer.
 
 ## In session display of participants
+
+By default, the Startup Wizard displays a list of existing participants and allows the operator to select the one to use for the current session. However, there is a risk of misclicks, and depending on how the protocol is designed, it may be possible for data to be recorded for the wrong participant.
+
+This risk can be mitigated by turning off the display of the list of existing participants with the `<in-session-display-of-participants>` protocol property.
+
+This will force the experimenter to type in the participant ID. If this ID is highly unique or contains a checksum, the risk of using the wrong participant IDs is effectively mitigated. If paper-based Case Report Forms or similar systems are used that can display barcodes/QR codes, then a handheld scanner can eliminate the need for the operator to type IDs and make incorrect IDs impossible.
