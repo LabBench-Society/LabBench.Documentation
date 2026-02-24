@@ -4,15 +4,102 @@ description: Instructions on how to install LabBench
 weight: 20
 ---
 
-The steps required for LabBench Installation depend on whether your users have administrative access to the laboratory computer. In both cases, you will need the LabBench installer, which can be downloaded from: 
+## Download installer
 
-Before LabBench installation, please read the Release Notes for the version you are installing, as they may contain additional information about the installation process that is not in this guide.
+The installer can be downloaded from:
 
-Once you have downloaded the installer, run this installer and accept all default choices.
+| Version | Installer | Release Notes |
+|---------|-----------|---------------|
+| 6.0.0 | [LabBench 6](https://files.labbench.io/sw/LabBenchR6.0.0.exe) | [Release Notes](https://labbench.io/labbench-release-notes.html#lb6_0_0) |
+
+
+## Installation
+
+The installation progress is automated, and requires one choice that depends on whether you have administrative access to the computer. The installation progress is illustrated in Figure 1.
+
+![](/images/Installation/Slide1.PNG)
+
+*Figure 1*
+
+### License and installation path
+
+When the installer starts, it will first ask you to choose the installation path and to review and accept the license. Accept the default installation path, unless your organisation have special requirements for the installation location of programs.
+
+The license you will be asked to accept is for Academic, Non-Commercial use of the program. To continue the installation, please accept the "I agree to the License terms and conditions" option. 
+
+Then click Next.
+
+### Installation of prerequisites
+
+To run LabBench, you need the .NET Desktop Runtime 10.0.2 or higher. The installer will automatically download and install that runtime if it is not already installed on the computer.
+
+Please accept the default choice and click Next.
+
+### Installation type
+
+
+
+* **Only for me**:
+* **Everybody (all users)**:
+
+## Local data directory
+
+| Location                 | Requirements and function        |
+|--------------------------|----------------------------------|
+| Documents\LabBench6      | |
+| C:\LabBench6             | |
+| C:\ProgramData\LabBench6 | |
+
+
+
+## License
+
+![](/images/Installation/Slide2.PNG)
+
+
+### License types
+
+* **Academic, non-commercial use**:
+* **3rd-party equipment**:
+* **Commercial use**:
+
+
+### Registrering the license
+
+Before LabBench can run experiments, it must be registered with a valid license code. To register a license, open the LabBench Designer and, on the System tab, select the License page (see Figure X).
+
+![](/images/Installation/Slide3.PNG)
+
+*Figure 2*
+
+On the license page, click the "Register license" button and in the resulting dialogue, enter your license key and click Register (see Figure X).
+
+![](/images/Installation/Slide4.PNG)
+
+*Figure 2*
+
+When you click the Register button, the license server will be contacted, and your license will be registered and locked to the computer you are currently using.
+
+### Moving and updating the license
+
+A license key can only be used on one computer at a time; however, it can be moved between computers as many times as needed. To move the license key, it must first be deregistered from the license server.
+
+![](/images/Installation/Slide5.PNG)
+
+*Figure 2*
+
+To deregister a license, click the Deregister button as shown in Figure X. Once the license key has been deregistrered it can be used on a new computer.
+
+For standard licenses, LabBench will not contact the license server after a license key is successfully registered. That means you must update the license manually if changes have been made, such as purchasing a commercial license or using 3rd-party equipment.
+
+To update the license, click the "Refresh license" button.
+
+
+
+## Next steps
 
 ## Registrering the license
 
-Before LabBench can run experiments, it must be registered with a valid license code. To register a license, open the LabBench Designer and, on the System tab, scroll down to the License section.
 
 ![](/images/administration/SystemLicense.png)
 
@@ -22,38 +109,6 @@ The license section contains three circular license registration buttons in the 
 
 Below the header is information about the license key that is currently registered. Initially, as no key will have been registered, this section will read UNLICENSED.
 
-## Online registration
-
-The laboratory computer can register the license key online when it has internet access. This is the simplest and fastest registration method. To perform an online registration, click the Online Registration button to open the Online License Registration Dialog (please see Figure 2).
-
-![](/images/administration/DialogLicenseEnterKey.png)
-
-*Figure 2: Online license registration dialog.*
-
-Once a key is entered, the REGISTER button will become enabled, as shown in Figure \ref{fig:LicenseDialog_Register}. Click the REGISTER button to register the license key with the license server.
-
-![](/images/administration/DialogLicenseRegister.png)
-
-*Figure 3: Online license registration dialog with key entered.*
-
-After clicking REGISTER, the dialog shown will close, and the LICENSE section should now display the activated license key with information about the license.
-
-## Offline registration
-
-Offline registration must be used if the computer cannot access the internet. Offline registration consists of a two-step process:
-
-1. Generation of a license activation request file `.req` and uploading it to the Offline License Portal.
-2. This will generate a license file `*.lic`, which must then be loaded into LabBench Designer.
-
-Click the Offline Registration Request button to generate a license activation request file `*.req`, this will open a File Save dialog, allowing you to save the file to a suitable location, such as a USB key.
-
-Transfer the USB key to a computer with internet access and upload the file to:
-
-* [Offline Registration Portal](https://offline.licensespring.com/)
-
-If the key is not registered on another computer, this will generate a license file `*.lic` that can be saved on the USB key. 
-
-Take the USB key to the laboratory computer and click the Offline Registration button to open a File Open dialog. In this File Open dialog, select the `*.lic` file and click open. LabBench should now be activated to run experiments in the LabBench Runner program.
 
 ## Moving the license
 
