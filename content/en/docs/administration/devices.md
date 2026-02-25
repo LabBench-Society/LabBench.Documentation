@@ -23,7 +23,7 @@ Clicking the Add Devices button will open the Scan Devices Dialog as shown in Fi
 Once the device(s) has been added you can close the dialog with its Close button. The newly added devices will not be listed on the List of added devices on the Devices Page.
 
 ### Resolving problem with Bluetooth serial ports
-
+ 
 If your computer has Bluetooth Serial Ports, as shown in Figure 2, the Scan all ports will fail in the Add Devices Dialog.
 
 ![](/images/administration/BluetoothSerialPorts.png)
