@@ -54,7 +54,7 @@ A free version of Seq Log Server for single-computer use is available. When the 
 
 LabBench uses role-based access control. When LabBench is installed, this system is disabled, meaning anyone opening LabBench has full access, including the ability to perform potentially destructive actions such as deleting data or entire studies.
 
-For single-user environments or environments that can rely on computer logins, this may be acceptable. However, in multiple-user environments, it may be required to restrict access to certain actions, which can be accomplished by enabling the Access Control system. Access Control can be enabled on the Access Control page (please see Figure 2).
+For single-researcher environments or environments that can rely on computer logins, this may be acceptable. However, in multiple-researcher environments, it may be required to restrict access to certain actions, which can be accomplished by enabling the Access Control system. Access Control can be enabled on the Access Control page (please see Figure 2).
 
 
 ![](/images/Administration_System/Slide3.PNG)
