@@ -6,12 +6,15 @@ weight: 40
 
 {{% pageinfo %}}
 
-Welcome to the introduction to LabBench, a system for describing experimental protocols in a human—and machine-readable format that can reduce the complexity of running experiments. This guide will explain how to administer a LabBench system using the LabBench Designer program. The user interface of LabBench Designer can be seen in Figure 1.
+Welcome to the introduction to LabBench, a system for describing experimental protocols in a human—and machine-readable format that can reduce the complexity of running experiments. This guide will explain how to administer a LabBench system using the LabBench Designer program. 
 
 {{% /pageinfo %}}
 
-The user interface of LabBench Designer consists of a page index on the left and the contents of the selected page on the right. Each page provides access to a subsystem of LabBench.
+The LabBench Designer user interface consists of a page index on the left and the contents of the selected page on the right. 
 
-![](/images/administration/LabBenchDesigner.png)
+Each page provides access to a LabBench subsystem:
+
+![](/images/Administration/Slide1.PNG)
+
 *Figure 1:*
 

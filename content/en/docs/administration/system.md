@@ -1,5 +1,14 @@
 ---
 title: System
-description: The system page makes it possible to; 1) Setup logging for the LabBench system. LabBench provides a logging system of events that take place during experiments, 2) Enable the User Access Control system, 3) Register and deregister a License Key for LabBench. Before LabBench can run experimental studies, it must be registered with a valid License Key on the System Page.
+description: "Overall system configuration: logging, access control, display calibration, and license management."
 weight: 1
 ---
+
+
+## Logging
+
+## Access Control
+
+## Display Calibration
+
+## License
