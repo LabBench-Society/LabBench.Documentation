@@ -65,20 +65,46 @@ For information on role-based access control and its configuration, please refer
 
 ## Display Calibration
 
+LabBench protocols can use a second external monitor to display visual stimuli, psychophysical rating scales, questionnaires, and similar instruments during experimental setups. These can be displayed so they have a given physical size or occupy a given visual angle from the participant's viewpoint. These sizes and angles are specified by LabBench protocols; however, for LabBench to display them correctly, it needs to know the monitor's size and its distance from the participant.
 
+The current monitor calibration data can be seen on the Display Calibration page (see Figure 3). Calibration data can be updated using the “Calibrate display” button.
 
 ![](/images/Administration_System/Slide4.PNG)
 
 *Figure 3*
 
+For information on how to calibrate monitors, please refer to the <a href="https://github.com/LabBench-Society/Protocols/tree/main/calibration.screenFiducial" target="_blank">Screen and fiducial calibration protocol</a> available in the LabBench Protocol Repository.
+
 ## License
+
+When you install LabBench, it will be assumed that you will use it for academic, non-commercial purposes. If you are a scientist at a public academic institution and will only use LabBench for studies with no direct commercial application or for educational purposes, you do not need to be concerned about the License page.
 
 ![](/images/Administration_System/Slide5.PNG)
 
 *Figure 4*
 
+However, you will need a paid license and to register it on the License page (see Figure 4) if:
+
+* You will use LabBench in a commercial entity or at an academic institution where it has a direct commercial application, or
+* You need to run studies that use 3rd party equipment (e.g. equipment that is not provided under the LabBench name by Inventors’ Way).
+
+If you are unsure whether a paid license is needed, please contact us at help@labbench.io.
+
 ### Registrering a license
+
+Click the “Register license” button to register a license for the current computer. When you register a license, it will be locked to the computer, meaning it can only be used on one computer at a time.
+
+A license, however, can be moved between computers as many times as needed. To move a license, first deregister it from the computer where it is currently in use, then register it on the new computer.
 
 ### Deregistrering the license
 
+Click "Deregister license" to deregister the license so it can be used on another computer.
+
 ### Refreshing the license
+
+After a perpetual license has been successfully registered, LabBench will not contact the license server again. This ensures an internet connection is only needed when you register or deregister a license.
+
+Consequently, if the license has been changed, for example, the use of 3rd party equipment has been added, or a trial license has been converted to a perpetual license, then you will need to refresh the license.
+
+To refresh the license, click the “Refresh license” button. Please note this will also require an internet connection as LabBench will need to contact the license server.
+
