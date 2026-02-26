@@ -40,9 +40,11 @@ The **Print and view controls** toolbar in the top of the Protocol panel makes i
 
 ## Setup Panel
 
+The Setup Panel (see Figure 3) allows you to configure experiments and consists of sections for inspecting and configuring participant ID validation, operators, experimental setup, and post-session actions.
+
 ![](/images/Administration_Experiments/Slide3.PNG)
 
-*Figure 3: The Experiments Page in the LabBench Designer.*
+*Figure 3: The Setup Panel.*
 
 ### Participant ID
 
@@ -58,11 +60,15 @@ The rule must be specified as a regular expression. A useful tool for developing
 
 ### Operators
 
+The Operators section is available if Access Control has been enabled. The Operators section lets you add and remove researchers from the experiment.
+
+To add a researcher click the **Add reseacher** button, this will open the dialogue shown in Figure 5.
 
 ![](/images/Administration_Experiments/Slide6.PNG)
 
 *Figure 5: Adding researchers as operators.*
 
+To remove a researcher click the **Remove researcher** button.
 
 ### Experimental setup
 
