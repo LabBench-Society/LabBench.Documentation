@@ -40,13 +40,13 @@ The LabBench I/O device is included in experimental setups with an `<lio>` eleme
 ### Digitimer DS5
 
 ```xml
-
+<ds5 name="DS5" transconductance="1mA_1V"/>
 ```
 
 ### NoxiSTIM
 
 ```xml
-
+<noxistim name="NoxiSTIM" transconductance="1mA_1V"/>
 ```
 
 
