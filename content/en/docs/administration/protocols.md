@@ -10,7 +10,7 @@ A unique ID identifies each Protocol Repository; for example, the public LabBenc
 
 Technically, a repository consists of a repository index file `repository.xml` that lists the protocols within the repository. Each protocol must be in a subfolder to the directory containing this repository index file. Each subfolder contains the protocol itself and all protocol assets that it requires. Examples of protocol assets include instruction files to the operator and/or subjects, images, sounds, etc.
 
-![](/images/administration/ProtocolsPage.png)
+![](/images/Administration_Protocols/Slide1.PNG)
 
 *Figure 1: Protocols page*
 
@@ -26,7 +26,7 @@ To add or delete repositories, click the Configure Repositories button on the Pr
 
 To add a repository, write or paste in the path to the local directory or the URL to where the `repository.xml` can be loaded or downloaded from, respectively, then click Add. If LabBench can load/download the `repository.xml` repository index file from this location it will add it to the system.
 
-![](/images/administration/DialogConfigureRepositories.png)
+![](/images/Administration_Protocols/Slide2.PNG)
 
 *Figure 2: Configuration of protocol repositories.*
 
@@ -36,7 +36,7 @@ To delete a repository, click the Delete button in the repository. Please note t
 
 To create an experiment from a protocol, click the Create Experiment button in the lower left of the Protocol header. This will open the Create Experiment dialog (see Figure 3).
 
-![](/images/administration/DialogCreateExperiment.png)
+![](/images/Administration_Protocols/Slide3.PNG)
 
 *Figure 3: Create an experiment.*
 
