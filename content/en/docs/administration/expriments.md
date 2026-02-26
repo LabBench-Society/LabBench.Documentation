@@ -72,29 +72,38 @@ To remove a researcher click the **Remove researcher** button.
 
 ### Experimental setup
 
-Most protocols will need access to a set of devices to run. This set of devices and their configuration is often called the experimental setup of a study, the term that LabBench uses. 
+The devices used in the protocol for the experiment are shown in the Experimental Setup section, where each device must be assigned to a device that has been added to the system on the Devices tab in LabBench Designer.
 
-The devices used in the protocol for an experiment can be seen in the Experimental Setup section of the Setup tab (see Figure 4). Each device defined in the Experimental Setup must be assigned a device from the Device Page (see Figure 5). A default device assignment is created when the experimental is created from a protocol in a repository. This will assign the first available device to each device in the Experimental Setup. However, if more than one device of the same type is present in the system, this assignment may be incorrect. 
+When the experiment is created, a default assignment is made, where the first available device of each required type is automatically assigned to that type in the experimental setup. In many cases, only one instance is available for each device type, and in those cases, the default assignments are most often correct. However, if these default assignments are incorrect they can be modified by clicking the **Assign devices** button. This will open the dialogue shown in Figure 6.
 
-![](/images/administration/DialogConfigureDevices.png)
+![](/images/Administration_Experiments/Slide7.PNG)
 
-*Figure 5: Assignment of devices to logical devices in the protocol (Configure Devices Dialog).*
+*Figure 6: Assignment of devices to logical devices in the protocol (Assign devices dialogue).*
 
-Clicking the Assign devices button will open the Configure Devices dialog (see Figure 5) that will allow you to change the assignment of devices.
+The Assign devices dialogue allows you to assign physical devices to each device in the experimental setup. Some devices also have a configuration that can be changed by their **Configure device** button —currently, the following devices can be configured:
 
-Some devices also have a configuration that can be changed by click their Configure device button (see Figure 4). Currently, LabBench I/O, LabBench DISPLAY and Joystick devices has properties that can be configured in the LabBench Designer.
+#### LabBench I/O
 
-#### Joystick configuration
+The LabBench I/O can generate triggers for external 3rd-party equipment, such as EEG amplifiers, on its TRIGGER INTERFACE port. This 3rd party equipment has different requirements for voltage levels (5.0V/TTL)/(3.3V/CMOS) and logic convention (positive/negative logic).
 
-Subjects can use a standard USB Joystick to complete questionnaires and provide answers in response tasks to estimate psychophysical functions and/or thresholds. However, no standard exists for the codes assigned to the USB buttons. Consequently, protocols written for one brand of USB joystick are unlikely to work with other brands of USB buttons.
+The **Configure device** button for the LabBench I/O will open the dialogue shown in Figure 8 that will allow you to configure the INTERFACE port of the LabBench I/O device.
 
-To make it possible to use a brand of Joystick different from the one a protocol was initially written for, it is possible to change the codes assigned to each button. To change the codes, click the Configure device button for the Joystick, which will open the dialog shown in Figure 7.
 
-![](/images/administration/DialogConfigureJoystick.png)
+![](/images/Administration_Experiments/Slide8.PNG)
 
-*Figure 7: Configuration of Joystick parameters.*
+*Figure 8: Configuration of the INTERFACE port.*
 
-When using this dialog, it is beneficial to have the joystick connected to the computer. This allows you to press buttons on the joystick and see their code(s) at the top of the dialog. This allows you to identify the correct codes to enter in the button map shown in the lower half of the dialog. Click OK to update the button maps; if you click Cancel, your changes will be discarded.
+#### Joystick
+
+Participants can use a standard USB Joystick to complete questionnaires and provide answers in response tasks to estimate psychophysical functions and/or thresholds. However, there is no standard for the codes assigned to the USB buttons. Consequently, protocols written for one brand of USB joystick are unlikely to work with other brands of USB buttons.
+
+To use a joystick brand other than the one the protocol was initially written for, you can change the codes assigned to each button. To change the codes, click the Configure device button for the Joystick, which opens the dialogue shown in Figure 8.
+
+![](/images/Administration_Experiments/Slide9.PNG)
+
+*Figure 8: Configuration of Joystick parameters.*
+
+When using this dialogue, it is beneficial to have the joystick connected to the computer. This allows you to press buttons on the joystick and see their code(s) at the top of the dialogue. This allows you to identify the correct codes to enter in the button map shown in the lower half of the dialogue. Click OK to update the button maps; if you click Cancel, your changes will be discarded.
 
 ### Post-session actions
 
@@ -136,7 +145,8 @@ The format for the data is determined by the file ending:
 
 ### Create participant
 
+Participants can be created by clicking the **Create participants** button. This will open a dialogue that lets you create a new participant. The identifier for the participant will be validated accordingly to the `<participatent-validation>` element in the Experiment Defition File (*.expx).
+
 ### Delete participant
 
-Subjects can be deleted by clicking the Delete Subject button on the subject. Because this is an irrevocable action, you will be asked to confirm this deletion in a dialog before the subject is deleted. This is to guard against accidental clicks on the Delete subject button.
-
+Participants can be deleted by clicking the Delete Subject button on the subject. Because this is an irrevocable action, you will be prompted to confirm the deletion in a dialogue before the participant is deleted. This is to guard against accidental clicks on the Delete participants button.
