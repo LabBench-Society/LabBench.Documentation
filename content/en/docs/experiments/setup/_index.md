@@ -24,12 +24,12 @@ Currently, LabBench supports the following devices:
 
 | Device            | Description                                       | Instruments |
 |-------------------|---------------------------------------------------|-------------|
-| `<lio>`           | [LabBench I/O](docs/experiments/setup/lio/)       | IStimulator, ITriggerGenerator, IScales, IButton, IRatioScale, ITriggerDetector |
-| `<cpar>`          | [Nocitech CPAR](docs/experiments/setup/cpar/)      | IPressureAlgometer, IButton, IRatioScale, IScales |
-| `<cparplus>`      | [LabBench CPAR+](docs/experiments/setup/cparplus/)     | IPressureAlgometer, IButton, IRatioScale, IScales |
-| `<sound>`         | [Standard Soundcards](docs/experiments/setup/sound/)                               | IStimulator, ISoundPlayer |
-| `<joystick>`      | [USB PC Joysticks/Gamepads](docs/experiments/setup/joystick/)                         | IButton, IJoystick, `*`ITriggerGenerator |
-| `<display>`       | [Secondary Computer Monitors](docs/experiments/setup/display/)                       | IDisplay, IRatioScale, IIntervalScale, IOrdinalScale, IImageDisplay, IScales, IQuestionnaire |
+| `<lio>`           | <p><span style="white-space: nowrap;">[LabBench I/O](docs/experiments/setup/lio/)</span></p> | IStimulator, ITriggerGenerator, IScales, IButton, IRatioScale, ITriggerDetector |
+| `<cparplus>`      | <p><span style="white-space: nowrap;">[LabBench CPAR+](docs/experiments/setup/cparplus/)</span></p> | IPressureAlgometer, IButton, IRatioScale, IScales |
+| `<sound>`         | <p><span style="white-space: nowrap;">[LabBench SOUND](docs/experiments/setup/sound/)</span></p> | IStimulator, ISoundPlayer |
+| `<joystick>`      | <p><span style="white-space: nowrap;">[LabBench JOYSTICK](docs/experiments/setup/joystick/) </span></p>| IButton, IJoystick, `*`ITriggerGenerator |
+| `<display>`       | <p><span style="white-space: nowrap;">[LabBench DISPLAY](docs/experiments/setup/display/)</span></p> | IDisplay, IRatioScale, IIntervalScale, IOrdinalScale, IImageDisplay, IScales, IQuestionnaire |
+| `<cpar>`          | <p><span style="white-space: nowrap;">[Nocitech CPAR](docs/experiments/setup/cpar/)</span></p> | IPressureAlgometer, IButton, IRatioScale, IScales |
 
 `*` Dummy implementation, no actual functionality provided.
 
