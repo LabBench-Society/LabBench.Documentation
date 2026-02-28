@@ -14,7 +14,9 @@ The **LabBench CPAR+** is a computer-controlled cuff pressure algometer that del
 The LabBench CPAR+ device is included in experimental setups with an `<cparplus>` element:
 
 ```xml
-
+<cpar-plus id="cpar"
+            button="joystick"
+            rating-scale="display.vas" />
 ```
 
 **Attributes:**

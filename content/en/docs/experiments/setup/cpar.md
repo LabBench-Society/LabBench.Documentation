@@ -15,7 +15,7 @@ The Nocitech CPAR device is included in experimental setups with an `<cpar>` ele
 
 
 ```xml
-
+<cpar id="cpar" compressor-mode="auto"/>
 ```
 
 **Attributes:**
