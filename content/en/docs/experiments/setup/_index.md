@@ -124,3 +124,25 @@ One example of a protocol that requires a more specific mapping is an experiment
     <!--  Other required mapping has been omitted for brevity -->                       
 </device-mapping>
 ```
+
+## Experimental Setup Configuration
+
+
+
+## Component Configuration
+
+### Scale Anchors
+
+```xml
+
+```
+
+### Scale Categories
+
+
+### Buttons
+
+```xml
+
+```
+
