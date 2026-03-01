@@ -37,6 +37,8 @@ Below is an example of a template defining a stop-signal task:
 </procedure-templates>
 ```
 
+*Code Listing 1*
+
 which is then constructed in the `<procedures>` element of the Experiment Definition File (*.expx) with a template constructor:
 
 ```xml
@@ -51,6 +53,8 @@ which is then constructed in the `<procedures>` element of the Experiment Defini
 </procedures>
 ```
 
+*Code Listing 2*
+
 When the constructor runs, it takes the template, executes all template variable statements, and inserts the generated procedure at the location in the protocol where it is defined. Template variable statements are Python code that can be used in a template for string, dynamic text, and calculated attributes. These statements are identified with the `var:` keyword, for example, the id attribute in the template above is generated with the template variable statement: `id="var: dependency"`. In this statement, everything after the `var:` keyword is evaluated as a Python expression that must return a string. This example is the simplest form of template variable statement, where a template variable `dependency` is inserted verbatim and used as the value for the `id` attribute. We will later see examples of more complicated statements.
 
 Templates are defined in the `<templates>` element and can be used to construct procedures in the `<procedures>` element of an Experiment Definition File (*.expx). However, it is also possible to include the `<templates>` element from other protocols in the same repository:
@@ -62,15 +66,13 @@ Templates are defined in the `<templates>` element and can be used to construct 
 </includes>
 ```
 
-These include statements are from the [intro.labbench]() protocol that includes a gamified version of the Stop-Signal Task and the Depression, Anxiety, and Stress Scales from the [cogni.sst.game]() and [questionnaires.dass]() protocols, respectively. This is an example of how repositories can contain collections of protocols that serve as building blocks for other protocols.
+*Code Listing 4*
 
-
-
-
-
-
+These include statements are from the <a href="https://github.com/LabBench-Society/Protocols/tree/main/intro.labbench" target="_blank">intro.labbench</a> protocol that includes a gamified version of the Stop-Signal Task and the Depression, Anxiety, and Stress Scales from the <a href="https://github.com/LabBench-Society/Protocols/tree/main/cogni.sst.game" target="_blank">cogni.sst.game</a> and <a href="https://github.com/LabBench-Society/Protocols/tree/main/questionnaires.dass" target="_blank">questionnaires.dass</a> protocols, respectively. This is an example of how repositories can contain collections of protocols that serve as building blocks for other protocols.
 
 ## Defining templates
+
+Templates are defined with in the `<templates>` element:
 
 ```xml
 <?xml version="1.0" encoding="utf-8" ?>
@@ -143,11 +145,102 @@ These include statements are from the [intro.labbench]() protocol that includes 
 </experiment>
 ```
 
+*Code Listing 5*
+
+The template element defines; templates included from other protocols <includes> element, template variables `<template-variables>` that can be used in template variable statements to construct string, dynamic string, and calculated attributes, protocol variables `<protocol-variables>`, procedure templates `<procedure-templates>`, and assets `<assets>` that will be required by the constructed procedures.
+
 ### Includes
+
+The `<includes>` element makes it possible to include templates from other protocols within the same repository. The following `<includes>` element include `<include>` all the templates from the <a href="https://github.com/LabBench-Society/Protocols/tree/main/cogni.sst.game" target="_blank">cogni.sst.game</a> protocol into the <a href="https://github.com/LabBench-Society/Protocols/tree/main/intro.labbench" target="_blank">intro.labbench</a>:
+
+```xml
+<includes>
+    <include protocol-id="cogni.sst.game" />
+</includes>
+```
+
+*Code Listing 6*
+
+What happens with the `<include>` in code listing 6 is that all the elements within the `<templates>` element of code listing 5 get imported into the `intro.labbench` protocol, which means that procedure constructors in the <procedure> element in the `intro.labbench` protocol can use templates from the `cogni.sst.game` protocol. 
 
 ### Template variables
 
+The `<template-variables>` defines top-level template variables that can be used in template variable statements. Constructors may define further template variables that are added to the top-level template variables.
+
+**Please note that not all template variables used in templates have to be included in this definition of top-level template variables.** A common paradigm is to defer the definition of template variables to constructors, providing them with a mechanism to customise the construction of templates.
+
+As all template variables are used to construct strings, their only types are strings and arrays of strings, and structures of strings.
+
+The simplest template variable definition is the definition of a string:
+
+```xml
+<string name="dependency" value="PARTICIPANT" />
+```
+*Code Listing 7*
+
+Strings can be organised into arrays:
+
+```xml
+<strings name="Trials" value="T1;T2;T3;T4" />
+```
+*Code Listing 8*
+
+Arrays are used in foreach loops (please see section [Foreach loops](/docs/experiments/templates/#foreach-loops) to generate multiple procedures within the foreach loop.
+
+Strings variables can also be grouped into structs:
+
+```xml
+<struct name="Configuration">
+    <string name="ID"             value="SLOT06"  />
+    <string name="Previous"       value="SLOT05"  />
+    <string name="TestSite"       value="SITE04"  />
+    <string name="TimeConstraint" value="func: Script.GetTimeSlotDuration(tc)"  />
+</struct>
+```
+*Code Listing 9*
+
+Variables within a struct are accessed as `[Name of struct].[Name of variable]`.
+
+Structs can also be organised into arrays:
+
+```xml
+<structs name="TimeSlots">
+    <struct>
+        <string name="ID"             value="SLOT01"  />
+        <string name="Previous"       value=""  />
+        <string name="TestSite"       value=""  />
+        <string name="TimeConstraint" value="0"  />
+    </struct>
+    <struct>
+        <string name="ID"             value="SLOT02"  />
+        <string name="Previous"       value="SLOT01"  />
+        <string name="TestSite"       value=""  />
+        <string name="TimeConstraint" value="func: Script.GetTimeSlotDuration(context)" />
+    </struct>
+    <!-- SLOT03 to SLOT05 omitted for brevity -->
+    <struct>
+        <string name="ID"             value="SLOT06"  />
+        <string name="Previous"       value="SLOT05"  />
+        <string name="TestSite"       value="SITE04"  />
+        <string name="TimeConstraint" value="func: Script.GetTimeSlotDuration(context)"  />
+    </struct>
+</structs>
+```
+*Code Listing 8*
+
+Arrays of structs can also be used in foreach loops (please see the [Foreach loops](/docs/experiments/templates/#foreach-loops) section) to generate multiple procedures within the foreach loop.
+
 ### Protocol variables
+
+Protocol variables can be specified in the <protocol-variables> element within the <templates> section. When the protocol is constructed, these variables are copied into the top <variables> element in the <protocol> element. 
+
+Consequently, if the <procedure-templates> are only within the same protocol, there is no difference between defining the variables within the <template> element or in the top-level <variables> element. However, if the protocol is intended to be included in other protocols, the <protocol-variables> element allows you to define variables that are imported into those protocols.
+
+Below is an example of variables that are defined for the Stop-Signal game:
+
+```xml
+
+```
 
 ### Procedure templates
 
@@ -159,13 +252,29 @@ These include statements are from the [intro.labbench]() protocol that includes 
 ### Foreach loops
 
 ```xml
-
+<foreach variable="Slot" in="TimeSlots">                    
+    <questionnaire-constructor
+        id="var: f'{Session}{Slot.ID}PREP'" 
+        name="var: f'AREA PREPARATION ({Slot.ID})'" 
+        session="var: Session"
+        template="prepareTimeSlot">
+        <variables>
+            <string name="Previous" value="var: f'{Session}{Slot.Previous}PREP' if not Slot.Previous else ''" />
+        </variables>
+    </questionnaire-constructor>
+</foreach>
 ```
 
 ### Conditional construction
 
 ```xml
-
+<if condition="not Slot.TestSite">
+    <questionnaire-constructor 
+        id="var: f'{Session}{Slot.TestSite}APPLICATION'" 
+        name="var: f'{Slot.TestSite} Pruritogen (Application)'" 
+        session="var: Session"
+        template="application" />
+</if>
 ```
 
 
