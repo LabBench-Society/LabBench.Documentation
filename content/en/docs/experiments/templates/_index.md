@@ -51,6 +51,20 @@ which is then constructed in the `<procedures>` element of the Experiment Defini
 </procedures>
 ```
 
+When the constructor runs, it takes the template, executes all template variable statements, and inserts the generated procedure at the location in the protocol where it is defined. Template variable statements are Python code that can be used in a template for string, dynamic text, and calculated attributes. These statements are identified with the `var:` keyword, for example, the id attribute in the template above is generated with the template variable statement: `id="var: dependency"`. In this statement, everything after the `var:` keyword is evaluated as a Python expression that must return a string. This example is the simplest form of template variable statement, where a template variable `dependency` is inserted verbatim and used as the value for the `id` attribute. We will later see examples of more complicated statements.
+
+Templates are defined in the `<templates>` element and can be used to construct procedures in the `<procedures>` element of an Experiment Definition File (*.expx). However, it is also possible to include the `<templates>` element from other protocols in the same repository:
+
+```xml
+<includes>
+    <include protocol-id="questionnaires.dass" />
+    <include protocol-id="cogni.sst.game" />
+</includes>
+```
+
+These include statements are from the [intro.labbench]() protocol that includes a gamified version of the Stop-Signal Task and the Depression, Anxiety, and Stress Scales from the [cogni.sst.game]() and [questionnaires.dass]() protocols, respectively. This is an example of how repositories can contain collections of protocols that serve as building blocks for other protocols.
+
+
 
 
 
@@ -141,11 +155,17 @@ which is then constructed in the `<procedures>` element of the Experiment Defini
 
 ## Template construction
 
-## Procedure constructors
 
 ### Foreach loops
 
+```xml
+
+```
+
 ### Conditional construction
 
+```xml
+
+```
 
 
