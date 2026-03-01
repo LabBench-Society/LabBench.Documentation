@@ -232,49 +232,119 @@ Arrays of structs can also be used in foreach loops (please see the [Foreach loo
 
 ### Protocol variables
 
-Protocol variables can be specified in the <protocol-variables> element within the <templates> section. When the protocol is constructed, these variables are copied into the top <variables> element in the <protocol> element. 
+Protocol variables can be specified in the `<protocol-variables>` element within the `<templates>` section. When the protocol is constructed, these variables are copied into the top level `<variables>` element in the `<protocol>` element. 
 
-Consequently, if the <procedure-templates> are only within the same protocol, there is no difference between defining the variables within the <template> element or in the top-level <variables> element. However, if the protocol is intended to be included in other protocols, the <protocol-variables> element allows you to define variables that are imported into those protocols.
+Consequently, if the `<procedure-templates>` are only within the same protocol, there is no difference between defining the variables within the `<template>` element or in the top-level `<variables>` element. However, if the protocol is intended to be included in other protocols, the `<protocol-variables>` element allows you to define variables that are imported into those protocols.
 
 Below is an example of variables that are defined for the Stop-Signal game:
 
 ```xml
+<struct name="StopSignal">
+    <variable name="TrainingStopSignals" value="2 if 'TEST' in Participant else 5"/> 
+    <variable name="NumberOfStopSignals" value="5 if 'TEST' in Participant else 30"/> 
+    <variable name="LowDelayLimit" value="50"/>
+    <variable name="HighDelayLimit" value="750"/>
+    <variable name="FixationDelay"  value="500"/>
+    <variable name="ResponseTimeout"  value="1000"/>
+    <variable name="FeedbackDelay" value="1000"/>            
+    <variable name="FeedbackTime" value="1000"/>
+    <variable name="Pause" value="1000"/>
+    <variable name="Period" value="(StopSignal.FixationDelay + StopSignal.ResponseTimeout + StopSignal.FeedbackDelay + StopSignal.FeedbackTime + StopSignal.Pause)/1000"/>
 
+    <variable name="Task" value="func: StopSignalGameScript.CreateTask(tc)"/>
+</struct>
 ```
+*Code Listing 10*
+
+In the example, all variables are contained within a struct named StopSignal, and consequently, all individual variables must be accessed as StopSignal.[Name of variable]. Defining variables within structs is good practice, as it allows shorter variable names while the struct simultaneously prevents naming conflicts with variables from other template protocols. For example, if a protocol includes both a Stop Signal Task and a Stroop Task, both will likely have a Period defined for their tasks. Consequently, without enclosing them within a struct, the names will conflict with each other, and the import of the protocols will fail, as already existing variables are not allowed to be overwritten by an import.
 
 ### Procedure templates
 
+Procedure templates are defined within the `<procedure-templates>` element. In general, they have the same syntax as their corresponding procedure, except that they do not have a name. Their constructor assigns their name.
+
 ### Assets
+
+Assets can be specified in the `<assets>` element within the `<templates>` section. When the protocol is constructed, these variables are copied into the top-level `<assets>` element of the `<protocol>` element.
+
+Consequently, if the `<assets>` are only within the same protocol, there is no difference between defining the variables within the `<template>` element or in the top-level `<assets>` element. However, like `<protocol-variables>`, if the protocol is intended to be included in other protocols, the `<assets>` element allows you to define assets that are imported into those protocols.
 
 ## Template construction
 
+The function of templates is to be used by template constructors to construct procedures in the <procedures> element of protocols. Construction consists of copying all the elements and attributes of the template into the corresponding elements and attributes of the procedure. In this process, if any attribute is a template variable statement (specified with the `var:` keyword), it is evaluated, yielding the string used for the attribute. 
+
+These template variable statements are usually implemented with Python f-strings. An f-string (short for formatted string literal) is a string that lets you insert variables or expressions directly inside it using curly braces `{}`. 
+
+You create one by putting an f before the opening quote of a string:
+
+```python
+f'{Session}{Slot.TestSite}APPLICATION'
+```
+
+In this example, if we let template variables Session='SES01' and Slot.TestSite='A1', this example will result in the generation of the string "SES01A1APPLICATION". The advantage of f-strings is that they are short and more readable, as their expression comes close to the resulting string.
+
+Another key concept to know when constructing procedures is when this construction takes place. Construction of procedures occurs as the first step after loading a protocol. It consists of creating the template variables defined in the `<template>` section and their constructors, followed by executing the constructors.
+
+**Consequently, protocol variables cannot be used in template variable statements, nor can they call Python code from assets included with the protocol.**
 
 ### Foreach loops
 
+A common task is to generate a series of procedures from templates customised to the values in an array template variable. For example, one may need to generate procedures for each session in a multi-session experiment (if the `<sessions>` element is defined, its `<session>` elements will automatically be available in a Sessions template array variable).
+
+This can be accomplished with the `<foreach>` constructor. This constructor takes a template variable array and assigns each value to a named template variable, thereby looping through the array and creating procedures for each value.
+
+Below is an example where two nested `<foreach>` constructors first loops through all sessions in an experiment, and then for each session loops through all the structs in the array of structs in Code Listing 8:
+
 ```xml
-<foreach variable="Slot" in="TimeSlots">                    
-    <questionnaire-constructor
-        id="var: f'{Session}{Slot.ID}PREP'" 
-        name="var: f'AREA PREPARATION ({Slot.ID})'" 
-        session="var: Session"
-        template="prepareTimeSlot">
-        <variables>
-            <string name="Previous" value="var: f'{Session}{Slot.Previous}PREP' if not Slot.Previous else ''" />
-        </variables>
-    </questionnaire-constructor>
+<foreach variable="Session" in="Sessions">                    
+    <foreach variable="Slot" in="TimeSlots">                    
+        <questionnaire-constructor
+            id="var: f'{Session}{Slot.ID}PREP'" 
+            name="var: f'AREA PREPARATION ({Slot.ID})'" 
+            session="var: Session"
+            template="prepareTimeSlot">
+            <variables>
+                <string name="Previous" value="var: f'{Session}{Slot.Previous}PREP' if not Slot.Previous else ''" />
+            </variables>
+        </questionnaire-constructor>
+
+        <!-- Other procedure constructors are omitted for brevity -->
+    </foreach>
 </foreach>
 ```
 
+Note how the `variable` attribute defines the name of the template variable that will be available to the constructors nested within the `<foreach>` constructor, which will be updated with the values of the template variable array defined by the `in` attribute. The `in` attribute must be a string literal naming an existing template variable and cannot itself be a template variable statement.
+
 ### Conditional construction
 
+Within `<foreach>` loops, it is a typical pattern for procedures to be constructed only for some values of the template variable array. This can be accomplished with the `<if>` constructor.
+
+The `<if>` constructor has a `condition` attribute that must be a Python expression that returns a boolean value (True or False). If it returns True, then the constructors within it are executed; otherwise, they are ignored.
+
+An example of this is the generation of procedures for the time slots defined in Code Listing 8. These time slots are from an experiment that tested the effect of a topical anti-puritogen on histamine-induced itch. This cream needs to be applied for 1.5 hours; consequently, for the first two time slots, no puritogen should be applied, and no assessment should be performed. This is specified in the TimeSlot by assigning an empty string to the TestSite variable.
+
+The code example below will only generate puritogen application and assessment procedures if the TestSite contains a string:
+
 ```xml
-<if condition="not Slot.TestSite">
+<if condition="Slot.TestSite">
     <questionnaire-constructor 
         id="var: f'{Session}{Slot.TestSite}APPLICATION'" 
         name="var: f'{Slot.TestSite} Pruritogen (Application)'" 
         session="var: Session"
         template="application" />
+
+    <!-- Procedure constructurs for puritogen removal and assessment are omitted for brevity -->
 </if>
 ```
+
+In this example, we use the fact that an empty string will evaluate to False in Python, and that a non-empty string evaluates to True. Consequently, the statement condition=”Slot.TestSite” will be True, and the procedures within the <if> statement will be included if TestSite is assigned a string.
+
+## Example protocols
+
+| Name | ID | Description |
+|------|----|------------|
+| Stop Signal Game | <a href="https://github.com/LabBench-Society/Protocols/tree/main/cogni.sst.game" target="_blank">cogni.sst.game</a> | Demonstrates how a gamified version of the Stop-Signal Task can be implemented in a form that can be included in other protocols. |
+| Depression Anxiety Stress Scales (DASS 42) | <a href="https://github.com/LabBench-Society/Protocols/tree/main/questionnaires.dass" target="_blank">questionnaires.dass</a> | Demonstrates how the Depression Anxiety Stress Scales (DASS 42) questionnaire can be implemented in a form that can be included in other protocols. |
+| Introduction to LabBench | <a href="https://github.com/LabBench-Society/Protocols/tree/main/intro.labbench" target="_blank">intro.labbench</a> | Demonstrates how a protocol that studies the interaction between Depression, Anxiety, Stress, and inhibition, as assessed with the Stop-Signal Task, can be implemented by including templates from the `cogni.sst.game` and `questionnaires.dass` protocols. |
+| Introduction to Randomization and Templating | <a href="https://github.com/LabBench-Society/Protocols/tree/main/intro.randomization" target="_blank">intro.randomization</a> | Demonstrates how `<foreach>` and `<if>` constructors can be used to implement a multi-session protocol that, for each session, assesses a set of anti-puritogens on a set of test sites. |
 
 
