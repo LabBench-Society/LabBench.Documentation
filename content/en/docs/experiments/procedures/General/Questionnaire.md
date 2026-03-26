@@ -48,23 +48,25 @@ The procedure window for the `<questionnaire>` is shown in Figure 1.
 </questionnaire>               
 ```
 
+### Question events
+
 ## Questions
 
 LabBench supports the following set of question types to accommodate different experimental needs:
 
-| Name                    | Element  | Purpose |
-|-------------------------|:--------:|--------|
-| Boolean                 | | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult). |
-| Numerical               | | Free or validated numeric input. |
-| Text                    | | Free-form or validated textual responses. |
-| Likert                  | | Ordered categorical scales that capture degrees of agreement or intensity. |
-| Dimensional Likert      | | A set of ordered categorical scales that capture degrees of agreement or intensity.|
-| List                    | | Sets of independent binary items (multiple true/false selections). |
-| Time                    | | Date and/or time input. |
-| Map                     | | Spatial responses are defined by marking regions (e.g., body maps). |
-| Categorical Rating      | | Ratings on discrete categorical scales. |
-| Numerical Rating        | | Ratings on a bounded numerical scale. |
-| Visual Analogue Rating  | | Ratings on a visual analogue scale. |
+| Name                    | Element                | Purpose                                                                            |
+|-------------------------|:----------------------:|------------------------------------------------------------------------------------|
+| Boolean                 | `<boolean>`            | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult).      |
+| Numerical               | `<numeric>`            | Free or validated numeric input.                                                   |
+| Text                    | `<text>`               | Free-form or validated textual responses.                                          |
+| Likert                  | `<likert>`             | Ordered categorical scales that capture degrees of agreement or intensity.         |
+| Dimensional Likert      | `<dimensional-likert>` | A set of ordered categorical scales that capture degrees of agreement or intensity.|
+| List                    | `<list>`               | Sets of independent binary items (multiple true/false selections).                 |
+| Time                    | `<time>`               | Date and/or time input.                                                            |
+| Map                     | `<map>`                | Spatial responses are defined by marking regions (e.g., body maps).                |
+| Categorical Rating      | `<categorical-scale>`  | Ratings on discrete categorical scales. |
+| Numerical Rating        | `<numerical-scale>`    | Ratings on a bounded numerical scale. |
+| Visual Analogue Rating  | `<visual-analogue-scale>` | Ratings on a visual analogue scale. |
 
 Questions are defined within the `<content>` element. All questions have is defined wit the following format:
 
