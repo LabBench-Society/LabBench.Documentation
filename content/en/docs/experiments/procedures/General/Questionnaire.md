@@ -27,6 +27,9 @@ The id is used to identify the answer in the dataset, and to refer to it from ca
 
 The procedure window for the `<questionnaire>` is shown in Figure 1.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide1.PNG)
+
+
 ## Test definition
 
 ```xml
@@ -172,7 +175,15 @@ rating scales. Participants select their response using the `up` and `down` butt
 A `<likert>` question is defined with:
 
 ```xml
-
+<likert id="likertQuestion"
+    title="Likert Question"
+    instruction="Answer on a likert scale.">
+    <choice value="0" label="C1" />
+    <choice value="1" label="C2" />
+    <choice value="2" label="C3" />
+    <choice value="3" label="C4" />
+    <choice value="4" label="C5" />
+</likert>
 ```
 
 ### Dimensional Likert
@@ -187,7 +198,24 @@ active using the `up` and `down` buttons, and perform their rating with the `inc
 A `<dimensional-likert>` question is defined with:
 
 ```xml
-
+<dimensional-likert id="dlikertQuestion"
+    title="Dimensional Likert Question"
+    instruction="Answer on a dimensional likert scale.">
+    <dimension name="Pain">
+        <choice value="0" label="C1" />
+        <choice value="1" label="C2" />
+        <choice value="2" label="C3" />
+        <choice value="3" label="C4" />
+        <choice value="4" label="C5" />
+    </dimension>
+    <dimension name="Itch">
+        <choice value="0" label="C1" />
+        <choice value="1" label="C2" />
+        <choice value="2" label="C3" />
+        <choice value="3" label="C4" />
+        <choice value="4" label="C5" />
+    </dimension>                        
+</dimensional-likert>
 ```
 
 
@@ -198,7 +226,14 @@ The `<list>` question asks a set of statement that can either be true or false. 
 A `<list>` question is defined with:
 
 ```xml
-
+<list id="listQuestion"
+    title="List Question"
+    instruction="Answer a set of options.">
+    <item id="Q0" question="Option 1" />
+    <item id="Q1" question="Option 2" />
+    <item id="Q2" question="Option 3" />
+    <item id="Q4" question="Option 4" />
+</list>
 ```
 
 ### Time
@@ -213,7 +248,9 @@ to the participant so they can confirm it is correct.
 A `<time>` question is defined with:
 
 ```xml
-
+<time id="timeQuestion" 
+    title="Time question"
+    instruction="Please enter a time" />
 ```
 
 ### Map
@@ -239,8 +276,42 @@ and can't navigate away from the area.
 A `<map>` question is defined with:
 
 ```xml
+<map id="mapQuestionSingle"
+    title="Map Question (Single selection)"
+    instruction="Makes it possible for operators to mark single areas"
+    image-map="Assets.BodyMap.Areas"
+    overlay-image="Assets.BodyMap.Overlay"
+    initial-active-area="C01"
+    selection-mode="single"
+    selected-colour="#ADFFA6"
+    active-selected-colour="#82BF7C"
+    deselected-colour="#FFFFFF"
+    active-deselected-colour="#E3E3E3">
 
+    <area id="C01" colour="#FF0A0A" down="C02" />
+    <area id="C02" colour="#FF1414" down="C03" up="C01"/>
+    <area id="C03" colour="#FF1E1E" down="C04" up="C02" left="C14" right="C17" />
+    <area id="C04" colour="#FF2828" down="C05" up="C03" />
+    <area id="C05" colour="#FF3232" down="C06" up="C04" left="C15" right="C18"/>
+    <area id="C06" colour="#FF3C3C" down="C07" up="C05" left="C10" />
+    <area id="C07" colour="#FF4646" down="C08" up="C06" left="C11" />
+    <area id="C08" colour="#FF5050" down="C09" up="C07" left="C12" />
+    <area id="C09" colour="#FF5A5A"            up="C08" left="C13" />
+    <area id="C10" colour="#FF6464" down="C11" up="C05" right="C06" />
+    <area id="C11" colour="#FF6E6E" down="C12" up="C10" right="C07" />
+    <area id="C12" colour="#FF7878" down="C13" up="C11" right="C08" />
+    <area id="C13" colour="#FF8282"            up="C12" right="C09" />
+    <area id="C14" colour="#FF8C8C" down="C15"          right="C05" />
+    <area id="C15" colour="#FF9696" down="C16" up="C14" right="C05" />
+    <area id="C16" colour="#FFA0A0"            up="C15" />
+    <area id="C17" colour="#FFAAAA" down="C18"          left="C03" />
+    <area id="C18" colour="#FFB4B4" down="C19" up="C17" left="C05" />
+    <area id="C19" colour="#FFBEBE"            up="C18"  />
+</map>
 ```
+
+![](/images/Experitments_Procedures_General_Questionnaire/Slide2.PNG)
+
 
 ### Categorical Scale Rating
 
@@ -251,7 +322,19 @@ increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 A `<categorical-scale>` question is defined with:
 
 ```xml
-
+<categorical-scale id="categoricalScaleQuestion" 
+    title="Categorical Rating Question"
+    instruction="Please rate your sensation"
+    top-anchor="Maximal Sensation" 
+    bottom-anchor="No Sensation" 
+    active-colour="rgb(255,0,0)" 
+    inactive-colour="rgb(32,32,32)">
+    <category value="C1" />
+    <category value="C2" />
+    <category value="C3" />
+    <category value="C4" />
+    <category value="C5" />
+</categorical-scale>
 ```
 
 ### Numerical Scale Rating
@@ -263,7 +346,15 @@ increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 A `<numerical-scale>` question is defined with:
 
 ```xml
-
+<numerical-scale id="numericalScaleQuestion" 
+    title="Numerical Rating Question"
+    instruction="Please rate your sensation"
+    maximum="10" 
+    minimum="0" 
+    top-anchor="Maximal Sensation" 
+    bottom-anchor="No Sensation" 
+    active-colour="rgb(255,0,0)" 
+    inactive-colour="rgb(32,32,32)"/>
 ```
 
 ### Visual Analogue Scale Rating
@@ -275,7 +366,14 @@ increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 A `<visual-analogue-scale>` question is defined with:
 
 ```xml
-
+<visual-analogue-scale id="visualAnalogScaleQuestion" 
+    title="Visual Analog Rating Question"
+    instruction="Please rate your sensation"
+    length="10"
+    top-anchor="Maximal Sensation" 
+    bottom-anchor="No Sensation" 
+    active-colour="rgb(255,0,0)" 
+    inactive-colour="rgb(32,32,32)"/>
 ```
 
 
