@@ -30,35 +30,64 @@ The procedure window for the `<questionnaire>` is shown in Figure 1.
 ## Test definition
 
 ```xml
+<questionnaire id="PARTICIPANT" 
+    name="Participant Controlled"
+    experimental-setup-id="questionnaire"
+    control="participant" 
+    progress-format="percentage">
 
+    <question-events start="True"
+                     changed="True"
+                     complete="True">
+        <instrument interface="stimulator" />
+    </question-events>
+
+    <content>
+        <!-- Content omitted for brevity -->
+    </content>
+</questionnaire>               
 ```
 
 ## Questions
 
 LabBench supports the following set of question types to accommodate different experimental needs:
 
+| Name                    | Element  | Purpose |
+|-------------------------|:--------:|--------|
+| Boolean                 | | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult). |
+| Numerical               | | Free or validated numeric input. |
+| Text                    | | Free-form or validated textual responses. |
+| Likert                  | | Ordered categorical scales that capture degrees of agreement or intensity. |
+| Dimensional Likert      | | A set of ordered categorical scales that capture degrees of agreement or intensity.|
+| List                    | | Sets of independent binary items (multiple true/false selections). |
+| Time                    | | Date and/or time input. |
+| Map                     | | Spatial responses are defined by marking regions (e.g., body maps). |
+| Categorical Rating      | | Ratings on discrete categorical scales. |
+| Numerical Rating        | | Ratings on a bounded numerical scale. |
+| Visual Analogue Rating  | | Ratings on a visual analogue scale. |
+
+Questions are defined within the `<content>` element. All questions have is defined wit the following format:
+
+```xml
+<question-type id="booleanQuestion" 
+    title="Boolean Question"
+    instruction="Answer yes or no."
+    ... question-specific attributes ... >
+    <question-specific-elements />
+</question-type>
+
+```
+
+and have the following common attribytes:
+
+| Attribute   | Type           | Definition |
+|-------------|:--------------:|------------|
+| id          | string         | Identifier for the question [ string ]. This identifier must be unique and is used to reference the answer in calculated parameters and in exported data. The answer can be referenced in calculated parameters as `[ProcedureID].[QuestionID]`. |
+| title       | dynamic string | The title of the question. |
+| instruction | dynamic string | An instruction to the operator or participant on how to answer the question. |
+| condition   | bool = Calculated(pc) | Places a condition on whether the question is asked. If the calculated parameter returns True, the question is asked; otherwise, it is skipped. Consequently, this attribute can be used to omit questions based on answers to previous questions or on the results of other procedures in the protocol. |
 
 
-* Boolean 
-Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult).
-* Numerical 
-Free or validated numeric input.
-* Text 
-Free-form or validated textual responses.
-* Likert 
-Ordered categorical scales that capture degrees of agreement or intensity.
-* List 
-Sets of independent binary items (multiple true/false selections).
-* Time 
-Date and/or time input, typically entered by the operator.
-* Map 
-Spatial responses are defined by marking regions (e.g., body maps).
-* Categorical Rating
-Ratings on discrete categorical scales.
-* Numerical Rating 
-Ratings on a bounded numerical scale.
-* Visual Analogue Rating 
-Continuous responses using a visual analogue scale.
 
 ### Boolean
 
@@ -66,8 +95,17 @@ The `<boolean>` question asks a statement that can either be true or false. If t
 answers the question, the answer is selected with the `up` and `down` buttons.
 
 ```xml
-
+<boolean id="booleanQuestion" 
+    title="Boolean Question"
+    instruction="Answer yes or no."
+    true-label="Ask the next text question" 
+    false-label="Skip the next text question" />
 ```
+with the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|:----:|------------|
+
 
 ### Numerical
 
@@ -78,9 +116,21 @@ If the participant answers the question, the answer must be given verbally to th
 who then enters it into the questionnaire. The operator's entered value will be displayed 
 to the participant so they can confirm it is correct.        
 
-```xml
+A `<numeric>` question is defined with:
 
+```xml
+<numeric id="numericQuestion"
+    title="Numeric Question"
+    instruction="Answer with a number.">
+    <validation min="0" min-included="true"
+                max="100" max-included="true"/>
+</numeric>
 ```
+
+with the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|:----:|------------|
 
 ### Text
 
@@ -91,9 +141,21 @@ If the participant answers the question, the answer must be given verbally to th
 who then enters it into the questionnaire. The operator's entered value will be displayed 
 to the participant so they can confirm it is correct.        
 
-```xml
+A `<text>` question is defined with:
 
+```xml
+<text id="textQuestion"
+    title="Text Question"
+    instruction="Answer with text."
+    condition="Current.booleanQuestion">
+    <validation regex="[\w\s]*" advice="Any text that consists of word charecters and whitespace."/>
+</text>
 ```
+
+with the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|:----:|------------|
 
 ### Likert
 
@@ -104,6 +166,8 @@ of response categories, from which a single option may be selected.
 In LabBench, Likert scales are presented vertically. This vertical orientation allows for 
 longer, more descriptive labels for response categories than horizontally displayed categorical 
 rating scales. Participants select their response using the `up` and `down` button.        
+
+A `<likert>` question is defined with:
 
 ```xml
 
@@ -118,6 +182,8 @@ ordered set of response categories, from which a single option may be selected.
 In LabBench, each Likert scale is presented horizontally. Participants select which Likert scale is 
 active using the `up` and `down` buttons, and perform their rating with the `increase` and `decrease` buttons.        
 
+A `<dimensional-likert>` question is defined with:
+
 ```xml
 
 ```
@@ -126,6 +192,8 @@ active using the `up` and `down` buttons, and perform their rating with the `inc
 ### List
 
 The `<list>` question asks a set of statement that can either be true or false. A statement is selected with the `up` and `down` buttons, and answered with the `decrease` and `increase` buttons, which makes the statement false and true, respectively.
+
+A `<list>` question is defined with:
 
 ```xml
 
@@ -139,6 +207,8 @@ when something occurred. The answer is in the form of a date and time.
 If the participant answers the question, the answer must be given verbally to the operator, 
 who then enters it into the questionnaire. The operator's entered value will be displayed 
 to the participant so they can confirm it is correct.
+
+A `<time>` question is defined with:
 
 ```xml
 
@@ -164,6 +234,8 @@ areas, specifying which area will be made active when the up, down, left, or rig
 pressed. For each area, at least one button must be defined so the participant can’t get trapped 
 and can't navigate away from the area.        
 
+A `<map>` question is defined with:
+
 ```xml
 
 ```
@@ -173,6 +245,8 @@ and can't navigate away from the area.
 The `<categorical-scale>` question asks the participant or operator to rate a sensation 
 on a categorical rating scale. If the participant answers the question, the rating is 
 increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
+
+A `<categorical-scale>` question is defined with:
 
 ```xml
 
@@ -184,6 +258,8 @@ The `<numerical-scale>` question asks the participant or operator to rate a sens
 on a numerical rating scale. If the participant answers the question, the rating is 
 increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 
+A `<numerical-scale>` question is defined with:
+
 ```xml
 
 ```
@@ -193,6 +269,8 @@ increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 The `<visual-analogue-scale>` question asks the participant or operator to rate a sensation 
 on a visual analog rating scale. If the participant answers the question, the rating is 
 increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
+
+A `<visual-analogue-scale>` question is defined with:
 
 ```xml
 
