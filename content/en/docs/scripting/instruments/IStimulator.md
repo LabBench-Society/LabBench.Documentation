@@ -9,28 +9,27 @@ weight: 20
 
 ### startTrigger
 
-| Value                         | Definition |
-|-------------------------------|------------|
-| `'none'` | | 
+| Value        | Definition |
+|---------- ---|------------|
+| `'none'`     | | 
 | `'internal'` | |
 | `'external'` | |
-| `'button'` | |
-| `'port1'` | |
-| `'port2'` | |
-| `'port3'` | |
-| `'port4'` | |
+| `'button'`   | |
+| `'port1'`    | |
+| `'port2'`    | |
+| `'port3'`    | |
+| `'port4'`    | |
 
 ## Stimulator
 
 ### Properties
 
-| Name | Type | Description |
-|------|------|-------------|
-| Max  |
-| Min  |
-| Neutral |
-| Range   |
-| 
+| Name    | Type | Description |
+|---------|------|-------------|
+| Max     |      |             |
+| Min     |      |             |
+| Neutral |      |             |
+| Range   |      |             |
 
 ### Functions
 
