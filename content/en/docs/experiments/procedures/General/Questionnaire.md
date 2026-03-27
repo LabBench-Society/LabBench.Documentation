@@ -76,6 +76,28 @@ An important note about the purpose of questionnaires in LabBench. The central i
 
 ### Question events
 
+Question events make it possible to extend the functionality of the questionnaire procedure by executing calculated parameters (i.e., Python code) when questions are entered, left, or their answers are changed.
+
+Questions events are defined with the `<question-events>` element:
+
+```xml
+<question-events start="True"
+                    changed="True"
+                    complete="True">
+    <instrument interface="stimulator" />
+</question-events>
+```
+
+which has the following attributes:
+
+| Attribute   | Type                       | Definition                                         |
+|-------------|:--------------------------:|----------------------------------------------------|
+| `start`     | bool = Calculated(context) | Called when a question is started.                 |
+| `changed`   | bool = Calculated(context) | Called when a the answer to a question is changed. |
+| `complete`  | bool = Calculated(context) | Called when a question is completed.               |
+
+Instruments can be made available for the `started`, `changed`, and `complete` calculated attributes by declaring `<instrument>` elements within the `<question-events>` element. These instruments must then be assigned to the procedure in the `<device-mapping>` of the experimental setup. 
+
 ## Questions
 
 LabBench supports the following set of question types to accommodate different experimental needs:
