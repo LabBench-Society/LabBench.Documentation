@@ -16,21 +16,17 @@ While questionnaires naturally support classical psychometric instruments (e.g.,
 * Runtime configuration of experimental parameters
 * Conditional branching and parameterisation of subsequent procedures
 
-This makes questionnaires an integral part of the experimental control flow rather than a standalone data-collection tool.
+Each question in a questionnaire is uniquely identified by an id and includes: 1) a title (the prompt or label shown to the user), and 2) an instruction (guidance on how to interpret or answer the question). The id is used to identify the answer in the dataset, and to refer to it from calculated parameters.
 
-Each question in a questionnaire is uniquely identified by an id and includes:
-
-* A title (the prompt or label shown to the user)
-* An instruction (guidance on how to interpret or answer the question)
-
-The id is used to identify the answer in the dataset, and to refer to it from calculated parameters.
-
-The procedure window for the `<questionnaire>` is shown in Figure 1.
+The procedure panel and participant screen for the `<questionnaire>` is shown in Figure 1.
 
 ![](/images/Experitments_Procedures_General_Questionnaire/Slide1.PNG)
 
+The participant screen is only displayed and used if the questionnaire is to be completed by the participant (`control="participant"`). The procedure pannel provides in the top of the panel the title and instruction for the question. Below the title of the instruction is the question that must be answered, and at the bottom is buttoms for going to the next and previous questions. It is only possible to go to the next question if the current question has been answered.
 
-## Test definition
+## Procedure definition
+
+Questionnaires are defined with the `<questionnaire>` element:
 
 ```xml
 <questionnaire id="PARTICIPANT" 
@@ -51,25 +47,52 @@ The procedure window for the `<questionnaire>` is shown in Figure 1.
 </questionnaire>               
 ```
 
+With the following procedure specific attributes:
+
+| Attribute   | Type           | Definition |
+|-------------|:--------------:|------------|
+| progress-format | enum | Controls the progress information that is provided by the procedure.     |
+| control         | enum | Sets whether the questionnaire is filled out by the operator or the participant. |
+
+### Progress format
+
+The procedure can display information on the progress of the questionnaire. The type of information provided is configured with theb `progress-format` attribute:
+
+* `none`: no progresss information is provided.
+* `percentage`: progress is provided as the percentage of completed questions.
+* `index`: progress is provided as [current question no] / [total number of questions].
+
+### Control
+
+Questionnaires can be completed by either the operator or participant. When the operator completes the questionnaire, it is displayed only in the procedure panel and not to the participant. When the participant completes the questionnaire, it appears in both the procedure panel and a questionnaire instrument that must be assigned to the procedure. The participant will answer the questions using a Button instrument, which must also be assigned to the procedure. 
+
+Whether the operator or participant answers is the questions is configured with the `control` attribute:
+
+* `operator`: answers are provided by the operator.
+* `participant`: answers are provided by the participant. In this mode, a Questionnaire
+                    instrument must be assigned to the procedure.
+
+An important note about the purpose of questionnaires in LabBench. The central idea in LabBench is that experiments must be as simple as possible for participants, which implies that **participants can only answer questions that require simple selection answers**, such as Likert scales, Yes/No statements, Body Maps, Rating Scales, etc. However, questions that require complex input, such as numeric , text, or time/date questions, must be answered by the operator asking the question and then entering the participant's answer.
+
 ### Question events
 
 ## Questions
 
 LabBench supports the following set of question types to accommodate different experimental needs:
 
-| Name                    | Element                | Purpose                                                                            |
-|-------------------------|:----------------------:|------------------------------------------------------------------------------------|
-| Boolean                 | `<boolean>`            | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult).      |
-| Numerical               | `<numeric>`            | Free or validated numeric input.                                                   |
-| Text                    | `<text>`               | Free-form or validated textual responses.                                          |
-| Likert                  | `<likert>`             | Ordered categorical scales that capture degrees of agreement or intensity.         |
-| Dimensional Likert      | `<dimensional-likert>` | A set of ordered categorical scales that capture degrees of agreement or intensity.|
-| List                    | `<list>`               | Sets of independent binary items (multiple true/false selections).                 |
-| Time                    | `<time>`               | Date and/or time input.                                                            |
-| Map                     | `<map>`                | Spatial responses are defined by marking regions (e.g., body maps).                |
-| Categorical Rating      | `<categorical-scale>`  | Ratings on discrete categorical scales. |
-| Numerical Rating        | `<numerical-scale>`    | Ratings on a bounded numerical scale. |
-| Visual Analogue Rating  | `<visual-analogue-scale>` | Ratings on a visual analogue scale. |
+| Name                    | Element                | Purpose                                                                            | Control |
+|-------------------------|:----------------------:|------------------------------------------------------------------------------------|---|
+| Boolean                 | `<boolean>`            | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult).      | O/P | 
+| Numerical               | `<numeric>`            | Free or validated numeric input. | O |
+| Text                    | `<text>`               | Free-form or validated textual responses. | O |
+| Likert                  | `<likert>`             | Ordered categorical scales that capture degrees of agreement or intensity.         | O/P |
+| Dimensional Likert      | `<dimensional-likert>` | A set of ordered categorical scales that capture degrees of agreement or intensity.| O/P |
+| List                    | `<list>`               | Sets of independent binary items (multiple true/false selections).                 | O/P |
+| Time                    | `<time>`               | Date and/or time input.                                                            | O |
+| Map                     | `<map>`                | Spatial responses are defined by marking regions (e.g., body maps).                | O/P |
+| Categorical Rating      | `<categorical-scale>`  | Ratings on discrete categorical scales. | O/P |
+| Numerical Rating        | `<numerical-scale>`    | Ratings on a bounded numerical scale. | O/P |
+| Visual Analogue Rating  | `<visual-analogue-scale>` | Ratings on a visual analogue scale. | O/P |
 
 Questions are defined within the `<content>` element. All questions have is defined wit the following format:
 
