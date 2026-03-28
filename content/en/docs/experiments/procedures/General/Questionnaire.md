@@ -143,6 +143,12 @@ and have the following common attribytes:
 The `<boolean>` question asks a statement that can either be true or false. If the participant 
 answers the question, the answer is selected with the `up` and `down` buttons.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide3.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
+
+A `<boolean>` question is defined with:
+
 ```xml
 <boolean id="booleanQuestion" 
     title="Boolean Question"
@@ -161,6 +167,10 @@ with the following attributes:
 
 The `<numeric>` question allows the participant or operator to provide a numerical
 answer to a statement. The answer can be validated to be within a given range.
+
+![](/images/Experitments_Procedures_General_Questionnaire/Slide5.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
 
 If the participant answers the question, the answer must be given verbally to the operator, 
 who then enters it into the questionnaire. The operator's entered value will be displayed 
@@ -192,6 +202,10 @@ The `<validation>` element have the following attributes:
 
 The `<text>` question allows the participant or operator to provide a verbal free-form 
 answer to a statement. The answer is in text that can be validated with a regular expression.
+
+![](/images/Experitments_Procedures_General_Questionnaire/Slide4.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
 
 If the participant answers the question, the answer must be given verbally to the operator, 
 who then enters it into the questionnaire. The operator's entered value will be displayed 
@@ -230,6 +244,10 @@ The `<likert>` question enables participants or operators to indicate their leve
 endorsement, or frequency using a Likert scale. A Likert scale is a symmetrically ordered set 
 of response categories, from which a single option may be selected.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide6.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
+
 In LabBench, Likert scales are presented vertically. This vertical orientation allows for 
 longer, more descriptive labels for response categories than horizontally displayed categorical 
 rating scales. Participants select their response using the `up` and `down` button.        
@@ -262,6 +280,10 @@ Each response category is quantified by an integer value that corresponds to the
 The `<dimensional-likert>` question enables participants or operators to indicate their level of 
 agreement, endorsement, or frequency using multiple Likert scales. A Likert scale is a symmetrically 
 ordered set of response categories, from which a single option may be selected.
+
+![](/images/Experitments_Procedures_General_Questionnaire/Slide7.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
 
 In LabBench, each Likert scale is presented horizontally. Participants select which Likert scale is 
 active using the `up` and `down` buttons, and perform their rating with the `increase` and `decrease` buttons.        
@@ -301,6 +323,10 @@ The categories in each dimension is defined with the same <choice> elements as f
 
 The `<list>` question asks a set of statement that can either be true or false. A statement is selected with the `up` and `down` buttons, and answered with the `decrease` and `increase` buttons, which makes the statement false and true, respectively.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide8.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
+
 A `<list>` question is defined with:
 
 ```xml
@@ -325,6 +351,10 @@ Each statement in the set is defined by an `<item>` element that has the followi
 The `<time>` question allows the participant or operator to provide answers to a question 
 when something occurred. The answer is in the form of a date and time.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide9.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
+
 If the participant answers the question, the answer must be given verbally to the operator, 
 who then enters it into the questionnaire. The operator's entered value will be displayed 
 to the participant so they can confirm it is correct.
@@ -345,6 +375,10 @@ The `<map>` question lets users select areas on an image, such as marking pain o
 If the map question is answered by the operator, they selected/deselected areas by clicking 
 on the image in the LabBench Runner procedure window. If the participants answer the question, 
 they will use a Button instrument to navigate between areas and to select/deselct them.
+
+![](/images/Experitments_Procedures_General_Questionnaire/Slide10.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
 
 When participants answer the question, the following button functions must be defined in the 
 button configuration:
@@ -455,6 +489,11 @@ The `<categorical-scale>` question asks the participant or operator to rate a se
 on a categorical rating scale. If the participant answers the question, the rating is 
 increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide11.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
+
+
 A `<categorical-scale>` question is defined with:
 
 ```xml
@@ -494,6 +533,10 @@ The `<numerical-scale>` question asks the participant or operator to rate a sens
 on a numerical rating scale. If the participant answers the question, the rating is 
 increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
 
+![](/images/Experitments_Procedures_General_Questionnaire/Slide13.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
+
 A `<numerical-scale>` question is defined with:
 
 ```xml
@@ -525,6 +568,10 @@ Which have the following attributes:
 The `<visual-analogue-scale>` question asks the participant or operator to rate a sensation 
 on a visual analog rating scale. If the participant answers the question, the rating is 
 increased/decreased by pressing the `increase`/`decrease buttons`, respectively.
+
+![](/images/Experitments_Procedures_General_Questionnaire/Slide12.PNG)
+
+*Illustration of the procedure panel and participant screen for the question*
 
 A `<visual-analogue-scale>` question is defined with:
 
