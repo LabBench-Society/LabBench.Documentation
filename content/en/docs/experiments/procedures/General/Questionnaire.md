@@ -313,6 +313,12 @@ A `<list>` question is defined with:
     <item id="Q4" question="Option 4" />
 </list>
 ```
+Each statement in the set is defined by an `<item>` element that has the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|----|------------|
+| id | string | Identification of the statement. This `id` must be unique. |
+| question | dynamic string | A statement that the participant or operator can answer with either true or false. |
 
 ### Time
 
@@ -331,25 +337,23 @@ A `<time>` question is defined with:
     instruction="Please enter a time" />
 ```
 
+The `<time>` question has no question specific attributes or elements.
+
 ### Map
 
-An area on the image can be selected or deselected. Each area has an id and a `colour`, which 
-matches the colour of the pixels in that area. The operator or participant will not see this 
-color, as it will be replaced by one of the following:
+The `<map>` question lets users select areas on an image, such as marking pain on a body map. 
+If the map question is answered by the operator, they selected/deselected areas by clicking 
+on the image in the LabBench Runner procedure window. If the participants answer the question, 
+they will use a Button instrument to navigate between areas and to select/deselct them.
 
-* `deselected-colour`: an area that is neither selected nor active.
-* `selected-colour`: an area that has been selected by the operator/participant but is not active.
-* `active-deselected-colour`: an  area has not been selected and is active.
-* `active-selected-colour`: an  area has been selected and is active.
+When participants answer the question, the following button functions must be defined in the 
+button configuration:
 
-The concept of an active/inactive area is relevant only when the participant completes the 
-questionnaire. In that mode, it is the area currently in focus, and pressing the increase/decrease 
-button selects/deselects the area, respectively.
+* `up`, `down`, `left`, `right`: are used to navigate between areas.
+* `increase` and `decrease`: are used to select/deselect areas.
 
-When the participant answers the questionnaire, each area must also set up navigation to adjacent 
-areas, specifying which area will be made active when the up, down, left, or right button is 
-pressed. For each area, at least one button must be defined so the participant can’t get trapped 
-and can't navigate away from the area.        
+If the assigned device also implements the Joystick instrument, joystick movement can be used 
+to navigate between areas.        
 
 A `<map>` question is defined with:
 
@@ -388,7 +392,61 @@ A `<map>` question is defined with:
 </map>
 ```
 
+The map question has the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|----|------------|
+| `image-map` | image = Calculated(context) | An image that will provide the areas that can be selected.  |
+| `overlay-image` | image = Calculated(context) | An overlay image that will be added on top of the processed area image. |
+| `selected-colour` | string | The colour of areas that the participant have selected, but which is currently not active.  |
+| `deselected-colour` | string | The colour of areas that the participant has not selected and which are currently not active. This colour is typically the same as the background colour of the image, meaning deselected/not active areas will not be colored.  |
+| `active-selected-colour` | string | The colour of areas that are selected and active. Please note that the concept of active/inactive areas is only used when the questionnaire is answered by the participant. If the operator answers the questionnaire then this attribute has no effect. |
+| `active-deselected-colour` | string | The colour of areas that are active but not selected. Please not that the concept of active/inactive areas is only used when the questionnaire is answered by the participant. If the operator answers the questionnaire then this attribute has no effect.|
+| `selection-mode` | enum | Area selection mode: `single`) one a single area can be selected in this mode if an area is selected and another area is allready selected then the other area will be automatically deselected, `multiple`) multiple areas can be selected simultaneously. |
+| `initial-active-area` | string | Sets which area is initially active. This must be the ID of an `<area>` element. |
+
+All colours must be specified in the form of #RRGGBB.
+
+#### Definition of areas
+
+An area on the image can be selected or deselected. Each area has an id and a `colour`, which 
+matches the colour of the pixels in that area. The operator or participant will not see this 
+color, as it will be replaced by one of the following:
+
+* `deselected-colour`: an area that is neither selected nor active.
+* `selected-colour`: an area that has been selected by the operator/participant but is not active.
+* `active-deselected-colour`: an  area has not been selected and is active. Active mean that pressing the `increase` button will select the area.
+* `active-selected-colour`: an  area has been selected and is active. Active mean that pressing the `decrease` button will deselect the area.
+
+The concept of an active/inactive area is relevant only when the participant completes the 
+questionnaire. In that mode, it is the area currently in focus, and pressing the increase/decrease 
+button selects/deselects the area, respectively.
+
+When the participant answers the questionnaire, each area must also set up navigation to adjacent 
+areas, specifying which area will be made active when the up, down, left, or right button is 
+pressed. For each area, at least one button must be defined so the participant can’t get trapped 
+and can't navigate away from the area.        
+
+The procedure for generating the map is illustrated in the figure below. For its configuration, it needs a bitmap image whose colours indicate which pixels belong to each area. The participant and operator will never see these colours, as the procedure replaces them with the colours for the selected/deselected and active/inactive areas. 
+
 ![](/images/Experitments_Procedures_General_Questionnaire/Slide2.PNG)
+
+In the example above, the participant answers the procedure, has selected his right thigh, and has the top of his scalp is marked as active. This means the procedure has replaced all the pixels in the right thigh with the selected-colour, all the pixels on the top of his scalp with the active-deselected-colour and all the rest of the pixels with the deselected-colour. If the right thigh had been active, its pixels would have been replaced with the active-selected-colour to indicate to the participant that the active area is both selected and active. 
+
+If the operator had answered the question, she/he would select/deselect areas by clicking the area in the procedure panel with the mouse, and the question wouldn’t be displayed to the participant. Because the operator can use the mouse to click any area to select it, the active/inactive concept is not needed. Consequently, when the operator answers the question, only the selected-colour and deselected-colour is used.
+
+The procedure needs to know the colour of each area in the `image-map` so it can replace those pixels based on the operator's and/or participant's input. If the question is to be answered by the participant, the navigation between areas must also be defined.
+
+Areas are defined with `<area>` elements that have the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|----|------------|
+| `id`      | string | Identification of the area. This `id` must be unique. |
+| `colour`  | string | The colour that defines the area on the `image-map`. Must be specified as a hex value #RRGGBB. |
+| `up`      | string | Which area should be activated when the `up` button is pressed or the Joystick is moved up. Must be the `id` of an area. |
+| `down`    | string | Which area should be activated when the `down` button is pressed or the Joystick is moved down. Must be the `id` of an area. |
+| `left`    | string | Which area should be activated when the `left` button is pressed or the Joystick is moved left. Must be the `id` of an area. |
+| `right`   | string | Which area should be activated when the `right` button is pressed or the Joystick is moved right. Must be the `id` of an area. |
 
 
 ### Categorical Scale Rating
@@ -415,6 +473,21 @@ A `<categorical-scale>` question is defined with:
 </categorical-scale>
 ```
 
+Which have the following attributes:
+
+| Attribute         | Type           | Definition |
+|-------------------|----------------|------------|
+| `top-anchor`      | dynamic string | Top anchor for the scale. |
+| `bottom-anchor`   | dynamic string | Bottom anchor for the scale. |
+| `active-colour`   | string         | Colour for the active category. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10. |
+| `inactive-colour` | string         | Colour for the inactive categories. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10.|
+
+Categories are specified with the `<category>` element that has the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|----|------------|
+| value | dynamic string | Description that will be displayed to the participant. |
+
 ### Numerical Scale Rating
 
 The `<numerical-scale>` question asks the participant or operator to rate a sensation 
@@ -427,13 +500,25 @@ A `<numerical-scale>` question is defined with:
 <numerical-scale id="numericalScaleQuestion" 
     title="Numerical Rating Question"
     instruction="Please rate your sensation"
-    maximum="10" 
-    minimum="0" 
     top-anchor="Maximal Sensation" 
     bottom-anchor="No Sensation" 
     active-colour="rgb(255,0,0)" 
-    inactive-colour="rgb(32,32,32)"/>
+    inactive-colour="rgb(32,32,32)"
+    minimum="0"
+    maximum="10" />
 ```
+
+Which have the following attributes:
+
+| Attribute         | Type           | Definition |
+|-------------------|----------------|------------|
+| `top-anchor`      | dynamic string | Top anchor for the scale. |
+| `bottom-anchor`   | dynamic string | Bottom anchor for the scale. |
+| `active-colour`   | string         | Colour for the active rating. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10. |
+| `inactive-colour` | string         | Colour for the inactive ratings. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10.|
+| `minimum` | int | The minimum rating for the scale. |
+| `maximum` | int | The maximal rating for the scale. |
+
 
 ### Visual Analogue Scale Rating
 
@@ -447,12 +532,23 @@ A `<visual-analogue-scale>` question is defined with:
 <visual-analogue-scale id="visualAnalogScaleQuestion" 
     title="Visual Analog Rating Question"
     instruction="Please rate your sensation"
-    length="10"
     top-anchor="Maximal Sensation" 
-    bottom-anchor="No Sensation" 
+    bottom-anchor="No Sensation"     
     active-colour="rgb(255,0,0)" 
-    inactive-colour="rgb(32,32,32)"/>
+    inactive-colour="rgb(32,32,32)"
+    length="10" />
 ```
+
+Which have the following attributes:
+
+| Attribute         | Type           | Definition |
+|-------------------|----------------|------------|
+| `top-anchor`      | dynamic string | Top anchor for the scale. |
+| `bottom-anchor`   | dynamic string | Bottom anchor for the scale. |
+| `active-colour`   | string         | Colour for the active part of the scale. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10. |
+| `inactive-colour` | string         | Colour for the inactive part of the scale. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10.|
+| `length` | double | Physical length of the scale in centimetres |
+
 
 
 
