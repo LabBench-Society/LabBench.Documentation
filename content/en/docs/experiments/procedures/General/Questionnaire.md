@@ -104,14 +104,14 @@ LabBench supports the following set of question types to accommodate different e
 
 | Name                    | Element                | Purpose                                                                            | Control |
 |-------------------------|:----------------------:|------------------------------------------------------------------------------------|---|
-| Boolean                 | `<boolean>`            | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult).      | O/P | 
+| Boolean                 | `<boolean>`            | Binary, mutually exclusive responses (e.g., true/false, yes/no, child/adult). | O/P | 
 | Numerical               | `<numeric>`            | Free or validated numeric input. | O |
 | Text                    | `<text>`               | Free-form or validated textual responses. | O |
-| Likert                  | `<likert>`             | Ordered categorical scales that capture degrees of agreement or intensity.         | O/P |
+| Likert                  | `<likert>`             | Ordered categorical scales that capture degrees of agreement or intensity.  | O/P |
 | Dimensional Likert      | `<dimensional-likert>` | A set of ordered categorical scales that capture degrees of agreement or intensity.| O/P |
-| List                    | `<list>`               | Sets of independent binary items (multiple true/false selections).                 | O/P |
-| Time                    | `<time>`               | Date and/or time input.                                                            | O |
-| Map                     | `<map>`                | Spatial responses are defined by marking regions (e.g., body maps).                | O/P |
+| List                    | `<list>`               | Sets of independent binary items (multiple true/false selections). | O/P |
+| Time                    | `<time>`               | Date and/or time input. | O |
+| Map                     | `<map>`                | Spatial responses are defined by marking regions (e.g., body maps). | O/P |
 | Categorical Rating      | `<categorical-scale>`  | Ratings on discrete categorical scales. | O/P |
 | Numerical Rating        | `<numerical-scale>`    | Ratings on a bounded numerical scale. | O/P |
 | Visual Analogue Rating  | `<visual-analogue-scale>` | Ratings on a visual analogue scale. | O/P |
@@ -138,7 +138,6 @@ and have the following common attribytes:
 | condition   | bool = Calculated(pc) | Places a condition on whether the question is asked. If the calculated parameter returns True, the question is asked; otherwise, it is skipped. Consequently, this attribute can be used to omit questions based on answers to previous questions or on the results of other procedures in the protocol. |
 
 
-
 ### Boolean
 
 The `<boolean>` question asks a statement that can either be true or false. If the participant 
@@ -155,7 +154,8 @@ with the following attributes:
 
 | Attribute | Type | Definition |
 |-----------|:----:|------------|
-
+| `true-label` | dynamic string | Description of the true option.    |
+| `false-label` | dynamic string | Description of the false option . |
 
 ### Numerical
 
@@ -177,10 +177,16 @@ A `<numeric>` question is defined with:
 </numeric>
 ```
 
-with the following attributes:
+The numarical input can be validated that the answer is within a given range by defining an `<validation>` element. 
+
+The `<validation>` element have the following attributes:
 
 | Attribute | Type | Definition |
 |-----------|:----:|------------|
+| `min`           | double | Minimum value for the number. | 
+| `min-included`  | bool | Is the minimum included in the allowed range. |
+| `max`           | double | Maximal value for the number.  |
+| `max-included`  | bool | Is the maximum included in the allowed range. |
 
 ### Text
 
@@ -197,7 +203,8 @@ A `<text>` question is defined with:
 <text id="textQuestion"
     title="Text Question"
     instruction="Answer with text."
-    condition="Current.booleanQuestion">
+    condition="Current.booleanQuestion"
+    maximal-length="255">
     <validation regex="[\w\s]*" advice="Any text that consists of word charecters and whitespace."/>
 </text>
 ```
@@ -206,6 +213,16 @@ with the following attributes:
 
 | Attribute | Type | Definition |
 |-----------|:----:|------------|
+| `maximal-length` | int = Calculated(context) | Maximal length of the answer. |
+
+The text answer can be validated with a regular expression by defining an `<validation>` element. 
+
+The `<validation>` element have the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|:----:|------------|
+| `regex` | string | The regular expression that are used to validate the text. |
+| `advice` | string | An advice on how to write a correct text input. |
 
 ### Likert
 
@@ -230,6 +247,15 @@ A `<likert>` question is defined with:
     <choice value="4" label="C5" />
 </likert>
 ```
+
+The categories of of the Likert chase is defined with `<choice>` elements, which have the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|----|------------|
+| `value` | int | Likert scale score if that category is selected. |
+| `label` | dynamic string | Description of the category  |
+
+Each response category is quantified by an integer value that corresponds to the Likert scale score if that category is selected.
 
 ### Dimensional Likert
 
@@ -263,6 +289,13 @@ A `<dimensional-likert>` question is defined with:
 </dimensional-likert>
 ```
 
+Each Likert scale (dimension) is defined with a `<dimension>` element, with the following attributes:
+
+| Attribute | Type | Definition |
+|-----------|----|------------|
+| `name` | dynamic string | Description of the Likert scale. |
+
+The categories in each dimension is defined with the same <choice> elements as for the Likert scale question (please see above).
 
 ### List
 
