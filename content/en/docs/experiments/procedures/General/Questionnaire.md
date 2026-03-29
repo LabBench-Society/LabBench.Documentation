@@ -596,8 +596,76 @@ Which have the following attributes:
 | `inactive-colour` | string         | Colour for the inactive part of the scale. The string must encode a valid RGB colour value, either in hex as #RRGGBB or as a rgb(RRR,GGG,BBB). For the rgb() notation the colours are in base 10.|
 | `length` | double | Physical length of the scale in centimetres |
 
+## Scripting
 
+The answers to the questionnaire can be accessed form calculated parameters and Python code with the use of the dot notation:
 
+```Python
+ProcedureID.QuestionID
+```
 
+The type of the returned answer depends on the type of question:
 
+| Question               | Type               | Description |
+|------------------------|--------------------|-------------|
+| Boolean                | `bool`             | Returns whether the true or false option was selected as the answer. |
+| Numerical              | `double`           | Returns the number that was entered as the answer.                   |
+| Text                   | `string`           | Returns the text that was entered as the answer.                     |
+| Likert                 | `int`              | Returns the `value` of the selected Likert category.                 |
+| Dimensional Likert     | `int[]`            | Returns an array of the `value`'s of the selected Likert categories. |
+| List                   | `dictionary<bool>` | Returns a dictionary with the answer to the statements asked in the question, where the keys to these answers are the statement `id`’s ([Statement ID]. <br /><br />The answers can be accessed either as `ProcedureID.QuestionID[”StatementID”]` or, `ProcedureID.QuestionID.StatementID`. |
+| Time                   | `struct`           | Returns a structure with the fields Time, ElapsedHours, and ElapsedDays. <br /><br /> The Time field provides access to a DateTime object containing the Date and Time entered as the answer. <br /><br /> The ElapsedHours and ElapsedDays fields provide the hours and days passed between the date/time that was entered as the answer and the time at which the question was answered. If the date/time is before the time at which the question was answered, the elapsed time will be negative. |
+| Map                    | `dictionary<bool>` | Returns a dictionary indicating whether an area was selected, where the keys to these answers are the id ([AreaID] of the area. <br /><br />The answers can be accessed either as `ProcedureID.QuestionID[”AreaID”]` or, `ProcedureID.QuestionID.AreaID`. |
+| Categorical Rating     | `int`              | Returns the categorical rating. The scale categories are numbered from 0; consequently, the ratings will range from `0` to `NumberOfCategories - 1`. |
+| Numerical Rating       | `int`              | Returns the numerical rating, which is an integer between the scale's `minimum` and `maximum`. |
+| Visual Analogue Rating | `double`           | Returns the visual analogue rating, which is a rational number between 0 and the `length` of the scale. |
+
+### DateTime
+
+Represents a specific instant in time, typically expressed as a combination of a calendar date and a precise time of day, with optional context such as time zone or UTC offset depending on how it is used.
+
+The following properties provides access to the date/time data:
+
+| Name         | Description |
+|--------------|-------------|
+| Date         | Returns the date portion of this instance, with the time component set to midnight. |
+| Day          | Returns the day of the month for this instance. |
+| DayOfWeek    | Returns the weekday corresponding to this instance. |
+| DayOfYear    | Returns the numeric day within the year for this instance. |
+| Hour         | Returns the hour component of this instance. |
+| Kind         | Indicates whether this instance represents local time, Coordinated Universal Time (UTC), or an unspecified time. |
+| Microsecond  | Returns the microsecond component, ranging from 0 to 999. |
+| Millisecond  | Returns the millisecond component of this instance. |
+| Minute       | Returns the minute component of this instance. |
+| Month        | Returns the month component of this instance. |
+| Now          | Returns a `DateTime` instance representing the current local date and time. |
+| Second       | Returns the second component of this instance. |
+| Ticks        | Returns the total number of ticks representing this instance. |
+| TimeOfDay    | Returns the time elapsed since midnight for this instance. |
+| Today        | Returns the current date with the time component set to midnight. |
+| UtcNow       | Returns a `DateTime` instance representing the current date and time in UTC. |
+| Year         | Returns the year component of this instance. |
+
+And have the following methods:
+
+| Name | Description |
+|------|-------------|
+| CompareTo(DateTime) | Compares this instance with another `DateTime` and returns an integer describing their relative order. |
+| DaysInMonth(int month, int year) | Returns the number of days in a given month of a specific year. |
+| Equals(DateTime) | Determines whether this instance is equal to another `DateTime`. |
+| IsDaylightSavingTime() | Indicates whether this instance falls within daylight saving time in the current time zone. |
+| IsLeapYear(int year) | Determines whether a specified year is a leap year. |
+| ToLocalTime() | Returns a new `DateTime` converted to local time. |
+| ToLongDateString() | Converts this instance to a long date string representation. |
+| ToLongTimeString() | Converts this instance to a long time string representation. |
+| ToShortDateString() | Converts this instance to a short date string representation. |
+| ToShortTimeString() | Converts this instance to a short time string representation. |
+| ToString() | Converts this instance to a string using current culture formatting. |
+| ToString(string format) | Converts this instance to a string using a specified format. |
+| ToUniversalTime() | Returns a new `DateTime` converted to UTC. |
+
+## Example protocols
+
+* [Introduction to LabBench](https://github.com/LabBench-Society/Protocols/tree/main/intro.labbench)
+* [Introduction to Questionnaires](https://github.com/LabBench-Society/Protocols/tree/main/intro.questionnaires)
 
