@@ -6,8 +6,26 @@ weight: 20
 
 {{% pageinfo %}}
 
+The sequential procedure enables state machines to implement experimental procedures. Unlike most other procedures, it has no base functionality that can be configured in the LabBench Language; instead, its functionality must be implemented by a Python script that is called from its procedure events and state events.
 
 {{% /pageinfo %}}
+
+The purpose of the sequential procedure is to allow you to define procedures for which there is no ready-made LabBench procedure. Consequently, it is fundamentally different from all other LabBench procedures: whereas other LabBench procedures allow you to extend their functionality with Python code, the functionality of a sequential procedure must be implemented in Python.
+
+The procedure assumes that the procedures to be implemented can be described with state machines. State machines are a formal way of describing systems that can exist in a finite number of discrete states. The core concept is the transitions that move the system from one state to another. 
+
+Transitions are triggered by specific conditions, such as:
+
+* A timer reaching a threshold
+* A participant response (e.g., button press)
+* A variable reaching a certain value
+* Input from or the completion of an action being executed by an instrument.
+
+
+
+## Procedure definition
+
+
 
 
 ## Scripting

@@ -10,7 +10,9 @@ Questionnaires makes it possible to collect input during an experimental session
 
 {{% /pageinfo %}}
 
-While questionnaires naturally support classical psychometric instruments (e.g., standardised scales and surveys), their role in LabBench extends beyond this. They function as a general-purpose interface for structured data entry, enabling:
+While questionnaires naturally support classical psychometric instruments (e.g., standardised scales and surveys), their role in LabBench extends beyond this. 
+
+In addition to their role as Questionnaires, they can also function as a general-purpose interface for structured data entry, enabling:
 
 * Collection of participant metadata (e.g., demographics, screening criteria)
 * Runtime configuration of experimental parameters
