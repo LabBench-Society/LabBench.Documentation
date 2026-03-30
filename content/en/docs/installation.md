@@ -10,7 +10,7 @@ The installer can be downloaded from:
 
 | Version | Installer | Release Notes |
 |---------|-----------|---------------|
-| 6.0.0 | [LabBench 6](https://files.labbench.io/sw/LabBenchR6.0.0.exe) | [Release Notes](https://labbench.io/labbench-release-notes.html#lb6_0_0) |
+| 6.0.2 | [LabBench 6](https://files.labbench.io/sw/LabBenchR6.0.2.exe) | [Release Notes](https://labbench.io/labbench-release-notes.html#lb6_0_0) |
 
 
 ## Installation
