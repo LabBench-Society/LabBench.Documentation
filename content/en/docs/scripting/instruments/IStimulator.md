@@ -10,7 +10,7 @@ weight: 20
 ### startTrigger
 
 | Value        | Definition |
-|---------- ---|------------|
+|--------------|------------|
 | `'none'`     | | 
 | `'internal'` | |
 | `'external'` | |
