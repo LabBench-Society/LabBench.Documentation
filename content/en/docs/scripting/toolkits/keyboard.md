@@ -1,6 +1,6 @@
 ---
 title: Keyboard
-description: Instructions on how to install LabBench
+description: Toolkit for keyboard access
 weight: 20
 ---
 

@@ -1,5 +1,5 @@
 ---
 title: Waveforms
-description: Instructions on how to install LabBench
+description: Toolkit for creating waveforms in Python code
 weight: 20
 ---

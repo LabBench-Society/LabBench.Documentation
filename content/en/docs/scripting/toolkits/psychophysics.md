@@ -1,5 +1,5 @@
 ---
 title: Psychophysics
-description: Instructions on how to install LabBench
+description: Toolkit for estimation of psychometric functions
 weight: 20
 ---

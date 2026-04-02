@@ -1,6 +1,6 @@
 ---
 title: Scheduler
-description: Schedule tasks to run in the background
+description: Toolkit for scheduling tasks to run in the background
 weight: 20
 ---
 

@@ -1,5 +1,5 @@
 ---
 title: Triggers
-description: Instructions on how to install LabBench
+description: Toolkit for creating triggers in Python code
 weight: 20
 ---

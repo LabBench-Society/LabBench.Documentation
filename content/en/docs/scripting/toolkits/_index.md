@@ -6,6 +6,6 @@ weight: 10
 
 {{% pageinfo %}}
 
-Toolkits in LabBench are **domain-specific, scriptable capability modules** that expose carefully scoped functionality to experimental protocols. 
+Toolkits in LabBench provides access to LabBench functionality. 
 
 {{% /pageinfo %}}
