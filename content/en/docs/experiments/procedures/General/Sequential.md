@@ -24,7 +24,7 @@ The procedure window displays the current state name, an information panel, and 
 
 ## Procedure definition
 
-A Sequential procedure can be defined with the <sequential> element within the <procedures> element in the Experiment Definition File (*.expx):
+A Sequential procedure can be defined with the `<sequential>` element within the `<procedures>` element in the Experiment Definition File (*.expx):
 
 ```xml
 <sequential id="PainRatingTask" 
