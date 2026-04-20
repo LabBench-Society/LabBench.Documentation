@@ -5,10 +5,17 @@ weight: 5
 ---
 
 {{% pageinfo %}}
+With the conditioned pain modulation procedure, one cuff applies static pressure while the other determines a stimulus-response curve. The stimulus-response curve determines the psychophysical rating (VAS Rating) to a linearly increasing pressure stimulus. 
 
+From this stimulus-response curve, several psychophysical parameters can be determined: 
+- Pain Detection Threshold (PDT), 
+- Pain Tolerance Limit (PTL), 
+- Pain Tolerance Threshold (PTT). 
+
+The determined parameters depend on the procedure configuration and the participant's instructions.              
 {{% /pageinfo %}}
 
-The procedure window for the `<>` test is shown in Figure 1. The procedure window consists of two areas: applied pressure and recorded responses. 
+The procedure window for the `<algometry-conditioned-pain-modulation>` procedure is shown in Figure 1. The procedure window consists of two areas: applied pressure and recorded responses. 
 
 ![](/images/Experitments_Procedures_Algometry/Slide4.PNG)
 
@@ -20,7 +27,7 @@ The applied pressure area will display a legend indicating which cuff outlet(s) 
 
 ## Procedure definition
 
-A temporal summation procedure can be defined with the `<>` element within the `<procedures>` element in the Experiment Definition File (*.expx):
+A conditioned pain modulation procedure can be defined with the `<algometry-conditioned-pain-modulation>` element within the `<procedures>` element in the Experiment Definition File (*.expx):
 
 ```xml
 <algometry-conditioned-pain-modulation id="AP2CPM" 
@@ -40,12 +47,19 @@ A temporal summation procedure can be defined with the `<>` element within the `
 </algometry-conditioned-pain-modulation>
 ```
 
-*Listing 1: Definition of a temporal summation procedure*
+*Listing 1: Definition of a conditioned pain modulation procedure*
 
-Listing 1 has the following test specific attributes:
+Listing 1 has the following procedure specific attributes:
 
 | Attribute         | Type                    | Specification |
 |-------------------|-------------------------|---------------|
+| `delta-pressure`    | double=Calculated(tc)   | This attribute is the rate of increase [kPa/s] of the applied pressure.  |
+| `pressure-limit`    | double=Calculated(tc)   | This attribute is the maximum pressure the device will deliver before it aborts the test [ double = Calculated(tc) ]. The maximal pressure for the device is 100kPa. |
+| `conditioning-time` | double=Calculated(tc)   | This attribute is the time from the test's start until the pressure starts to increase linearly. |
+| `primary-cuff`      | int=Calculated(tc) | Determines which cuff (1 or 2) will be used for the pressure stimulation.|
+| `second-cuff`       | bool | Inflate the second cuff together with the primary cuff. |
+| `stop-mode`         | enum | Stop mode for the test (`stop-on-maximal-rating` or `stop-when-button-pressed`).  |
+| `vas-pdt`           | double=Calculated(tc)   | The VAS score is interpreted as the Pain Detection Threshold (PDT). It can be set to higher than 0.1cm to allow for non-painful stimulations to be rated by the subject. |
 
 ## Scripting (Properties)
 
@@ -53,9 +67,25 @@ In addition to the properties that are common to all test results, the test resu
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|
+| `Responder`                 | `bool`         | Did the procedure complete according to its `stop-mode` (`stop-on-maximal-rating` or `stop-when-button-pressed`) [ True ] or did it complete because the maximal pressure was reached [ False ]. |
+| `PDT`                       | `double`       | Pain Detection Threshold. |
+| `PTT`                       | `double`       | Pain Tolerance Threshold. |
+| `PTL`                       | `double`       | Pain Tolerance Limit. |
+| `SecondCuff`                | `bool`         | Was the second cuff inflated in parallel with the first cuffs (spatial summation). |
+| `PrimaryChannel`            | `int`          | What was the primary cuff channel. Please note this is only relevant if `second-cuff` is False. |
+| `VASPainDetectionThreshold` | `double`       | Rating threshold for the pain detection threshold. |
+| `MaximalPressure`           | `double`       | Maximal allowed pressure during the procedure. |
+| `MaximalTime`               | `double`       | Maximal time of the procedure. Please note this will be longer than the actual running time if the participant was a responder. |
+| `StimulationPressure`       | `List<double>` | Stimulation pressure during the procedure. |
+| `VAS`                       | `List<double>` | Rating of the stimulation pressure during the procedure. | 
+| `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `VAS` data points. |
 
 
 ## Scripting (Methods)
+
+### `double GetPressureFromPerception(double score)`
+
+### `bool IsScoreAvailable(double score)`
 
 ## Example protocols
 
