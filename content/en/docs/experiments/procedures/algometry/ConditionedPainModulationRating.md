@@ -75,9 +75,6 @@ In addition to the properties that are common to all procedure results, the cond
 | `ConditioningPressure`       | `List<double>` | Conditioning pressure during the procedure. |
 | `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `ConditioningPressure` data points. |
 
-
-## Scripting (Methods)
-
 ## Example protocols
 
 * <a href="https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx" target="_blank" rel="noopener noreferrer">Introduction to Cuff Pressure Algometry</a>.
