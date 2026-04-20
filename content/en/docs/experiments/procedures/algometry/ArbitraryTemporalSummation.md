@@ -5,14 +5,18 @@ weight: 3
 ---
 
 {{% pageinfo %}}
-
+The arbitrary temporal summation procedure applies a series of rectangular pressure stimuli to one or both cuffs. 
+        
+The participant is asked to rate the pain sensation of these stimuli on the VAS meter as soon as possible after the cessation of a pressure stimulus. 
+        
+The VAS rating for a stimulus is recorded just before the next stimulus is given or would have been given if it had not been the last stimulus in the series. The arbitrary temporal summation procedure makes it possible to specify each stimulus in the series individually, and thus, each stimulus can have a different intensity and duration.
 {{% /pageinfo %}}
 
-The procedure window for the `<>` test is shown in Figure 1. The procedure window consists of two areas: applied pressure and recorded responses. 
+The procedure window for the `<algometry-arbitrary-temporal-summation>` procedure is shown in Figure 1. The procedure window consists of two areas: applied pressure and recorded responses. 
 
 ![](/images/Experitments_Procedures_Algometry/Slide6.PNG)
 
-*Figure 1: Procedure window of the temporal summation procedure*
+*Figure 1: Procedure window of the arbitrary temporal summation procedure*
 
 The applied pressure area will display a legend indicating which cuff outlet(s) will be active and will plot the applied pressure over time. The pressure is annotated with the psychophysical rating of each pressure stimulus.
 
@@ -20,7 +24,7 @@ The applied pressure area will display a legend indicating which cuff outlet(s) 
 
 ## Procedure definition
 
-A temporal summation procedure can be defined with the `<>` element within the `<procedures>` element in the Experiment Definition File (*.expx):
+A arbitrary temporal summation procedure can be defined with the `<algometry-arbitrary-temporal-summation>` element within the `<procedures>` element in the Experiment Definition File (*.expx):
 
 ```xml
 <algometry-arbitrary-temporal-summation id="AP2ATSum" 
@@ -48,7 +52,7 @@ A temporal summation procedure can be defined with the `<>` element within the `
 
 *Listing 1: Definition of a temporal summation procedure*
 
-Listing 1 has the following test specific attributes:
+Listing 1 has the following procedure specific attributes:
 
 | Attribute         | Type                    | Specification |
 |-------------------|-------------------------|---------------|
