@@ -65,7 +65,8 @@ Listing 1 has the following procedure specific attributes:
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all test results, the test result for the stimulus response test has the following test specific properties:
+In addition to the properties that are common to all procedure results, the conditioned pain modulation procedure result has the following procedure specific properties:
+
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|

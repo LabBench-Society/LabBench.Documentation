@@ -70,7 +70,8 @@ Each individual `<stimulus>` in the sequence of stimuli is defined within the `<
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all test results, the procedure result for the stimulus response test has the following procedure specific properties:
+In addition to the properties that are common to all procedure results, the arbitrary temporal summation procedure result has the following procedure specific properties:
+
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|

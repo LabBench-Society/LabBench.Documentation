@@ -59,10 +59,21 @@ Listing 1 has the following procedure specific attributes:
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all test results, the test result for the stimulus response test has the following test specific properties:
+In addition to the properties that are common to all procedure results, the conditioned pain modulation rating procedure result has the following procedure specific properties:
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|
+| `Responder`                 | `bool`         | Did the procedure complete according to its `measurement` attribute. |
+| `PDT`                       | `double`       | Pain Detection Threshold. |
+| `PTT`                       | `double`       | Pain Tolerance Threshold. |
+| `SecondCuff`                | `bool`         | Was the second cuff inflated in parallel with the first cuffs (spatial summation). |
+| `PrimaryChannel`            | `int`          | What was the primary cuff channel. Please note this is only relevant if `second-cuff` is False. |
+| `VASPainDetectionThreshold` | `double`       | Rating threshold for the pain detection threshold. |
+| `MaximalPressure`           | `double`       | Maximal allowed pressure during the procedure. |
+| `MaximalTime`               | `double`       | Maximal time of the procedure. Please note this will be longer than the actual running time if the participant was a responder. |
+| `Pressure`       | `List<double>` | Stimulation pressure during the procedure. |
+| `ConditioningPressure`       | `List<double>` | Conditioning pressure during the procedure. |
+| `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `ConditioningPressure` data points. |
 
 
 ## Scripting (Methods)

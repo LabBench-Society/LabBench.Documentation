@@ -55,7 +55,7 @@ Listing 1 has the following procedure specific attributes:
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all procedure results, the procedure result for the temporal summation procedure has the following procedure specific properties:
+In addition to the properties that are common to all procedure results, the temporal summation procedure result has the following procedure specific properties:
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|

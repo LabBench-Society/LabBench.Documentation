@@ -51,7 +51,7 @@ Listing 1 has the following test specific attributes:
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all test results, the test result for the stimulus response test has the following test specific properties:
+In addition to the properties that are common to all procedure results, the stimulus rating procedure result has the following procedure specific properties:
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|
@@ -64,7 +64,7 @@ In addition to the properties that are common to all test results, the test resu
 | `MaximalPressure`           | `double`       | Maximal allowed pressure during the procedure. |
 | `MaximalTime`               | `double`       | Maximal time of the procedure. Please note this will be longer than the actual running time if the participant was a responder. |
 | `Pressure`       | `List<double>` | Stimulation pressure during the procedure. |
-| `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `VAS` data points. |
+| `Time`                      | `List<double>` | Time of the values in the `Pressure` data points. |
 
 ## Example protocols
 
