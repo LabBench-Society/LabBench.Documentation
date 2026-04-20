@@ -25,19 +25,23 @@ The applied pressure area will display a legend indicating which cuff outlet(s) 
 
 The psychophysical ratings area will show the recorded ratings for the applied pressure, together with the VAS threshold `vas-pdt` for the Pain Detection Threshold and the estimated value for the Pain Tolerance Limit if determined by the test.
 
+**Please see [Algometry](docs/experiments/procedures/algometry/) page for an introduction to the cuff pressure procedures and concepts that are common for these procedures before reading the rest of this procedure documentation.**
+
 ## Test definition
 
 A Response Recording test can be defined with the `<algometry-stimulus-response>` element within the `<test>` element in the Experiment Definition File (*.expx):
 
 ```xml
-<algometry-stimulus-response id="AP2SR01" name="Stimulus Response (Stop on VAS 10) [Cuff 1]"
+<algometry-stimulus-response id="AP2SR01" 
+   name="Stimulus Response (Stop on VAS 10) [Cuff 1]"
+   experimental-setup-id="vas" 
    delta-pressure="1"
    pressure-limit="100"
    primary-cuff="1"
    second-cuff="false"
    stop-mode="stop-on-maximal-rating"
-   conditioning-time="0"
-   vas-pdt="0.1" />
+   vas-pdt="0.1" 
+   conditioning-time="0"  />
 ```
 
 *Listing 1: Definition of a stimulus response test*
@@ -51,36 +55,8 @@ Listing 1 has the following test specific attributes:
 | conditioning-time | double=Calculated(tc)   | This attribute is the time from the test's start until the pressure starts to increase linearly. |
 | primary-cuff      | int=Calculated(tc) | Determines which cuff (1 or 2) will be used for the pressure stimulation.|
 | second-cuff       | bool | Inflate the second cuff together with the primary cuff. |
-| stop-mode         | enum | Stop mode for the test (stop-on-maximal-rating or stop-when-button-pressed).  |
+| stop-mode         | enum | Stop mode for the test (`stop-on-maximal-rating` or `stop-when-button-pressed`).  |
 | vas-pdt           | double=Calculated(tc)   | The VAS score is interpreted as the Pain Detection Threshold (PDT). It can be set to higher than 0.1cm to allow for non-painful stimulations to be rated by the subject. |
-
-### Anchor points for the visual analog scale (`stop-mode`)
-
-This attribute determines whether the VAS scale has two (2) or three anchor points (3):
-
-- When set to `stop-on-maximal-rating` the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)). 
-- When set to `stop-when-button-pressed` the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
-
-The effect of the `stop-mode` on determination of the PDT, PTT, and PTL thresholds is shown in Figure 2.
-
-![](/images/experiments/tests/algometry/StimulusResponseStopMode.png)
-
-*Figure 2: Illustration of how the `stop-mode` attribute controls whether two or three anchor points are used for the visual analog scale.*
-
-### Spatial Summation (`second-cuff`)
-
-Spatial summation can be studied by placing two cuffs adjacent to each other and inflating the cuffs in parallel. Inflating the cuffs in parallel can be achieved by setting the `second-cuff` attribute to `true`. The effect of setting the `second-cuff` attribute to `true` is shown in Figure 3.
-
-![](/images/experiments/tests/algometry/StimulusResponseSecondCuff.png)
-
-*Figure 3: Illustration of how the `second-cuff` attribute can be used for spatial summation tests.*
-
-### Conditioned Pain Modulation (`conditioning-time`)
-
-![](/images/experiments/tests/algometry/StimulusResponseConditioningTime.png)
-
-*Figure 4: Illustration of how the `conditioning-time` attribute can be used for conditioned pain modulation with an externally controlled conditioning stimulus.*
-
 
 ## Scripting (Properties)
 
@@ -88,18 +64,18 @@ In addition to the properties that are common to all test results, the test resu
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|
-| `Responder`                 | `bool`         | |
-| `PDT`                       | `double`       | |
-| `PTT`                       | `double`       | |
-| `PTL`                       | `double`       | |
-| `SecondCuff`                | `bool`         | |
-| `PrimaryChannel`            | `int`          | |
-| `VASPainDetectionThreshold` | `double`       | |
-| `MaximalPressure`           | `double`       | |
-| `MaximalTime`               | `double`       | |
-| `StimulationPressure`       | `List<double>` | |
-| `VAS`                       | `List<double>` | | 
-| `Time`                      | `List<double>` | |
+| `Responder`                 | `bool`         | Did the procedure complete according to its `stop-mode` (`stop-on-maximal-rating` or `stop-when-button-pressed`) [ True ] or did it complete because the maximal pressure was reached [ False ]. |
+| `PDT`                       | `double`       | Pain Detection Threshold. |
+| `PTT`                       | `double`       | Pain Tolerance Threshold. |
+| `PTL`                       | `double`       | Pain Tolerance Limit. |
+| `SecondCuff`                | `bool`         | Was the second cuff inflated in parallel with the first cuffs (spatial summation). |
+| `PrimaryChannel`            | `int`          | What was the primary cuff channel. Please note this is only relevant if `second-cuff` is False. |
+| `VASPainDetectionThreshold` | `double`       | Rating threshold for the pain detection threshold. |
+| `MaximalPressure`           | `double`       | Maximal allowed pressure during the procedure. |
+| `MaximalTime`               | `double`       | Maximal time of the procedure. Please note this will be longer than the actual running time if the participant was a responder. |
+| `StimulationPressure`       | `List<double>` | Stimulation pressure during the procedure. |
+| `VAS`                       | `List<double>` | Rating of the stimulation pressure during the procedure. | 
+| `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `VAS` data points. |
 
 ## Scripting (Methods)
 

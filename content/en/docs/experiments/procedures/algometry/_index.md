@@ -83,20 +83,32 @@ An implementation of these experimental setup can be seen in the <a href="https:
 
 ## Spatial summation of procedures
 
+Spatial summation can be studied by placing two cuffs adjacent to each other and inflating the cuffs in parallel. Inflating the cuffs in parallel can be achieved by setting the `second-cuff` attribute to `true`. The effect of setting the `second-cuff` attribute to `true` is shown in Figure 3.
+
 ![](/images/Experitments_Procedures_Algometry/Slide10.PNG)
 
+*Figure 3: Illustration of how the `second-cuff` attribute can be used for spatial summation tests.*
 
 ## Conditioning of procedures
 
 ![](/images/Experitments_Procedures_Algometry/Slide11.PNG)
 
-## Configuration of rating procedures
+## Attributes of scaling procedures
 
 ### Definition of anchor points 
 
+This attribute determines whether the VAS scale has two (2) or three anchor points (3):
+
+- When set to `stop-on-maximal-rating` the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)). 
+- When set to `stop-when-button-pressed` the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
+
+The effect of the `stop-mode` on determination of the PDT, PTT, and PTL thresholds is shown in Figure 2.
+
 ![](/images/Experitments_Procedures_Algometry/Slide12.PNG)
 
-## Configuration of threshold procedures
+*Figure 2: Illustration of how the `stop-mode` attribute controls whether two or three anchor points are used for the visual analog scale.*
+
+## Attributes of threshold procedures
 
 ### Definition of threshold estimation procedure
 
