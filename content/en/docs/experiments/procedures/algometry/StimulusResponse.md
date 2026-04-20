@@ -17,7 +17,7 @@ The determined parameters depend on the test configuration and the subject's ins
 
 The test window for the `<algometry-stimulus-response>` test is shown in Figure 1. The test window consists of two areas: applied pressure and recorded responses. The purpose of the test is to determine Pain Detection Thresholds (PDT), Pain Tolerance Thresholds (PTT), and Pain Tolerance Limit (PTL) to cuff pressure.
 
-![](/images/experiments/tests/algometry/StimulusResponseUI.png)
+![](/images/Experitments_Procedures_Algometry/Slide3.PNG)
 
 *Figure 1: Test window of the stimulus response test*
 
@@ -81,64 +81,6 @@ Spatial summation can be studied by placing two cuffs adjacent to each other and
 
 *Figure 4: Illustration of how the `conditioning-time` attribute can be used for conditioned pain modulation with an externally controlled conditioning stimulus.*
 
-## Examples of experimental setups
-
-### LabBench CPAR+
-
-```xml
-<experimental-setup name="LabBench CPAR+">
-<devices>
-      <cpar-plus id="dev"/>
-</devices>
-<device-mapping>
-   <device-assignment instrument-name="PressureAlgometer" device-id="dev" />
-</device-mapping>
-</experimental-setup>        
-```
-
-An implementation of this experimental setup can be seen in the [Introduction to Cuff Pressure Algometry](https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx) (_please note clicking this link will leave this site_).
-
-
-### LabBench CPAR+ and LabBench DISPLAY
-
-
-```xml
-<experimental-setup name="LabBench CPAR+ (Scale on secondary monitor)">
-<devices>
-   <cpar-plus id="dev"/>
-
-   <display id="display"
-      screen="secondary"
-      position="fullscreen"
-      active-color="rgb(255,0,0)"
-      background-color="rgb(255,255,255)"
-      inactive-color="rgb(16,16,16)"
-      normative-distance="40">
-
-      <monitor diagonal-size="53.34" distance="40" />
-
-         <configurations>
-            <visual-analog-scale id="vas"
-                  experimental-setup-id="vas"
-                  length="10"
-                  controller-device="dev">
-                  <anchors>
-                     <modality text="" />
-                     <top-anchor text="10/Worst imaginable pain" />
-                     <bottom-anchor text="0/No pain" />
-                  </anchors>
-            </visual-analog-scale>
-         </configurations>
-      </display>
-   </devices>
-   <device-mapping>
-      <device-assignment instrument-name="PressureAlgometer" device-id="dev" />
-   </device-mapping>
-</experimental-setup>    
-```
-
-An implementation of this experimental setup can be seen in the [Introduction to Cuff Pressure Algometry](https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx) (_please note clicking this link will leave this site_).
-
 
 ## Scripting (Properties)
 
@@ -167,7 +109,6 @@ In addition to the properties that are common to all test results, the test resu
 
 ## Example protocols
 
-* [Introduction to Cuff Pressure Algometry](https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx) (_please note clicking this link will leave this site_).
-
+* <a href="https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx" target="_blank" rel="noopener noreferrer">Introduction to Cuff Pressure Algometry</a>.
 
 

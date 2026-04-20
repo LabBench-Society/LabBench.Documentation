@@ -26,39 +26,50 @@ Currently, the following cuff pressure algometry procedures are available:
 
 ## Examples of experimental setups
 
+
+
 ### LabBench CPAR+
+
+![](/images/Experitments_Procedures_Algometry/Slide1.PNG)
 
 ```xml
 <experimental-setup name="LabBench CPAR+">
-<devices>
+   <devices>
       <cpar-plus id="dev"/>
-</devices>
-<device-mapping>
-   <device-assignment instrument-name="PressureAlgometer" device-id="dev" />
-</device-mapping>
+   </devices>
+   <device-mapping>
+      <device-assignment instrument-name="PressureAlgometer" device-id="dev" />
+   </device-mapping>
 </experimental-setup>        
 ```
 
 ### LabBench CPAR+ and LabBench DISPLAY
 
+![](/images/Experitments_Procedures_Algometry/Slide2.PNG)
+
 
 ```xml
 <experimental-setup name="LabBench CPAR+ (Scale on secondary monitor)">
-<devices>
-   <cpar-plus id="dev"/>
+   <devices>
+      <cpar-plus id="dev"/>
 
-   <display id="display">
+      <display id="display" normative-distance="40">
+         <typography active-colour="rgb(255,0,0)"
+            background-colour="rgb(255,255,255)"
+            inactive-colour="rgb(16,16,16)" />
+
          <configurations>
-            <visual-analogue-scale id="vas"
-                  experimental-setup-id="vas"
-                  length="10"
-                  controller-device="dev">
-                  <anchors>
-                     <modality text="" />
-                     <top-anchor text="10/Worst imaginable pain" />
-                     <bottom-anchor text="0/No pain" />
-                  </anchors>
-            </visual-analog-scale>
+            <visual-analogue-scale
+               id="vas"
+               experimental-setup-id="vas"
+               length="10"
+               controller-device="dev">
+               <anchors>
+                  <modality text="" />
+                  <top-anchor text="10/Worst imaginable itch" />
+                  <bottom-anchor text="0/No itch" />
+               </anchors>
+            </visual-analogue-scale>
          </configurations>
       </display>
    </devices>
@@ -70,11 +81,29 @@ Currently, the following cuff pressure algometry procedures are available:
 
 An implementation of these experimental setup can be seen in the <a href="https://github.com/LabBench-Society/Protocols/blob/main/intro.cpar/intro.cpar.expx" target="_blank" rel="noopener noreferrer">Introduction to Cuff Pressure Algometry</a>.
 
-## Definition of anchor points for rating procedures
-
-
 ## Spatial summation of procedures
+
+![](/images/Experitments_Procedures_Algometry/Slide10.PNG)
 
 
 ## Conditioning of procedures
+
+![](/images/Experitments_Procedures_Algometry/Slide11.PNG)
+
+## Configuration of rating procedures
+
+### Definition of anchor points 
+
+![](/images/Experitments_Procedures_Algometry/Slide12.PNG)
+
+## Configuration of threshold procedures
+
+### Definition of threshold estimation procedure
+
+![](/images/Experitments_Procedures_Algometry/Slide13.PNG)
+
+
+
+
+
 
