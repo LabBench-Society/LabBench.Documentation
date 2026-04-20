@@ -56,16 +56,38 @@ Listing 1 has the following procedure specific attributes:
 
 | Attribute         | Type                    | Specification |
 |-------------------|-------------------------|---------------|
+| `pressure-static`    | double = Calculated(context) | The pressure that will be applied in between the pressure stimuli. This value is included as a slight static pressure between the stimuli can prevent the cuff from shifting during the procedure. |
+| `primary-cuff`      | int=Calculated(tc) | Determines which cuff (1 or 2) will be used for the pressure stimulation.|
+| `second-cuff`       | bool | Inflate the second cuff together with the primary cuff. |
+
+Each individual `<stimulus>` in the sequence of stimuli is defined within the `<stimuli>` element. These `<stimulus>` elements have the following attributes:
+
+| Attribute   | Type                    | Specification |
+|-------------|-------------------------|---------------|
+| `pressure`  | double = Calculated(context) | Stimulation pressure. |
+| `t-on`      | double = Calculated(context) | Duration of the stimulus. |
+| `t-off`     | double = Calculated(context) | Pause to the next stimulus [ms]. |
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all test results, the test result for the stimulus response test has the following test specific properties:
+In addition to the properties that are common to all test results, the procedure result for the stimulus response test has the following procedure specific properties:
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|
+| `SecondCuff`                | `bool`         | Was the second cuff inflated in parallel with the first cuffs (spatial summation). |
+| `PrimaryChannel`            | `int`          | What was the primary cuff channel. Please note this is only relevant if `second-cuff` is False. |
+| `MaximalPressure`           | `double`       | Maximal allowed pressure during the procedure. |
+| `MaximalTime`               | `double`       | Maximal time of the procedure. Please note this will be longer than the actual running time if the participant was a responder. |
+| `NumberOfStimuli`           | `int `         | The number of pressure stimuli applied during the procedure. |
+| `NominalStimulatingPressure` | `double[]` | Stimulating pressure. |
+| `TimeOn`               | `double[]` | The duration of the rectangular stimuli. |
+| `TimeOff`              | `double[]` | The pause between the stimuli in the series. |
+| `Responses`       | `List<double>` | Ratings of each stimulus in the temporal summation. |
+| `ResponseSample`       | `List<double>` | Time points at which the ratings where sampled. |
+| `StimulationPressure`       | `List<double>` | Stimulation pressure during the procedure. |
+| `VAS`                       | `List<double>` | Rating of the stimulation pressure during the procedure. | 
+| `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `VAS` data points. |
 
-
-## Scripting (Methods)
 
 ## Example protocols
 
