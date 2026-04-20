@@ -1,21 +1,21 @@
 ---
 title: Stimulus Response
-description: Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This test can be used to determine pressure pain detection and tolerance thresholds.
+description: Psychophysical rating of linearly increasing pressure until the pain tolerance threshold or limit is reached. This procedure can be used to determine pressure pain detection and tolerance thresholds.
 weight: 1
 ---
 
 {{% pageinfo %}}
-Stimulus-response tests determine the psychophysical rating (VAS Rating) to a linearly increasing pressure stimulus. 
+Stimulus-response procedures determine the psychophysical rating (VAS Rating) to a linearly increasing pressure stimulus. 
 From this stimulus-response curve, several psychophysical parameters can be determined: 
 
 1. PDT: The Pain Detection Threshold, 
 2. PTL: The Pain Tolerance Limit, and 
 3. PTT: The Pain Tolerance Threshold (PTT). 
 
-The determined parameters depend on the test configuration and the subject's instructions.
+The determined parameters depend on the procedure configuration and the subject's instructions.
 {{% /pageinfo %}}
 
-The test window for the `<algometry-stimulus-response>` test is shown in Figure 1. The test window consists of two areas: applied pressure and recorded responses. The purpose of the test is to determine Pain Detection Thresholds (PDT), Pain Tolerance Thresholds (PTT), and Pain Tolerance Limit (PTL) to cuff pressure.
+The procedure window for the `<algometry-stimulus-response>` procedure is shown in Figure 1. The procedure window consists of two areas: applied pressure and recorded responses. The purpose of the test is to determine Pain Detection Thresholds (PDT), Pain Tolerance Thresholds (PTT), and Pain Tolerance Limit (PTL) to cuff pressure.
 
 ![](/images/Experitments_Procedures_Algometry/Slide3.PNG)
 
@@ -27,9 +27,9 @@ The psychophysical ratings area will show the recorded ratings for the applied p
 
 **Please see [Algometry](docs/experiments/procedures/algometry/) page for an introduction to the cuff pressure procedures and concepts that are common for these procedures before reading the rest of this procedure documentation.**
 
-## Test definition
+## Procedure definition
 
-A Response Recording test can be defined with the `<algometry-stimulus-response>` element within the `<test>` element in the Experiment Definition File (*.expx):
+A Stimulus Response procedure can be defined with the `<algometry-stimulus-response>` element within the `<procedures>` element in the Experiment Definition File (*.expx):
 
 ```xml
 <algometry-stimulus-response id="AP2SR01" 
@@ -44,23 +44,23 @@ A Response Recording test can be defined with the `<algometry-stimulus-response>
    conditioning-time="0"  />
 ```
 
-*Listing 1: Definition of a stimulus response test*
+*Listing 1: Definition of a stimulus response procedure*
 
-Listing 1 has the following test specific attributes:
+Listing 1 has the following procedure specific attributes:
 
 | Attribute         | Type                    | Specification |
 |-------------------|-------------------------|---------------|
-| delta-pressure    | double=Calculated(tc)   | This attribute is the rate of increase [kPa/s] of the applied pressure.  |
-| pressure-limit    | double=Calculated(tc)   | This attribute is the maximum pressure the device will deliver before it aborts the test [ double = Calculated(tc) ]. The maximal pressure for the device is 100kPa. |
-| conditioning-time | double=Calculated(tc)   | This attribute is the time from the test's start until the pressure starts to increase linearly. |
-| primary-cuff      | int=Calculated(tc) | Determines which cuff (1 or 2) will be used for the pressure stimulation.|
-| second-cuff       | bool | Inflate the second cuff together with the primary cuff. |
-| stop-mode         | enum | Stop mode for the test (`stop-on-maximal-rating` or `stop-when-button-pressed`).  |
-| vas-pdt           | double=Calculated(tc)   | The VAS score is interpreted as the Pain Detection Threshold (PDT). It can be set to higher than 0.1cm to allow for non-painful stimulations to be rated by the subject. |
+| `delta-pressure`    | double=Calculated(tc)   | This attribute is the rate of increase [kPa/s] of the applied pressure.  |
+| `pressure-limit`    | double=Calculated(tc)   | This attribute is the maximum pressure the device will deliver before it aborts the test [ double = Calculated(tc) ]. The maximal pressure for the device is 100kPa. |
+| `conditioning-time` | double=Calculated(tc)   | This attribute is the time from the test's start until the pressure starts to increase linearly. |
+| `primary-cuff`      | int=Calculated(tc) | Determines which cuff (1 or 2) will be used for the pressure stimulation.|
+| `second-cuff`       | bool | Inflate the second cuff together with the primary cuff. |
+| `stop-mode`         | enum | Stop mode for the test (`stop-on-maximal-rating` or `stop-when-button-pressed`).  |
+| `vas-pdt`           | double=Calculated(tc)   | The VAS score is interpreted as the Pain Detection Threshold (PDT). It can be set to higher than 0.1cm to allow for non-painful stimulations to be rated by the subject. |
 
 ## Scripting (Properties)
 
-In addition to the properties that are common to all test results, the test result for the stimulus response test has the following test specific properties:
+In addition to the properties that are common to all procedure results, the procedure result for the stimulus response procedure has the following procedure specific properties:
 
 | Name                        | Type           | Specification |
 |-----------------------------|----------------|---------------|
