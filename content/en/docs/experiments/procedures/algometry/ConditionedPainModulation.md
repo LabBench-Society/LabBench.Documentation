@@ -57,7 +57,7 @@ Listing 1 has the following procedure specific attributes:
 | `pressure-limit`    | double=Calculated(tc)   | This attribute is the maximum pressure the device will deliver before it aborts the test [ double = Calculated(tc) ]. The maximal pressure for the device is 100kPa. |
 | `conditioning-time` | double=Calculated(tc)   | This attribute is the time from the test's start until the pressure starts to increase linearly. Ths include the time it takes for the conditioning pressure to increase from zero to `conditional-pressure`.|
 | `delta-conditional-pressure` | double=Calculated(tc) | The rate of increase [kPa/s] of the applied conditioning pressure. A value of zero means the application of the conditioning pressure will be instantaneous. |
-| `conditional-pressure` |double=Calculated(tc) | The pressure that will be applied with the conditioning cuff. |
+| `conditional-pressure` | double=Calculated(tc) | The pressure that will be applied with the conditioning cuff. |
 | `primary-cuff`      | int=Calculated(tc) | Determines which cuff (1 or 2) will be used for the pressure stimulation.|
 | `second-cuff`       | bool | Inflate the second cuff together with the primary cuff. |
 | `stop-mode`         | enum | Stop mode for the test (`stop-on-maximal-rating` or `stop-when-button-pressed`).  |
