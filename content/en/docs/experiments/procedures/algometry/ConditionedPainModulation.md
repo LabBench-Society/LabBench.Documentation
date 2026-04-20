@@ -79,6 +79,7 @@ In addition to the properties that are common to all test results, the test resu
 | `MaximalPressure`           | `double`       | Maximal allowed pressure during the procedure. |
 | `MaximalTime`               | `double`       | Maximal time of the procedure. Please note this will be longer than the actual running time if the participant was a responder. |
 | `StimulationPressure`       | `List<double>` | Stimulation pressure during the procedure. |
+| `ConditioningPressure`       | `List<double>` | Conditioning pressure during the procedure. |
 | `VAS`                       | `List<double>` | Rating of the stimulation pressure during the procedure. | 
 | `Time`                      | `List<double>` | Time of the values in the `StimulationPressure` and `VAS` data points. |
 
