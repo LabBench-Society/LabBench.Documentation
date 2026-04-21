@@ -138,9 +138,7 @@ The effect of the `stop-mode` on the determination of the PDT, PTT, and PTL thre
 For threshold procedures, the outcome measures are pain detection and pain tolerance thresholds, indicated by the participant pressing a button. Which thresholds are determined is controlled by the measurement attribute:
 
 * **PDT**: The participant pressed the button when they feel the slighest pain. The pressure at the button press is recorded as the pain detection threshold.
-
 * **PTT**: The participant pressed the button when the pain becomes intolerable. The pressure at the button press is recorded as the pain tolerance threshold.
-
 * **BOTH**: The participant press and hold the button when they feel the slighest pain and releases it when the pain becomes intolerable. The pressure at the time of button press is recorded as the pain detection threshold, and the pressure at release is recorded as the pain tolerance threshold.
 
 The effect of this attribute is illustrated in Figure 6.
