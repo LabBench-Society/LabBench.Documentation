@@ -98,18 +98,29 @@ Spatial summation can be studied by placing two cuffs adjacent to each other and
 
 ## Conditioning of procedures
 
+Conditioned pain modulation is a psychophysical mechanism in which a conditioning stimulus reduces the pain evoked by a second stimulus. It’s often summarised as “pain inhibits pain.” In LabBench procedures, the conditioning stimulus can be directly controlled by a LabBench device or provided externally. Stimulus Response and Stimulus Rating procedures use external conditioning stimuli, in which the subject experiences an external stimulus, such as cold water. In contrast, Conditioned Pain Modulation and Conditioned Pain Modulation Rating procedures use computer-controlled stimuli managed directly by the LabBench device. The outcome measure for these procedures is the change in psychophysical ratings and thresholds (PDT and PTT) induced by the conditioning stimulus relative to the unconditioned ratings and thresholds.
+
+When the conditioning stimulus is external, the procedure is to present it to the participant while simultaneously starting the test. A common procedure is to apply the conditioning stimulus before the start of the stimulation pressure. For this purpose, all of these procedures have a `conditioning-time` attribute that delays the start of stimulation pressure. For computer-controlled conditioning stimuli, there is also a `delta-conditional-pressure` attribute that gradually increases the conditioning stimulus rather than applying it instantaneously. This is to avoid startling the participant by applying a sudden, highly painful stimulus. 
+
+The effect of these two attributes is illustrated in Figure X.
+
 ![](/images/Experitments_Procedures_Algometry/Slide11.PNG)
+
+*Figure X: Illustration of how the `conditioning-time` and `delta-conditional-pressure` controls the application of conditioning stimuli.*
 
 ## Attributes of scaling procedures
 
 ### Definition of anchor points 
 
-This attribute determines whether the VAS scale has two (2) or three anchor points (3):
+For scaling procedures, participants rate the pressure stimuli on a visual analogue scale. To perform this rating, the scale's anchor points need to be defined for participants. For cuff pressure algometry, visual analogue scales have been used with either two or three anchor points, and the definition is determined by the `stop-mode` attribute in the scaling procedures.
 
-- When set to `stop-on-maximal-rating` the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)). 
-- When set to `stop-when-button-pressed` the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
+The `stop-mode` attribute determines whether the VAS scale has two (2) or three anchor points (3):
 
-The effect of the `stop-mode` on determination of the PDT, PTT, and PTL thresholds is shown in Figure 2.
+* When set to `stop-on-maximal-rating`, the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)).
+* When set to `stop-when-button-pressed`, the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
+
+The effect of the `stop-mode` on the determination of the PDT, PTT, and PTL thresholds is shown in Figure 2.
+
 
 ![](/images/Experitments_Procedures_Algometry/Slide12.PNG)
 
