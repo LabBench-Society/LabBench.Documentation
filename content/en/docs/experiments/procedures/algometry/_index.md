@@ -34,6 +34,9 @@ The simplest experimental setup for cuff pressure algometry consists of the equi
 
 ![](/images/Experitments_Procedures_Algometry/Slide1.PNG)
 
+*Figure 1*
+
+
 The `<experimental-setup>` element for this experimental setup is shown below:
 
 ```xml
@@ -52,6 +55,8 @@ The `<experimental-setup>` element for this experimental setup is shown below:
 The experimental setup for cuff pressure algometry can also be extended with an external display. An external display can show a calibrated VAS scale during scaling procedures, controlled by the participant with the LabBench SCALE device. The external display can also be used to provide participants with instructions throughout the experimental sessions.
 
 ![](/images/Experitments_Procedures_Algometry/Slide2.PNG)
+
+*Figure 2*
 
 The `<experimental-setup>` element for this experimental setup is shown below:
 
@@ -102,11 +107,11 @@ Conditioned pain modulation is a psychophysical mechanism in which a conditionin
 
 When the conditioning stimulus is external, the procedure is to present it to the participant while simultaneously starting the test. A common procedure is to apply the conditioning stimulus before the start of the stimulation pressure. For this purpose, all of these procedures have a `conditioning-time` attribute that delays the start of stimulation pressure. For computer-controlled conditioning stimuli, there is also a `delta-conditional-pressure` attribute that gradually increases the conditioning stimulus rather than applying it instantaneously. This is to avoid startling the participant by applying a sudden, highly painful stimulus. 
 
-The effect of these two attributes is illustrated in Figure X.
+The effect of these two attributes is illustrated in Figure 4.
 
 ![](/images/Experitments_Procedures_Algometry/Slide11.PNG)
 
-*Figure X: Illustration of how the `conditioning-time` and `delta-conditional-pressure` controls the application of conditioning stimuli.*
+*Figure 4: Illustration of how the `conditioning-time` and `delta-conditional-pressure` controls the application of conditioning stimuli.*
 
 ## Attributes of scaling procedures
 
@@ -119,19 +124,30 @@ The `stop-mode` attribute determines whether the VAS scale has two (2) or three 
 * When set to `stop-on-maximal-rating`, the VAS scale has two anchor points (pain detection threshold (PDT), pain tolerance threshold (PTT)).
 * When set to `stop-when-button-pressed`, the VAS scale has three anchor points (pain detection threshold (PDT), pain tolerance limit (PTL), pain tolerance threshold (PTT)).
 
-The effect of the `stop-mode` on the determination of the PDT, PTT, and PTL thresholds is shown in Figure 2.
+The effect of the `stop-mode` on the determination of the PDT, PTT, and PTL thresholds is shown in Figure 5.
 
 
 ![](/images/Experitments_Procedures_Algometry/Slide12.PNG)
 
-*Figure 2: Illustration of how the `stop-mode` attribute controls whether two or three anchor points are used for the visual analog scale.*
+*Figure 5: Illustration of how the `stop-mode` attribute controls whether two or three anchor points are used for the visual analog scale.*
 
 ## Attributes of threshold procedures
 
 ### Definition of threshold estimation procedure
 
+For threshold procedures, the outcome measures are pain detection and pain tolerance thresholds, indicated by the participant pressing a button. Which thresholds are determined is controlled by the measurement attribute:
+
+* **PDT**: The participant pressed the button when they feel the slighest pain. The pressure at the button press is recorded as the pain detection threshold.
+
+* **PTT**: The participant pressed the button when the pain becomes intolerable. The pressure at the button press is recorded as the pain tolerance threshold.
+
+* **BOTH**: The participant press and hold the button when they feel the slighest pain and releases it when the pain becomes intolerable. The pressure at the time of button press is recorded as the pain detection threshold, and the pressure at release is recorded as the pain tolerance threshold.
+
+The effect of this attribute is illustrated in Figure 6.
+
 ![](/images/Experitments_Procedures_Algometry/Slide13.PNG)
 
+*Figure 6: Illustration of how the `measurement` attribute controls how and which thresholds are determined.*
 
 
 
