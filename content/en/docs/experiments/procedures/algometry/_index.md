@@ -1,6 +1,6 @@
 ---
-title: Algometry
-description: Tests for performing pressure algometry.
+title: Cuff pressure algometry
+description: Procedures for performing cuff pressure algometry.
 weight: 30
 ---
 
@@ -11,6 +11,8 @@ Cuff pressure algometry does not rely on operator strength and is not controlled
 All cuff pressure algometry procedures use pressure stimuli rated by the subject. These procedures can be divided into two main categories. The first category of procedures (scaling procedures), pressure stimuli are rated on a visual analogue scale. In the second category of procedures (threshold procedures), pressure stimuli are rated by indicating perception thresholds, most commonly the pain detection and tolerance thresholds.
 
 A second distinction is whether the pressure stimuli are unconditioned or conditioned by a second painful stimulus. This conditioning stimulus can be induced by a second tourniquet cuff under computer control or by an external stimulus, such as submersion of a hand or foot in a cold water bath.
+
+## Algometry procedures 
 
 Currently, the following cuff pressure algometry procedures are available:
 
@@ -26,11 +28,13 @@ Currently, the following cuff pressure algometry procedures are available:
 
 ## Examples of experimental setups
 
-
-
 ### LabBench CPAR+
 
+The simplest experimental setup for cuff pressure algometry consists of the equipment shown in Figure X. The LabBench CPAR+ device is combined with either a LabBench SCALE (scaling algometry procedures) or a LabBench BUTTON (threshold algometry procedures). The LabBench CPAR+ device is controlled by LabBench running on a laboratory computer.
+
 ![](/images/Experitments_Procedures_Algometry/Slide1.PNG)
+
+The `<experimental-setup>` element for this experimental setup is shown below:
 
 ```xml
 <experimental-setup name="LabBench CPAR+">
@@ -45,8 +49,11 @@ Currently, the following cuff pressure algometry procedures are available:
 
 ### LabBench CPAR+ and LabBench DISPLAY
 
+The experimental setup for cuff pressure algometry can also be extended with an external display. An external display can show a calibrated VAS scale during scaling procedures, controlled by the participant with the LabBench SCALE device. The external display can also be used to provide participants with instructions throughout the experimental sessions.
+
 ![](/images/Experitments_Procedures_Algometry/Slide2.PNG)
 
+The `<experimental-setup>` element for this experimental setup is shown below:
 
 ```xml
 <experimental-setup name="LabBench CPAR+ (Scale on secondary monitor)">
