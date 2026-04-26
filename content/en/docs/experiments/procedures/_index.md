@@ -294,21 +294,121 @@ class StopSignalTask:
 
 ## Procedure components
 
-Functionality for the generation of stimuli (`Stimulator` instrument), triggers (`TriggerGenerator` instrument), and sampling of psychophysical responses (`RatioScale`, `IntervalScale`, `OrdinalScale`, `Button` instruments) is implemented not by the individual tests but by procedure components that are called from the tests.
+Functionality for the generation of stimuli (`Stimulator` instrument) and triggers (`TriggerGenerator` instrument) is implemented not by the individual procedures but by procedure components that are called from the procedures. The use of procedure components ensures that triggers and stimuli are specified in the same format across all procedures in the LabBench Language.
 
-The use of procedure components ensures that stimuli, triggers, and the sampling of psychophysical constants are specified in the same format across all tests in the LabBench Language.
+### Component order and triggering
 
-### Stimulation
+```xml
+<configuration>
+    <trigger-generation trigger-source="internal" />
+    <stimulation-generation trigger-source="none" />
+</configuration>
+```
+
+where the trigger source is an enum with the following values:
+
+| Value            | Definition |
+|------------------|------------|
+| `none`           | | 
+| `internal`       | |
+| `external`       | |
+| `button`         | |
+| `response-port1` | |
+| `response-port2` | |
+| `response-port3` | |
+| `response-port4` | |
+
+
 
 ### Trigger generation
 
-### Psychophysical responses
+### Stimulus generation
+
+
+#### Pulse
+
+```xml
+<stimulus>
+    <pulse Is="x" Ts="1" Tdelay="0" />
+</stimulus>
+```
+
+
+#### Ramp
+
+```xml
+<stimulus>                        
+    <ramp Is="x" Ts="10" Tdelay="0" />
+</stimulus>
+```
+
+
+#### Sine
+
+
+
+
+```xml
+<stimulus>                        
+    <sine Is="x" Ts="10" Frequency="500" />
+</stimulus>
+```
+
+#### Arbitrary stimuli
+
+
+```xml
+```
+
+
+#### Windowed Sine
+
+```xml
+```
+
+#### Repeated Stimulus
+
+```xml
+```
+
+#### Combined Stimulus
+
+```xml
+```
+
+
+#### Repeated Combined Stimulus
+
+```xml
+```
+
+
+#### Custom stimulation
+
+```xml
+<scripts stimulate="func: Script.Stimulate(context, x)">
+    <instrument interface="stimulator" />
+    <instrument interface="image-display" />
+</scripts>
+```
+
+```xml
+<stimulus>
+    <pulse Is="x" Ts="1" Tdelay="0" />
+</stimulus>
+```
+
+```python
+def Stimulate(context, x):
+    context.Instruments.Stimulator.Generate("port2", context.Stimulus)
+    context.Instruments.ImageDisplay.Display(context.Assets.Images.Cue, 250, True)
+    return True
+```
 
 ## Scripting
 
-### Properties
+| Name                        | Type           | Specification |
+|-----------------------------|----------------|---------------|
 
-### Functions
 
-## Test results
 
