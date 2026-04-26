@@ -298,6 +298,10 @@ Functionality for the generation of stimuli (`Stimulator` instrument) and trigge
 
 ### Component order and triggering
 
+Trigger and stimulus generation are implemented by two separate procedure components that must be correctly synchronised. If both triggers and stimuli are to be generated simultaneously, they must be started at the same time. For that to happen, the generation order is important: triggers are generated first, followed by stimuli. Consequently, if both are defined, trigger generation must be driven by stimulus generation. This is accomplished by setting the `trigger-source` of the trigger generation component to `internal`.
+
+Configuration of trigger sources is done with the `<configuration>` element:
+
 ```xml
 <configuration>
     <trigger-generation trigger-source="internal" />
@@ -305,24 +309,43 @@ Functionality for the generation of stimuli (`Stimulator` instrument) and trigge
 </configuration>
 ```
 
-where the trigger source is an enum with the following values:
+This is the configuration pattern to use when triggers must be synchronised with stimuli. Setting the `trigger-source` for the trigger generation component to `internal` tells it to wait until something triggers the stimulus generation component. In the example above, the `trigger-souce` for the stimulus generation component is set to `none`, which means that it will not wait and will be triggered immediately. An alternative is to set it to trigger on a received trigger signal (`external`), a button press (`button`), or a trigger event received on a response port (`response-port1-4`).
+
+Please note, it is almost always an error to set the `trigger-source` of both components to none as this means both trigger and stimulus generation will be executed immediately with no synchronisation between them.
+
+The available trigger options are described in the table below:
 
 | Value            | Definition |
 |------------------|------------|
-| `none`           | | 
-| `internal`       | |
-| `external`       | |
-| `button`         | |
-| `response-port1` | |
-| `response-port2` | |
-| `response-port3` | |
-| `response-port4` | |
-
-
+| `none`           | The trigger or stimulus generation will start immediately when the component is executed. This means the generation is entirely software-controlled, with no synchronisation with other components or external events, such as button presses or trigger events from response ports. | 
+| `internal`       | The trigger source is internal to the device, meaning the trigger is the execution of another component within the device. Please note that this trigger source is currently relevant only for the trigger generation component, as it is always executed before the stimulus generation component. Setting this trigger source for the stimulus generation component will cause it to wait forever, since it is the last component to execute. |
+| `external`       | The trigger source is a trigger received on a TRIGGER INPUT connector on the device. This trigger source synchronises the trigger and/or stimulus generation with other devices. |
+| `button`         | The trigger source is a press on a button connected to a response port. Please note that it does not matter which response port the button is connected to. |
+| `response-portX`  | The trigger source is a trigger event received from a device connected to a specific response port. Please note that a button press is not a trigger event; consequently, if the component should be triggered by a button press, then the `button` trigger source must be used instead. |
 
 ### Trigger generation
 
 ### Stimulus generation
+
+Stimuli for the stimulus generation component are specified within `<stimulus>` elements:
+
+```xml
+<stimulus>
+    <!-- composition of stimuli -->
+</stimulus>
+```
+
+Stimuli can be composed of the following elements:
+
+| Stimulus      | Description |
+|---------------|-------------|
+| `<pulse>`     | |
+| `<ramp>`      | |
+| `<sine>`      | |
+| `<arbitrary>` | |
+| `<window>`    | |
+| `<combined>`  | |
+| `<repeated>`  | |
 
 
 #### Pulse
@@ -358,28 +381,57 @@ where the trigger source is an enum with the following values:
 
 
 ```xml
+<stimulus>                        
+    <arbitrary Ts="50" expression="x * ((1 - exp(-t/10))/(1 - exp(-50/10)))" />
+</stimulus>
 ```
 
 
 #### Windowed Sine
 
 ```xml
+<stimulus>  
+    <window window="bartlett" parameter="1">
+        <sine Is="x" Ts="10" Frequency="500" />
+    </window>                      
+</stimulus>
 ```
 
 #### Repeated Stimulus
 
 ```xml
+<stimulus>  
+    <repeated Tperiod="10" N="4">
+        <repeated Tperiod="2" N="3">
+            <pulse Is="x" Ts="1" />
+        </repeated>                        
+    </repeated>
+</stimulus>
 ```
 
 #### Combined Stimulus
 
 ```xml
+<stimulus>  
+    <combined>
+        <pulse Is="-2" Ts="10" />
+        <pulse Is="x" Ts="1" Tdelay="6" />
+    </combined>
+</stimulus>
 ```
 
 
 #### Repeated Combined Stimulus
 
 ```xml
+<stimulus>                          
+    <repeated Tperiod="20" N="3">
+        <combined>
+            <pulse Is="-2" Ts="10" />
+            <pulse Is="x" Ts="1" Tdelay="6" />                                
+        </combined>
+    </repeated>
+</stimulus>
 ```
 
 

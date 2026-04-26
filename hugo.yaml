@@ -46,7 +46,7 @@ imaging:
 languages:
   en:
     languageName: English
-    title: LabBench
+    title: LabBench, Version 6.04
     params:
       description: LabBench Documentation
   # cSpell:disable
