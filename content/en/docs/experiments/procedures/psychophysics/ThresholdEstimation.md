@@ -10,7 +10,7 @@ The threshold estimation test uses adaptive methods to efficiently estimate a pa
 
 {{% /pageinfo %}}
 
-The purpose of the `<threshold-estimation-test>` test is to estimate the psychometric function or threshold for a given stimulus modality with adaptive methods. These adaptive methods estimate the psychometric function or threshold based on whether or not the subject performed a response task correctly (result: True) or incorrectly (result: False).
+The purpose of the `<psychophysics-threshold-estimation>` procedure is to estimate the psychometric function or threshold for a given stimulus modality with adaptive methods. These adaptive methods estimate the psychometric function or threshold based on whether or not the subject performed a response task correctly (result: True) or incorrectly (result: False).
 
 Consequently, the algorithm performs the estimation iteratively:
 
@@ -19,17 +19,17 @@ The subject answers a question about the stimulus, with the answer being either 
 2. The result of the response task is fed into the algorithm, which updates the estimate and, based on the response and algorithm state, selects the next stimulus intensity to be tested.
 3. This loop continues until the adaptive algorithm's stop criterion is met. 
 
-The test window for the `<threshold-estimation-test>` is shown in Figure 1. It consists of three areas: 1) recorded responses, 2) psychometric function, and 3) manual response task.
+The procedure window for the `<psychophysics-threshold-estimation>` is shown in Figure 1. It consists of three areas: 1) recorded responses, 2) psychometric function, and 3) manual response task.
 
 ![](/images/experiments/tests/threshold-estimation/ThesholdEstimationUI.png)
 
-*Figure 1: Test window of the threshold estimation test*
+*Figure 1: Procedure window of the threshold estimation procedure*
 
 The recorded responses area is always shown and shows information about the tested stimulation intensities and subject responses. The psychometric function area is always shown and will show information on either the estimated psychometric functions or thresholds. The manual response task area is shown only when a manual response task is used and provides the operator with guidance on what to ask the participant, and allows the operator to enter the participant's response to the estimation algorithm.
 
 ## Test definition
 
-A Response Recording test can be defined with the `<psychophysics-threshold-estimation>` element within the `<test>` element in the Experiment Definition File (`*.expx`):
+A threshold estimation procedure can be defined with the `<psychophysics-threshold-estimation>` element within the `<procedures>` element in the Experiment Definition File (`*.expx`):
 
 ```xml
 <psychophysics-threshold-estimation id="yesNo"
@@ -61,14 +61,14 @@ A Response Recording test can be defined with the `<psychophysics-threshold-esti
 </psychophysics-threshold-estimation>
 ```
 
-*Listing 1: Definition of a psychophysical threshold estimation test*
+*Listing 1: Definition of a psychophysical threshold estimation procedure*
 
-The `<psychophysics-threshold-estimation>` test has two test specific attributes:
+The `<psychophysics-threshold-estimation>` procedure has these procedure specific attributes:
 
 | Attribute              | Type                 | Specification |
 |------------------------|----------------------|---------------|
-| `stimulus-update-rate` | int = Calculated(tc) | |
-| `trigger-update-rate`  | int = Calculated(tc) | |
+| `stimulus-update-rate` | int = Calculated(tc) | Update rate in Hz for stimulus generation. Defines how often the stimulus waveform is evaluated and sent to the output. |
+| `trigger-update-rate`  | int = Calculated(tc) | Update rate in Hz for trigger generation. Defines how often trigger states are evaluated and updated. |
 
 The `<psychophysics-threshold-estimation>` test has X test specific elements:
 
