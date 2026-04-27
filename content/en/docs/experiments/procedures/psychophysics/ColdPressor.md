@@ -154,3 +154,23 @@ The procedure can be adapted without code changes by:
 
 This flexibility allows the same implementation to support multiple experimental paradigms while maintaining consistent timing and data collection.
 
+## Scripting
+
+The following properties are available in calculated parameters as the result of a cold pressor procedure. These properties provide access to the measured thresholds, configuration, and outcome of the procedure.
+
+
+| Name        | Type                         | Description |
+|-------------|------------------------------|-------------|
+| TimeLimit   | double                       | The configured time limit in seconds for the procedure. |
+| Measurement | enum = [pdt, ptt, both]      | The measurement mode used for the procedure. |
+| PDT         | double                       | Pain detection threshold in seconds. Represents the time from start to first pain sensation. Returns NaN if not recorded. |
+| PTT         | double                       | Pain tolerance threshold in seconds. Represents the time from start to task termination. Returns NaN if not recorded. |
+| Responder   | bool                         | Indicates whether the participant completed the procedure within the time limit. |
+| Completed   | bool                         | Indicates whether the procedure was completed and accepted. |
+| Failed      | bool                         | Indicates whether the procedure failed. |
+
+**Notes:**
+
+- `PDT` and `PTT` may be `NaN` depending on the selected measurement mode or if the participant did not reach the corresponding threshold.
+- A participant is marked as a **non-responder** if the `TimeLimit` is exceeded before the final event is recorded.
+- The result inherits common properties from `Result`, such as timing, identifiers, and instrument information, which are also available in scripting.
