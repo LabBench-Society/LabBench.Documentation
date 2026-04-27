@@ -323,66 +323,6 @@ The available trigger options are described in the table below:
 | `button`         | The trigger source is a press on a button connected to a response port. Please note that it does not matter which response port the button is connected to. |
 | `response-portX`  | The trigger source is a trigger event received from a device connected to a specific response port. Please note that a button press is not a trigger event; consequently, if the component should be triggered by a button press, then the `button` trigger source must be used instead. |
 
-### Trigger generation
-
-Stimuli for the stimulus generation component are specified within `<trigger>` elements:
-
-```xml
-<trigger duration="1">
-    <!-- composition of triggers -->
-</trigger>
-```
-Triggers can be composed of the following elements:
-
-| Stimulus         | Description |
-|------------------|-------------|
-| trigger          | |
-| combined-trigger | |
-| repeated-trigger | |
-
-#### Trigger
-
-
-
-```xml
-<trigger duration="1" Tdelay="0">
-    <code output="trigger-output" />
-    <code output="stimulator-trigger-output" />
-    <code output="trigger-interface" value="16"/>
-</trigger>
-```
-
-
-#### Combined trigger
-
-```xml
-<combined-triggers Tdelay="0">
-    <trigger duration="10">
-        <code output="trigger-output" />
-    </trigger>
-    <trigger duration="1" Tdelay="5">
-        <code output="stimulator-trigger-output" />
-        <code output="trigger-interface" value="16"/>
-    </trigger>
-</combined-triggers>
-```
-
-#### Repeated trigger
-
-```xml
-<repeated-trigger Tperiod="10" N="3">                                                
-    <combined-trigger>
-        <trigger duration="4">
-            <code output="trigger-output" />
-        </trigger>
-        <trigger duration="1" Tdelay="1">
-            <code output="stimulator-trigger-output" />
-            <code output="trigger-interface" value="16"/>
-        </trigger>
-    </combined-trigger>
-</repeated-trigger>
-```
-
 ### Stimulus generation
 
 Stimuli for the stimulus generation component are specified within `<stimulus>` elements:
@@ -669,6 +609,78 @@ def Stimulate(context, x):
 ```
 
 Stimuli can also be generated programmatically with the [Stimuli Toolkit](docs/scripting/toolkits/stimuli/).
+
+### Trigger generation
+
+Trigger generation follows the same compositional principles as stimulus generation, but instead of producing continuous waveforms, it generates discrete trigger signals. These signals are typically used to synchronize instruments, mark events, or control external hardware.
+
+Triggers are defined using <triggers> elements and can be combined and repeated to form more complex timing patterns.
+
+```xml
+<triggers>
+    <!-- composition of triggers -->
+</triggers>
+```
+
+Triggers can be composed of the following elements:
+
+| Stimulus         | Description |
+|------------------|-------------|
+| trigger          | Defines a trigger signal with a fixed duration. |
+| combined-trigger | Combines multiple triggers by superimposing them in time. |
+| repeated-trigger | Repeats a trigger or trigger composition over time. |
+
+#### Trigger
+
+A `<trigger>` defines a signal that is active for a specified duration. Nested `<code>` elements describe how the trigger is routed to one or more outputs.
+
+```xml
+<trigger duration="1" Tdelay="0">
+    <code output="trigger-output" />
+    <code output="stimulator-trigger-output" />
+    <code output="trigger-interface" value="16"/>
+</trigger>
+```
+
+In this example, a trigger with a duration of 1 ms is generated and sent simultaneously to multiple outputs. The `<code>` elements specify which outputs are activated, and optional values (such as `value="16"`) can be used to define the trigger code for a given interface.
+
+#### Combined trigger
+
+A `<combined-trigger>` allows multiple triggers to be superimposed, preserving their relative timing.
+
+```xml
+<combined-triggers Tdelay="0">
+    <trigger duration="10">
+        <code output="trigger-output" />
+    </trigger>
+    <trigger duration="1" Tdelay="5">
+        <code output="stimulator-trigger-output" />
+        <code output="trigger-interface" value="16"/>
+    </trigger>
+</combined-triggers>
+```
+
+In this example, two triggers are combined. One trigger is active for 10 ms, while a second shorter trigger is activated after a delay of 5 ms. Both triggers are evaluated together, allowing overlapping or time-offset trigger signals to be generated as a single composition.
+
+#### Repeated trigger
+
+A `<repeated-trigger>` repeats a trigger or trigger composition multiple times with a fixed period.
+
+```xml
+<repeated-trigger Tperiod="10" N="3">                                                
+    <combined-trigger>
+        <trigger duration="4">
+            <code output="trigger-output" />
+        </trigger>
+        <trigger duration="1" Tdelay="1">
+            <code output="stimulator-trigger-output" />
+            <code output="trigger-interface" value="16"/>
+        </trigger>
+    </combined-trigger>
+</repeated-trigger>
+```
+
+In this example, a combined trigger is repeated 3 times with a period of 10 ms. Each repetition preserves the internal structure and timing of the combined triggers, enabling the construction of complex, periodic trigger patterns.
 
 ## Scripting
 
