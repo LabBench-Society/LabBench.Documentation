@@ -405,8 +405,11 @@ Stimuli can be composed of the following elements:
 | `<combined>`  | Creation of a stimulus that is a combination of two or more stimuli. |
 | `<repeated>`  | Repetition of an enclosed stimulus, which can be a single stimulus, a combined stimulus, or other repeated stimuli. This enables the creation of arbitrary stimulation patterns and waveforms. |
 
+Most of the attributes of these elements are calculated attributes that take two parameters: the program `context` and a free parameter `x`. The role of the free parameter x depends on the procedure that uses the component. In threshold estimation procedures, the free parameter `x` is the value that the threshold estimation algorithm adjusts to find the threshold.
 
 #### Pulse
+
+A pulse stimulus generates a constant signal with intensity `Is` for the duration `Ts`. Outside this interval, the stimulus is zero.
 
 ![](/images/Experitments_Procedures/Slide1.PNG)
 
@@ -420,13 +423,16 @@ The stimulus is declared with the `<pulse>` element:
 
 A `<pulse>` stimulus is defined by the following attributes:
 
-| Attribute | Type                            | Specification |
-|-----------|---------------------------------|---------------|
-| `Is`      | double = Calculated(context, x) | |
-| `Ts`      | double = Calculated(context, x) | |
-| `Tdelay`  | double = Calculated(context, x) | |
+| Attribute | Type                            | Specification                                                  |
+|-----------|---------------------------------|----------------------------------------------------------------|
+| `Is`      | double = Calculated(context, x) | The intensity of the stimulus.                                 |
+| `Ts`      | double = Calculated(context, x) | The duration in milliseconds of the stimulus.                  |
+| `Tdelay`  | double = Calculated(context, x) | The delay in milliseconds with respect to its parent stimulus. |
 
 #### Ramp
+
+A ramp stimulus generates a linearly increasing (or decreasing) signal over time. The stimulus starts at `Ioffset` and changes linearly to `Ioffset + Is` over the duration `Ts`. Outside this interval, the stimulus is zero.
+
 
 ![](/images/Experitments_Procedures/Slide2.PNG)
 
@@ -440,10 +446,16 @@ The stimulus is declared with the `<ramp>` element:
 
 A `<ramp>` stimulus is defined by the following attributes:
 
-| Attribute         | Type                    | Specification |
-|-------------------|-------------------------|---------------|
+| Attribute | Type                            | Specification                                                  |
+|-----------|---------------------------------|----------------------------------------------------------------|
+| `Is`      | double = Calculated(context, x) | The intensity of the stimulus.                                 |
+| `Ts`      | double = Calculated(context, x) | The duration in milliseconds of the stimulus.                  |
+| `Tdelay`  | double = Calculated(context, x) | The delay in milliseconds with respect to its parent stimulus. |
+| `Ioffset` | double = Calculated(context, x) | The intensity offset for the ramp stimulus. The stimulus will be equal to `Ioffset` at its onset and equal to `Ioffset` + `Intensity` at its cessation. |
 
 #### Sine
+
+A sine stimulus generates a sinusoidal signal with amplitude `Is` and frequency `Frequency` over the duration `Ts`. Outside this interval, the stimulus is zero.
 
 ![](/images/Experitments_Procedures/Slide3.PNG)
 
@@ -451,16 +463,21 @@ The stimulus is declared with the `<sine>` element:
 
 ```xml
 <stimulus>                        
-    <sine Is="x" Ts="10" Frequency="500" />
+    <sine Is="x" Ts="10" Tdelay="0" Frequency="500" />
 </stimulus>
 ```
 
 A `<sine>` stimulus is defined by the following attributes:
 
-| Attribute         | Type                    | Specification |
-|-------------------|-------------------------|---------------|
+| Attribute | Type                            | Specification                                                  |
+|-----------|---------------------------------|----------------------------------------------------------------|
+| `Is`      | double = Calculated(context, x) | The intensity of the stimulus.                                 |
+| `Ts`      | double = Calculated(context, x) | The duration in milliseconds of the stimulus.                  |
+| `Tdelay`  | double = Calculated(context, x) | The delay in milliseconds with respect to its parent stimulus. |
+| `Frequency` | double = Calculated(context, x) | The frequency [Hz] of the sine wave. |
 
 #### Arbitrary stimuli
+An arbitrary stimulus is defined by its waveform, which is specified directly by a mathematical expression of time. The expression is evaluated over the interval [0, Ts], yielding the stimulus value at each time point. Outside this interval, the stimulus is zero.
 
 ![](/images/Experitments_Procedures/Slide4.PNG)
 
@@ -468,17 +485,62 @@ The stimulus is declared with the `<arbitrary>` element:
 
 ```xml
 <stimulus>                        
-    <arbitrary Ts="50" expression="x * ((1 - exp(-t/10))/(1 - exp(-50/10)))" />
+    <arbitrary Ts="50" Tdelay="0" expression="x * ((1 - exp(-t/10))/(1 - exp(-50/10)))" />
 </stimulus>
 ```
 
 A `<arbitrary>` stimulus is defined by the following attributes:
 
-| Attribute         | Type                    | Specification |
-|-------------------|-------------------------|---------------|
+| Attribute    | Type                            | Specification                                                      |
+|--------------|---------------------------------|--------------------------------------------------------------------|
+| `expression` | double = Expression             | Mathematical expression that defines the waveform of the stimulus. |
+| `Ts`         | double = Calculated(context, x) | The duration in milliseconds of the stimulus.                      |
+| `Tdelay`     | double = Calculated(context, x) | The delay in milliseconds with respect to its parent stimulus.     |
 
+The arbitrary stimulus is defined by the mathematical expression specified for its expression attribute. This expression must be a single-line Python expression that returns the stimulus value at time t, which is used to calculate the waveform for the stimulus between time 0 and time Ts. Outside this interval, the stimulus will be zero. 
 
-#### Windowed Sine
+In the scope of this expression are the following variables:
+
+| Variable | Type | Specification |
+|----------|---------------------------------|----------------------------------------------------------------|
+| `x` | double | |
+| `t` | double | |
+| `C` | object | |
+| `[Test ID]` | Result | |
+| `[Variable Name]` | object | |
+
+In the scope are also the following functions which can be called from the expression:
+
+| Function        | Description |
+|-----------------|-------------|
+| exp(x)          | Returns e^x. Returns +∞ if x is large positive, 0 if x is large negative. NaN propagates. |
+| round(x)        | Rounds x to the nearest integer using banker's rounding (midpoints round to nearest even). NaN propagates. |
+| ceiling(x)      | Returns the smallest integer ≥ x. ±∞ and NaN are returned unchanged. |
+| floor(x)        | Returns the largest integer ≤ x. ±∞ and NaN are returned unchanged. |
+| truncate(x)     | Removes fractional part (toward zero). ±∞ and NaN are returned unchanged. |
+| log(x)          | Natural logarithm (base e). x > 0 → valid; x = 0 → -∞; x < 0 → NaN; NaN propagates. |
+| log10(x)        | Base-10 logarithm. Same domain as log(x): x > 0 → valid; x = 0 → -∞; x < 0 → NaN. |
+| sin(x)          | Sine of x (radians). Defined for all finite x. ±∞ → NaN; NaN propagates. |
+| sinh(x)         | Hyperbolic sine. Large |x| may overflow to ±∞. NaN propagates. |
+| asin(x)         | Arcsine in radians. Domain: -1 ≤ x ≤ 1. Outside → NaN. |
+| cos(x)          | Cosine of x (radians). Defined for all finite x. ±∞ → NaN; NaN propagates. |
+| cosh(x)         | Hyperbolic cosine. Large |x| → +∞. NaN propagates. |
+| acos(x)         | Arccosine in radians. Domain: -1 ≤ x ≤ 1. Outside → NaN. |
+| tan(x)          | Tangent of x (radians). Undefined at odd multiples of π/2 (returns large finite values due to floating-point limits). ±∞ → NaN. |
+| tanh(x)         | Hyperbolic tangent. Approaches ±1 as x → ±∞. NaN propagates. |
+| abs(x)          | Absolute value of x. ±∞ → +∞; NaN propagates. |
+| sqrt(x)         | Square root. x ≥ 0 → valid; x < 0 → NaN; +∞ → +∞. |
+| max(val1, val2) | Returns the larger value. If either input is NaN, result is NaN. |
+| min(val1, val2) | Returns the smaller value. If either input is NaN, result is NaN. |
+| pow(x, y)       | Returns x^y. Negative x with non-integer y → NaN. 0^0 → 1. Large results may overflow to ±∞. NaN propagates. |
+| step(x)         | Returns 1 if x ≥ 0, otherwise 0. NaN returns 0 (comparison is false). |
+| pulse(x, d)     | Returns 1 if 0 ≤ x < d, otherwise 0. NaN in either argument returns 0. |
+
+#### Window functions
+
+A window stimulus applies a shaping function to a nested stimulus, modifying its amplitude over time. This smoothly tapers the signal—typically reducing it to zero at the start and end—to avoid abrupt transitions.
+
+Window functions are commonly used to reduce artefacts such as clicks in audio signals or sharp edges in stimulation by ensuring a gradual onset and offset of the waveform.
 
 ![](/images/Experitments_Procedures/Slide5.PNG)
 
@@ -494,11 +556,14 @@ The stimulus is declared with the `<window>` element:
 
 A `<window>` stimulus is defined by the following attributes:
 
-| Attribute         | Type                    | Specification |
-|-------------------|-------------------------|---------------|
-
+| Attribute   | Type  | Specification |
+|-------------|-------|---------------|
+| `window`    | enum  | Type of window to apply [bartlett, blackman, tukey]. |
+| `parameter` | double = Calculated(context, x) | Window parameter, which applies to blackman and tukey window functions. |
 
 #### Repeated Stimulus
+
+A repeated stimulus replicates a nested stimulus multiple times at a fixed interval. The inner stimulus is played N times, with a period of Tperiod between repetitions. Outside the defined repetitions, the stimulus is zero.
 
 ![](/images/Experitments_Procedures/Slide6.PNG)
 
@@ -506,8 +571,8 @@ The stimulus is declared with the `<repeated>` element:
 
 ```xml
 <stimulus>  
-    <repeated Tperiod="10" N="4">
-        <repeated Tperiod="2" N="3">
+    <repeated Tperiod="10" N="4" Tdelay="0">
+        <repeated Tperiod="2" N="3" Tdelay="0">
             <pulse Is="x" Ts="1" />
         </repeated>                        
     </repeated>
@@ -516,10 +581,16 @@ The stimulus is declared with the `<repeated>` element:
 
 A `<repeated>` stimulus is defined by the following attributes:
 
-| Attribute         | Type                    | Specification |
-|-------------------|-------------------------|---------------|
+| Attribute | Type                            | Specification |
+|-----------|---------------------------------|---------------|
+| `Tperiod` | double = Calculated(context, x) | |
+| `N`       | int = Calculated(context, x)    | |
+| `Tdelay`  | double = Calculated(context, x) | The delay in milliseconds with respect to its parent stimulus. |
+
 
 #### Combined Stimulus
+
+A combined stimulus superimposes multiple nested stimuli by summing their values over time. Each nested stimulus contributes to the total signal according to its own timing and parameters.
 
 ![](/images/Experitments_Procedures/Slide7.PNG)
 
@@ -537,6 +608,8 @@ The stimulus is declared with the `<combined>` element:
 A combined stimulus has no attributes.
 
 #### Repeated Combined Stimulus
+
+A repeated combined stimulus allows multiple stimuli to be combined into a single waveform and then repeated as a unit. The individual stimuli are first summed together, preserving their relative timing, and the resulting waveform is then repeated N times with a period of Tperiod. This makes it possible to construct more complex stimulation patterns from simpler building blocks.
 
 ![](/images/Experitments_Procedures/Slide8.PNG)
 
@@ -556,12 +629,25 @@ Complex repeated stimuli can be created by combining `<repeated>` and `<combined
 
 #### Custom stimulation
 
+Custom stimulation allows full control over how a stimulus is delivered by delegating execution to a user-defined script. Instead of relying on the built-in stimulus generation component, the stimulus is passed to a script function, where it can be routed to one or more instruments and combined with other modalities.
+
+This approach enables synchronized multi-modal stimulation, such as combining electrical stimulation with visual or other outputs, and supports integration with instruments beyond the standard stimulator.
+
+The `<scripts>` element defines custom script functions that control how stimulation is initialised and executed. The initialize function is called once before stimulation begins and can be used to set up the state or prepare instruments. The stimulate function is called for each stimulus and is responsible for delivering the stimulus, typically by accessing the configured instruments and using the current context.
+
+Nested <instrument> elements declare which instrument interfaces are available within the script through context.Instruments.
+
 ```xml
-<scripts stimulate="func: Script.Stimulate(context, x)">
+<scripts initialize
+         stimulate="func: Script.Stimulate(context, x)">
     <instrument interface="stimulator" />
     <instrument interface="image-display" />
 </scripts>
 ```
+
+Even when using custom stimulation, stimuli can still be defined using the standard `<stimulus>` elements. The defined stimulus is evaluated as usual and made available within the script through `context.Stimulus`.
+
+This allows the script to reuse stimulus definitions in Experiment Definition File, while controlling how and where the stimulus is delivered from Python code. For example, the evaluated waveform can be passed directly to an instrument, combined with other outputs, or conditionally applied within the Python function.
 
 ```xml
 <stimulus>
@@ -569,12 +655,20 @@ Complex repeated stimuli can be created by combining `<repeated>` and `<combined
 </stimulus>
 ```
 
+Within the `Stimulate` function, the evaluated stimulus is available through `context.Stimulus` and can be passed directly to instruments. In this example, the defined pulse stimulus is generated on the stimulator using the Generate command, while a visual cue is presented simultaneously via the image display. 
+
+In this example, the order is important. The stimulus is generated first and set to trigger on a trigger event on response port 2. A visual trigger (LabBench VTG) is connected to this response port. When the image is shown, it is displayed for 250ms, with a fiducial that triggers the LabBench VTG and thus generates the electrical stimulus. Consequently, the visual and electrical stimuli will be synchronised.
+
+This demonstrates how standard stimulus definitions can be combined with custom logic, enabling synchronised multi-modal stimulation within a single script.
+
 ```python
 def Stimulate(context, x):
     context.Instruments.Stimulator.Generate("port2", context.Stimulus)
     context.Instruments.ImageDisplay.Display(context.Assets.Images.Cue, 250, True)
     return True
 ```
+
+Stimuli can also be generated programmatically with the [Stimuli Toolkit](docs/scripting/toolkits/stimuli/).
 
 ## Scripting
 
