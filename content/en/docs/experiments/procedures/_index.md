@@ -339,16 +339,18 @@ Stimuli can be composed of the following elements:
 
 | Stimulus      | Description |
 |---------------|-------------|
-| `<pulse>`     | |
-| `<ramp>`      | |
-| `<sine>`      | |
-| `<arbitrary>` | |
-| `<window>`    | |
-| `<combined>`  | |
-| `<repeated>`  | |
+| `<pulse>`     | A rectangular stimulus that is defined by its intensity (`Is`), duration (`Ts`), and delay (`Tdelay`). |
+| `<ramp>`      | A linearly increasing stimulus that is defined by its initial offset (`Ioffset`), intensity (`Is`), duration (`Ts`), and delay (`Tdelay`). |
+| `<sine>`      | A sinusoidal stimulus that is defined by its intensity (`Is`), duration (`Ts`), delay (`Tdelay`), and frequency (`Frequency`). |
+| `<arbitrary>` | A stimulus that can be any waveform described by a mathematical expression (`expression`) with duration (`Ts`) and delay (`Tdelay`). |
+| `<window>`    | A window function applied to a stimulus; it’s defined by its type (`window`) and parameter (`parameter`). |
+| `<combined>`  | Creation of a stimulus that is a combination of two or more stimuli. |
+| `<repeated>`  | Repetition of an enclosed stimulus, which can be a single stimulus, a combined stimulus, or other repeated stimuli. This enables the creation of arbitrary stimulation patterns and waveforms. |
 
 
 #### Pulse
+
+The stimulus is declared with the `<pulse>` element:
 
 ```xml
 <stimulus>
@@ -356,20 +358,30 @@ Stimuli can be composed of the following elements:
 </stimulus>
 ```
 
+A `<pulse>` stimulus is defined by the following attributes:
+
+| Attribute         | Type                    | Specification |
+|-------------------|-------------------------|---------------|
 
 #### Ramp
 
+The stimulus is declared with the `<ramp>` element:
+
 ```xml
 <stimulus>                        
-    <ramp Is="x" Ts="10" Tdelay="0" />
+    <ramp Is="x" Ts="10" Tdelay="0" Ioffset="-1" />
 </stimulus>
 ```
 
+A `<ramp>` stimulus is defined by the following attributes:
+
+| Attribute         | Type                    | Specification |
+|-------------------|-------------------------|---------------|
 
 #### Sine
 
 
-
+The stimulus is declared with the `<sine>` element:
 
 ```xml
 <stimulus>                        
@@ -377,8 +389,14 @@ Stimuli can be composed of the following elements:
 </stimulus>
 ```
 
+A `<sine>` stimulus is defined by the following attributes:
+
+| Attribute         | Type                    | Specification |
+|-------------------|-------------------------|---------------|
+
 #### Arbitrary stimuli
 
+The stimulus is declared with the `<arbitrary>` element:
 
 ```xml
 <stimulus>                        
@@ -386,8 +404,15 @@ Stimuli can be composed of the following elements:
 </stimulus>
 ```
 
+A `<arbitrary>` stimulus is defined by the following attributes:
+
+| Attribute         | Type                    | Specification |
+|-------------------|-------------------------|---------------|
+
 
 #### Windowed Sine
+
+The stimulus is declared with the `<window>` element:
 
 ```xml
 <stimulus>  
@@ -397,7 +422,15 @@ Stimuli can be composed of the following elements:
 </stimulus>
 ```
 
+A `<window>` stimulus is defined by the following attributes:
+
+| Attribute         | Type                    | Specification |
+|-------------------|-------------------------|---------------|
+
+
 #### Repeated Stimulus
+
+The stimulus is declared with the `<repeated>` element:
 
 ```xml
 <stimulus>  
@@ -409,7 +442,14 @@ Stimuli can be composed of the following elements:
 </stimulus>
 ```
 
+A `<repeated>` stimulus is defined by the following attributes:
+
+| Attribute         | Type                    | Specification |
+|-------------------|-------------------------|---------------|
+
 #### Combined Stimulus
+
+The stimulus is declared with the `<combined>` element:
 
 ```xml
 <stimulus>  
@@ -420,8 +460,11 @@ Stimuli can be composed of the following elements:
 </stimulus>
 ```
 
+A combined stimulus has no attributes.
 
 #### Repeated Combined Stimulus
+
+Complex repeated stimuli can be created by combining `<repeated>` and `<combined>` elements:
 
 ```xml
 <stimulus>                          
