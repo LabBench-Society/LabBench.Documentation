@@ -684,8 +684,69 @@ In this example, a combined trigger is repeated 3 times with a period of 10 ms. 
 
 ## Scripting
 
-| Name                        | Type           | Specification |
-|-----------------------------|----------------|---------------|
+The following properties are available within scripting and calculated parameters as a result of a procedure execution. They provide access to metadata, timing information, and execution state, allowing scripts and expressions to make decisions based on the outcome of a run.
+
+| Name                  | Type                           | Description |
+|-----------------------|--------------------------------|-------------|
+| ID                    | string                         | Unique identifier of the result. |
+| Operator              | string                         | Name or identifier of the operator who executed the procedure. |
+| RunningTime           | double                         | Total duration of the procedure in seconds. |
+| RunningTimeInMinutes  | double                         | Total duration of the procedure in minutes. |
+| RecordingTimeString   | string                         | Recording start time stored as a string representation. |
+| ProtocolID            | string                         | Identifier of the protocol used to generate the result. |
+| MachineID             | string                         | Identifier of the machine on which the procedure was executed. |
+| OperatingSystem       | string                         | Operating system of the machine used during execution. |
+| Iteration             | int                            | Iteration index of the procedure run. |
+| Instruments           | List<InstrumentDescriptor>     | List of instruments used during the procedure, including their names and identifiers. |
+| Annotations           | ProcedureAnnotations           | Collection of annotations associated with the procedure. |
+| RecordingTime         | DateTime                       | Recording start time. |
+| RecordingEndTime      | DateTime                       | Recording end time calculated as `RecordingTime + RunningTime`. |
+| Completed             | bool                           | Indicates whether the procedure completed successfully. |
+| Failed                | bool                           | Indicates whether the procedure failed. |
 
 
+### InstrumentDescriptor
 
+The `InstrumentDescriptor` describes an instrument used during a procedure. It provides identification information, allowing results to reference which instruments were involved in the execution.
+
+| Name | Type   | Description |
+|------|--------|-------------|
+| Name | string | Human-readable name of the instrument. |
+| ID   | string | Unique identifier of the instrument. |
+
+### DateTime
+
+`DateTime` represents a specific point in time, including both date and time components. It is used to store timestamps such as recording start and end times.
+
+| Name        | Type     | Description |
+|-------------|----------|-------------|
+| Year        | int      | The year component of the date. |
+| Month       | int      | The month component (1–12). |
+| Day         | int      | The day of the month. |
+| Hour        | int      | The hour component (0–23). |
+| Minute      | int      | The minute component (0–59). |
+| Second      | int      | The second component (0–59). |
+| Millisecond | int      | The millisecond component (0–999). |
+| Date        | DateTime | The date component with the time set to 00:00:00. |
+| TimeOfDay   | TimeSpan | The time elapsed since midnight. |
+| DayOfWeek   | DayOfWeek| The day of the week. |
+| DayOfYear   | int      | The day of the year (1–366). |
+| Ticks       | long     | The number of 100-nanosecond intervals since 0001-01-01. |
+
+### TimeSpan
+
+`TimeSpan` represents a duration of time rather than a specific point in time. It is commonly used to express intervals such as elapsed time or differences between two timestamps.
+
+| Name         | Type   | Description |
+|--------------|--------|-------------|
+| Days         | int    | The day component of the time interval. |
+| Hours        | int    | The hour component (0–23). |
+| Minutes      | int    | The minute component (0–59). |
+| Seconds      | int    | The second component (0–59). |
+| Milliseconds | int    | The millisecond component (0–999). |
+| Ticks        | long   | The total number of 100-nanosecond intervals in the time interval. |
+| TotalDays    | double | The total duration expressed in days. |
+| TotalHours   | double | The total duration expressed in hours. |
+| TotalMinutes | double | The total duration expressed in minutes. |
+| TotalSeconds | double | The total duration expressed in seconds. |
+| TotalMilliseconds | double | The total duration expressed in milliseconds. |
