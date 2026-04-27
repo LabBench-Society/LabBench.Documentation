@@ -325,12 +325,62 @@ The available trigger options are described in the table below:
 
 ### Trigger generation
 
-Stimuli for the stimulus generation component are specified within `<stimulus>` elements:
+Stimuli for the stimulus generation component are specified within `<trigger>` elements:
 
 ```xml
-<stimulus>
-    <!-- composition of stimuli -->
-</stimulus>
+<trigger duration="1">
+    <!-- composition of triggers -->
+</trigger>
+```
+Triggers can be composed of the following elements:
+
+| Stimulus         | Description |
+|------------------|-------------|
+| trigger          | |
+| combined-trigger | |
+| repeated-trigger | |
+
+#### Trigger
+
+
+
+```xml
+<trigger duration="1" Tdelay="0">
+    <code output="trigger-output" />
+    <code output="stimulator-trigger-output" />
+    <code output="trigger-interface" value="16"/>
+</trigger>
+```
+
+
+#### Combined trigger
+
+```xml
+<combined-triggers Tdelay="0">
+    <trigger duration="10">
+        <code output="trigger-output" />
+    </trigger>
+    <trigger duration="1" Tdelay="5">
+        <code output="stimulator-trigger-output" />
+        <code output="trigger-interface" value="16"/>
+    </trigger>
+</combined-triggers>
+```
+
+#### Repeated trigger
+
+```xml
+<repeated-trigger Tperiod="10" N="3">                                                
+    <combined-trigger>
+        <trigger duration="4">
+            <code output="trigger-output" />
+        </trigger>
+        <trigger duration="1" Tdelay="1">
+            <code output="stimulator-trigger-output" />
+            <code output="trigger-interface" value="16"/>
+        </trigger>
+    </combined-trigger>
+</repeated-trigger>
 ```
 
 ### Stimulus generation
@@ -370,8 +420,11 @@ The stimulus is declared with the `<pulse>` element:
 
 A `<pulse>` stimulus is defined by the following attributes:
 
-| Attribute         | Type                    | Specification |
-|-------------------|-------------------------|---------------|
+| Attribute | Type                            | Specification |
+|-----------|---------------------------------|---------------|
+| `Is`      | double = Calculated(context, x) | |
+| `Ts`      | double = Calculated(context, x) | |
+| `Tdelay`  | double = Calculated(context, x) | |
 
 #### Ramp
 
