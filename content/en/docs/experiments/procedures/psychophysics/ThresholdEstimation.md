@@ -27,7 +27,7 @@ The procedure window for the `<psychophysics-threshold-estimation>` is shown in 
 
 The recorded responses area is always shown and shows information about the tested stimulation intensities and subject responses. The psychometric function area is always shown and will show information on either the estimated psychometric functions or thresholds. The manual response task area is shown only when a manual response task is used and provides the operator with guidance on what to ask the participant, and allows the operator to enter the participant's response to the estimation algorithm.
 
-## Test definition
+## Procedure definition
 
 A threshold estimation procedure can be defined with the `<psychophysics-threshold-estimation>` element within the `<procedures>` element in the Experiment Definition File (`*.expx`):
 
@@ -70,7 +70,7 @@ The `<psychophysics-threshold-estimation>` procedure has these procedure specifi
 | `stimulus-update-rate` | int = Calculated(tc) | Update rate in Hz for stimulus generation. Defines how often the stimulus waveform is evaluated and sent to the output. |
 | `trigger-update-rate`  | int = Calculated(tc) | Update rate in Hz for trigger generation. Defines how often trigger states are evaluated and updated. |
 
-The `<psychophysics-threshold-estimation>` test has X test specific elements:
+The `<psychophysics-threshold-estimation>` procedure has the following specific elements:
 
 | Element              | Specification |
 |----------------------|---------------|
@@ -208,7 +208,7 @@ Istimulus = (Imax - Imin) * x + Imin
 
 This mapping is performed automatically by LabBench and is transparent to the user once the stimulus range is defined. Intensity normalization significantly simplifies experiment design and reduces configuration errors.
 
-#### Test definition 
+#### Channel definition 
 
 A stimulus channel `<channel>` can be configured to use the Psi estimation method with the `<psi-method>` element:
 
