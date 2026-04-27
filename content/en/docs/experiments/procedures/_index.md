@@ -325,6 +325,14 @@ The available trigger options are described in the table below:
 
 ### Trigger generation
 
+Stimuli for the stimulus generation component are specified within `<stimulus>` elements:
+
+```xml
+<stimulus>
+    <!-- composition of stimuli -->
+</stimulus>
+```
+
 ### Stimulus generation
 
 Stimuli for the stimulus generation component are specified within `<stimulus>` elements:
@@ -350,6 +358,8 @@ Stimuli can be composed of the following elements:
 
 #### Pulse
 
+![](/images/Experitments_Procedures/Slide1.PNG)
+
 The stimulus is declared with the `<pulse>` element:
 
 ```xml
@@ -364,6 +374,8 @@ A `<pulse>` stimulus is defined by the following attributes:
 |-------------------|-------------------------|---------------|
 
 #### Ramp
+
+![](/images/Experitments_Procedures/Slide2.PNG)
 
 The stimulus is declared with the `<ramp>` element:
 
@@ -380,6 +392,7 @@ A `<ramp>` stimulus is defined by the following attributes:
 
 #### Sine
 
+![](/images/Experitments_Procedures/Slide3.PNG)
 
 The stimulus is declared with the `<sine>` element:
 
@@ -396,6 +409,8 @@ A `<sine>` stimulus is defined by the following attributes:
 
 #### Arbitrary stimuli
 
+![](/images/Experitments_Procedures/Slide4.PNG)
+
 The stimulus is declared with the `<arbitrary>` element:
 
 ```xml
@@ -411,6 +426,8 @@ A `<arbitrary>` stimulus is defined by the following attributes:
 
 
 #### Windowed Sine
+
+![](/images/Experitments_Procedures/Slide5.PNG)
 
 The stimulus is declared with the `<window>` element:
 
@@ -429,6 +446,8 @@ A `<window>` stimulus is defined by the following attributes:
 
 
 #### Repeated Stimulus
+
+![](/images/Experitments_Procedures/Slide6.PNG)
 
 The stimulus is declared with the `<repeated>` element:
 
@@ -449,6 +468,8 @@ A `<repeated>` stimulus is defined by the following attributes:
 
 #### Combined Stimulus
 
+![](/images/Experitments_Procedures/Slide7.PNG)
+
 The stimulus is declared with the `<combined>` element:
 
 ```xml
@@ -463,6 +484,8 @@ The stimulus is declared with the `<combined>` element:
 A combined stimulus has no attributes.
 
 #### Repeated Combined Stimulus
+
+![](/images/Experitments_Procedures/Slide8.PNG)
 
 Complex repeated stimuli can be created by combining `<repeated>` and `<combined>` elements:
 

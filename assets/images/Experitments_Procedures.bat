@@ -1,4 +1,4 @@
-cd Experitments_Procedures_General_Sequential
+cd Experitments_Procedures
 magick mogrify -trim +repage *.png
 cd ..
 
