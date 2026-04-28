@@ -69,7 +69,17 @@ A Stimulus Presentation procedure can be defined with the `<psychophysics-stimul
 </psychophysics-stimulus-presentation>
 ```
 
-The example above demonstrates a stimulus presentation procedure that combines stimulus generation, trigger generation, response collection, and custom scripting to implement synchronized multi-modal stimulation. This procedure defines a set of 10 linearly spaced stimulus intensities between 10% and 100% of the stimulator’s maximum output. The experimenter can step through these intensities and deliver stimuli manually.
+The example above demonstrates a stimulus presentation procedure that combines stimulus generation, trigger generation, response collection, and custom scripting to implement synchronized multi-modal stimulation. The stimuli is generated with the following Python code:
+
+```python
+def Initialize(contect):
+    return True
+
+def Stimulate(context, x):
+    context.Instruments.Stimulator.Generate("port2", context.Stimulus)
+    context.Instruments.ImageDisplay.Display(context.Assets.Images.Cue, 250, True)
+    return True
+```
 
 Trigger and stimulus generation are configured to be synchronised. The trigger generation component is set to `internal`, meaning it waits for the stimulus generation to be executed. The stimulation generation component is triggered by an external event on `response-port01`, ensuring that both trigger and stimulus generation are aligned with a hardware event.
 
