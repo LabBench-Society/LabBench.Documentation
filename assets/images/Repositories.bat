@@ -1,4 +1,4 @@
-cd Installation
+cd Repositories
 magick mogrify -trim +repage *.png
 cd ..
 

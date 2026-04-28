@@ -1,4 +1,4 @@
-cd Experitments_Procedures_Psychophysics_ColdPressor
+cd Experitments_Procedures_Psychophysics_StimulusPresentation
 magick mogrify -trim +repage *.png
 cd ..
 
