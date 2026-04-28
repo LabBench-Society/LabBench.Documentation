@@ -10,6 +10,154 @@ Scripting in LabBench allows you to add executable logic to otherwise declarativ
 
 {{% /pageinfo %}}
 
+## Calculated attributes
+
+Calculated attributes define values using executable expressions or script functions that are evaluated at runtime. They are used throughout LabBench to compute parameters dynamically based on context, results, and inputs.
+
+A calculated attribute can take one of two forms:
+
+### 1. Expression
+
+A single-line Python expression:
+
+```xml
+intensity="min(Stimulator.Max, ManualThreshold.Intensity)"
+duration="10 * Ts"
+```
+
+Expressions are compiled once and evaluated using a runtime scope that includes:
+
+* The current procedure context (blackboard)
+* Defined variables and results
+* The free parameter `x` (if provided)
+* Built-in mathematical functions
+* Constants `PI` and `E`
+
+### 2. Function call
+
+A reference to a Python function:
+
+```xml
+intensity="func: Script.Compute(context)"
+stimulus="func: Script.Generate(context, x)"
+```
+
+Depending on the signature, functions are called as:
+
+* `func: Script.Function(context)`
+* `func: Script.Function(context, x)`
+
+The system validates:
+
+* That the script asset exists
+* That it is a Python script
+* That the function is defined
+
+## Execution model
+
+At runtime, a calculated attribute is:
+
+1. **Parsed** into either:
+
+   * An expression
+   * A function call
+
+2. **Compiled** (expressions or scripts)
+
+3. **Executed** with:
+
+   * `context` (procedure blackboard)
+   * Optional `x` parameter
+
+If execution is not possible (e.g. missing context or blocked state), a **default value** is returned.
+
+## Scope and available values
+
+During evaluation, the following are available:
+
+### Variables
+
+| Name            | Description                    |
+| --------------- | ------------------------------ |
+| `x`             | Free parameter (if applicable) |
+| `[ProcedureID]` | Results from procedures        |
+| `[DefineName]`  | Defined values                 |
+| `C`             | Context object                 |
+
+### Constants
+
+| Name | Value |
+| ---- | ----- |
+| `PI` | π     |
+| `E`  | e     |
+
+### Functions
+
+The following functions are available directly in expressions:
+
+* `exp`, `log`, `log10`
+* `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`
+* `asin`, `acos`
+* `abs`, `sqrt`
+* `round`, `floor`, `ceiling`, `truncate`
+* `min`, `max`, `pow`
+* `step(x)`
+* `pulse(x, d)`
+
+Array generators:
+
+* `linspace(x0, x1, n)`
+* `geomspace(x0, x1, n)`
+* `logspace(x0, x1, base, n)`
+
+## Type handling
+
+Each calculated attribute enforces a return type (e.g. `int`, `double`, `string`, `double[]`).
+
+The result of execution is:
+
+* Converted to the required type
+* Stored internally
+* Returned to the caller
+
+If conversion fails, a runtime error is raised.
+
+## Error handling and validation
+
+Calculated attributes are validated before execution:
+
+* Expressions are syntax-checked
+* Script references are verified
+* Functions must exist in the script
+
+At runtime:
+
+* Exceptions are caught and reported with full Python trace
+* Invalid usage (e.g. wrong `(context, x)` signature) raises explicit errors
+* Invalid values (NaN, ±∞) may propagate unless explicitly handled
+
+## Gotchas
+
+* **Silent defaults:** If a parameter cannot execute (e.g. missing context), it falls back to a default value without crashing.
+* **Signature mismatch:** `(context)` vs `(context, x)` must match exactly, or execution fails at runtime.
+* **NaN propagation:** Many functions propagate NaN. One bad value can affect the entire calculation.
+* **Array generation pitfalls:** `linspace`, `geomspace`, and `logspace` can fail if inputs are invalid (e.g. negative values in logspace).
+* **IronPython limitations:** Only pure Python and .NET interop are supported. No CPython native libraries.
+
+* **Controlled scope:**  Only variables provided by LabBench are available. Missing values usually mean they are not part of the execution scope.
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Scripting in LabBench
 
 Scripting in LabBench provides a powerful way to extend and customize experimental behavior beyond what is possible with static XML configuration alone. While protocols (.expx files) are formally defined and validated using an XSD schema, many XML attributes can contain executable logic in the form of single-line Python expressions (calculated parameters) or references to Python functions defined in external script files. Together, this allows protocols to remain declarative and readable, while still supporting adaptive procedures, conditional logic, and dynamic parameter updates that are essential in modern psychophysics and neuroscience experiments.
