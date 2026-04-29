@@ -1,14 +1,530 @@
 ---
 title: Scripting
-description: Information on how call python code from LabBench protocols.
+description: Information on how use and call Python code.
 weight: 70
 ---
 
 {{% pageinfo %}}
 
-Scripting in LabBench allows you to add executable logic to otherwise declarative XML protocols, enabling dynamic parameter computation, conditional flow control, adaptive stimulus selection, and real-time interaction with experiment state and hardware. Using embedded IronPython, scripts can access and modify the .NET objects created from the protocol—such as stimuli, channels, devices, and state variables—making it possible to implement psychophysical methods, trial randomization, and closed-loop experimental logic directly within a .expx file or associated script assets, without changing or recompiling the LabBench application itself.
+Scripting in LabBench allows you to add executable logic to otherwise declarative XML protocols. 
 
 {{% /pageinfo %}}
+
+Throughout this documentation, you will have seen this notation `type = Calculated(context, x)` or `type = Calculated(context)` as the type for attributes. This notation means that the attribute is evaluated as either a single-line Python expression or a function call in a Python script. These attributes are referred to as calculated attributes.
+
+The ability to evaluate expressions or call Python functions from an Experiment Definition File makes it possible to automate protocols, and this is where the LabBench language derives its power and versatility.
+
+## Expressions
+
+Unless any keywords are provided for a calculated attribute, it will be evaluated as a single-line Python expression.
+
+### Syntax
+
+General form:
+
+```xml
+<attribute>="expression"
+```
+
+Examples:
+
+```xml
+Istart="SR.PDT"
+Ts="min(2, SD.Chronaxie)"
+Imin="0.1 * Stimulator.Max"
+```
+
+An expression must:
+
+* Be written as a single line
+* Return a value of the expected type (e.g. int, double, string)
+* Be valid Python syntax
+* Be valid XML (reserved characters must be escaped)
+
+### Scope
+
+Single-line expressions are evaluated in a **constructed execution scope**. This scope defines exactly which variables, results, functions, and constants are available when the expression is executed. The scope is not a full Python environment—it is explicitly built by LabBench before evaluation.
+
+When an expression is evaluated, LabBench creates a dictionary of variables and injects:
+
+1. **Free parameter (`x`) if applicable**
+2. **Results**
+3. **Defines and variables**
+4. **Instruments**
+5. **Parameters**
+6. **Assets**
+7. **Built-in functions**
+8. **Constants**
+
+This combined scope is then used to execute the expression.
+
+All results are injected in two ways:
+
+```python
+Test01.PDT
+Results.Test01.PDT
+```
+
+| Name         | Description               |
+| ------------ | ------------------------- |
+| `Results`    | Collection of all results |
+| `[ResultID]` | Direct access to a result |
+| `Current`    | The result of the currently selected procedure |
+
+All variables are available directly:
+
+```python
+MyVariable
+Participant
+```
+
+| Name           | Description                              |
+| -------------- | ---------------------------------------- |
+| `[DefineName]` | Value defined in the protocol or runtime |
+
+
+All instruments are injected directly into scope:
+
+```python
+Stimulator.Max
+ImageDisplay.Show(...)
+```
+
+| Name               | Description         |
+| ------------------ | ------------------- |
+| `[InstrumentName]` | Instrument instance |
+
+Procedure-specific parameters are also available:
+
+```python
+NumberOfStimuli
+```
+
+Assets are available both as a collection and directly:
+
+```python
+Assets.Images.Cue
+Images.Cue
+```
+
+| Name        | Description            |
+| ----------- | ---------------------- |
+| `Assets`    | Asset manager          |
+| `[AssetID]` | Direct access to asset |
+
+
+#### Functions
+
+The following functions are available in single-line expressions. All functions operate on `double` values unless otherwise noted.
+
+| Signature                   | Return type | Description                                          | Edge conditions                                                             |
+| --------------------------- | ----------- | ---------------------------------------------------- | --------------------------------------------------------------------------- |
+| `exp(x)`                    | `double`    | Returns (e^x).                                       | Large positive `x` → `+∞`; large negative `x` → `0`; NaN propagates.        |
+| `round(x)`                  | `double`    | Rounds to nearest integer using banker’s rounding.   | Midpoints round to nearest even; NaN propagates.                            |
+| `ceiling(x)`                | `double`    | Smallest integer ≥ `x`.                              | `±∞` and NaN returned unchanged.                                            |
+| `floor(x)`                  | `double`    | Largest integer ≤ `x`.                               | `±∞` and NaN returned unchanged.                                            |
+| `truncate(x)`               | `double`    | Removes fractional part (toward zero).               | `±∞` and NaN returned unchanged.                                            |
+| `log(x)`                    | `double`    | Natural logarithm.                                   | `x > 0` valid; `x = 0` → `-∞`; `x < 0` → NaN.                               |
+| `log10(x)`                  | `double`    | Base-10 logarithm.                                   | Same domain as `log`.                                                       |
+| `sin(x)`                    | `double`    | Sine of `x` (radians).                               | `±∞` → NaN; NaN propagates.                                                 |
+| `sinh(x)`                   | `double`    | Hyperbolic sine.                                     | Large |x| may overflow to `±∞`; NaN propagates.                             |
+| `asin(x)`                   | `double`    | Arcsine (radians).                                   | Domain: `-1 ≤ x ≤ 1`; outside → NaN.                                        |
+| `cos(x)`                    | `double`    | Cosine of `x` (radians).                             | `±∞` → NaN; NaN propagates.                                                 |
+| `cosh(x)`                   | `double`    | Hyperbolic cosine.                                   | Large |x| → `+∞`; NaN propagates.                                           |
+| `acos(x)`                   | `double`    | Arccosine (radians).                                 | Domain: `-1 ≤ x ≤ 1`; outside → NaN.                                        |
+| `tan(x)`                    | `double`    | Tangent of `x` (radians).                            | Undefined at odd multiples of π/2; returns large finite values; `±∞` → NaN. |
+| `tanh(x)`                   | `double`    | Hyperbolic tangent.                                  | Approaches `±1` as `x → ±∞`; NaN propagates.                                |
+| `abs(x)`                    | `double`    | Absolute value.                                      | `±∞` → `+∞`; NaN propagates.                                                |
+| `sqrt(x)`                   | `double`    | Square root.                                         | `x ≥ 0` valid; `x < 0` → NaN; `+∞` → `+∞`.                                  |
+| `max(x, y)`                 | `double`    | Returns larger of two values.                        | If either input is NaN → NaN.                                               |
+| `min(x, y)`                 | `double`    | Returns smaller of two values.                       | If either input is NaN → NaN.                                               |
+| `pow(x, y)`                 | `double`    | Returns (x^y).                                       | Negative `x` with non-integer `y` → NaN; `0^0 = 1`; overflow → `±∞`.        |
+| `step(x)`                   | `double`    | Step function: returns `1` if `x ≥ 0`, else `0`.     | NaN → `0` (comparison false).                                               |
+| `pulse(x, d)`               | `double`    | Rectangular pulse: `1` if `0 ≤ x < d`, else `0`.     | NaN in either argument → `0`.                                               |
+| `linspace(x0, x1, n)`       | `double[]`  | Linearly spaced array from `x0` to `x1` (inclusive). | `n < 2` may cause division issues; NaN/∞ propagate to output.               |
+| `geomspace(x0, x1, n)`      | `double[]`  | Geometric progression from `x0` to `x1`.             | `x0 ≤ 0` or `x1 ≤ 0` may produce invalid values; `n < 2` invalid.           |
+| `logspace(x0, x1, base, n)` | `double[]`  | Values defined as (base^{linspace(x0,x1)}).          | Large exponents may overflow; invalid base or NaN inputs propagate.         |
+
+#### Constants
+
+| Name | Value |
+| ---- | ----- |
+| `PI` | π     |
+| `E`  | e     |
+
+#### Name resolution
+
+Variables are added to the scope in sequence. If a name already exists:
+
+* The new value is **not added**
+* A debug log entry is generated
+
+This means:
+
+* Earlier entries take precedence
+* Duplicate names can lead to unexpected behaviour
+
+
+### Escaping characters
+
+XML uses a small set of reserved characters to define its structure. These characters cannot be used directly inside attribute values or element content without being escaped, as they would otherwise be interpreted as part of the XML syntax.
+
+This becomes particularly important in LabBench, where **calculated attributes often contain single-line Python expressions**. Many valid Python expressions include characters that must be escaped in XML, which can lead to subtle errors if not handled correctly.
+
+The following characters must be escaped when used inside XML:
+
+| Character | Meaning in XML                     | Escape sequence |
+| --------- | ---------------------------------- | --------------- |
+| `<`       | Start of a tag                     | `&lt;`          |
+| `>`       | End of a tag                       | `&gt;`          |
+| `&`       | Start of an entity                 | `&amp;`         |
+| `"`       | Attribute delimiter (double quote) | `&quot;`        |
+
+Calculated attributes are typically written like this:
+
+```xml
+<arbitrary Ts="50" expression="x < 5" />
+```
+
+This is **invalid XML**, because `<` is interpreted as the start of a new tag.
+
+Correct version:
+
+```xml
+<arbitrary Ts="50" expression="x &lt; 5" />
+```
+
+which is hard to read and understand. **If escaped characters are needed it is often better to call a Python function in a script.**
+
+**Practical guidance:**
+
+* Always escape `<`, `>`, and `&` in expressions
+* Be careful with quotes inside attributes
+* Prefer simpler expressions where possible to reduce escaping complexity
+
+**Gotchas:**
+
+* **Silent XML parsing errors:** Invalid escaping may not produce clear errors—it can break parsing or cause attributes to be ignored.
+* **Hard-to-read expressions:** Heavy escaping (`&lt;`, `&gt;`, etc.) can make expressions difficult to read and debug.
+* **Double escaping mistakes:** Writing `&amp;lt;` instead of `&lt;` will produce incorrect results.
+* **Mismatch between Python and XML syntax:**  A valid Python expression is not necessarily valid XML—always validate both layers.
+
+#### Summary
+
+When writing calculated attributes:
+
+* You are writing **Python inside XML**
+* The expression must be valid in **both contexts**
+* XML escaping is required for certain characters
+
+Understanding this dual constraint avoids a large class of subtle and frustrating errors.
+
+
+## Functions
+
+### Syntax
+
+```python
+
+```
+
+```python
+
+```
+
+### Scope
+
+
+## Dynamic text
+
+### Syntax 
+
+```python
+
+```
+
+### Formatted strings (f-strings)
+
+**f-strings** (formatted string literals) are a concise way to embed expressions inside strings in Python. They are prefixed with `f` and evaluate expressions directly inside `{}`.
+
+```xml
+<variable name="value" value="3.14159">
+```
+
+```python
+text = f'Value is {value}'
+```
+
+Expressions inside `{}` are evaluated at runtime:
+
+```python
+f'{2 + 2}'          # "4"
+f'{value * 2}'      # "6.28318"
+```
+
+You can control formatting using a **format specifier** after a colon `:` inside the braces:
+
+```python
+f'{value:.2f}'   # "3.14"
+```
+
+General syntax:
+
+```
+{expression:format_spec}
+```
+
+**Common number formatting:**
+
+| Format      | Description              | Example            | Result     |
+| ----------- | ------------------------ | ------------------ | ---------- |
+| `{x}`       | Default                  | `f'{3.14}'`        | `3.14`     |
+| `{x:.2f}`   | Fixed-point (2 decimals) | `f'{3.14159:.2f}'` | `3.14`     |
+| `{x:.0f}`   | No decimals (rounded)    | `f'{3.6:.0f}'`     | `4`        |
+| `{x:6.2f}`  | Width + decimals         | `f'{3.14:6.2f}'`   | `"  3.14"` |
+| `{x:06.2f}` | Zero-padded              | `f'{3.14:06.2f}'`  | `"003.14"` |
+| `{x:+.2f}`  | Always show sign         | `f'{3.14:+.2f}'`   | `+3.14`    |
+| `{x:.2e}`   | Scientific notation      | `f'{1234:.2e}'`    | `1.23e+03` |
+| `{x:.1%}`   | Percentage               | `f'{0.256:.1%}'`   | `25.6%`    |
+| `{x:b}`     | Binary                   | `f'{5:b}'`         | `101`      |
+| `{x:x}`     | Hex (lowercase)          | `f'{255:x}'`       | `ff`       |
+| `{x:X}`     | Hex (uppercase)          | `f'{255:X}'`       | `FF`       |
+
+**Alignment and width:**
+
+| Format   | Description    | Example      | Result     |
+| -------- | -------------- | ------------ | ---------- |
+| `{x:>6}` | Right aligned  | `f'{42:>6}'` | `'    42'` |
+| `{x:<6}` | Left aligned   | `f'{42:<6}'` | `'42    '` |
+| `{x:^6}` | Center aligned | `f'{42:^6}'` | `'  42  '` |
+
+## The `context` object 
+
+When a Python function is called from a calculated attribute, it receives a **context object** (named `context`) that provides access to the full state of the experiment at runtime.
+
+This object is an instance of `ProcedureBlackboard` and acts as the central interface between your Python code and LabBench.
+
+The context exposes several categories of data and functionality:
+
+### Properties
+
+The `context` object exposes both **automatically injected variables** and **public properties** that describe the current execution environment. These can be accessed directly from Python functions.
+
+| Name                | Type                          | Description                                                        |
+| ------------------- | ----------------------------- | ------------------------------------------------------------------ |
+| `Language`          | `string`                      | Active language code for the session.                              |
+| `Participant`       | `string`                      | Name or identifier of the participant.                             |
+| `ParticipantNumber` | `int`                         | Participant number within the study. Can be used for example for generation of latin-squares. |
+| `StartTime`         | `DateTime`                    | Timestamp when the session was initialized.                        |
+| `ExperimentalSetup` | `string`                      | Identifier of the experimental setup.                              |
+| `ActiveSession`     | `string`                      | Identifier of the currently active session.                        |
+| `Current`           | `Result`                      | The currently executing procedure result.                          |
+| `Results`           | `ItemCollection<Result>`      | Collection of all procedure results. Please note they are also exposed as `context.[Result ID]`. |
+| `Variables`         | `ItemCollection<object>`      | Collection of all defined variables (defines + runtime variables). Please note they are also exposed as `context.[Variable Name]`. |
+| `Parameters`        | `ItemCollection<object>`      | Collection of procedure-specific parameters. Please note they are also exposed as `context.[Parameter Name]`.|
+| `Instruments`       | `ItemCollection<IInstrument>` | Collection of available instruments.                               |
+| `Assets`            | `AssetManager`                | Access to protocol assets (images, scripts, etc.).                 |
+
+These values can be accessed directly:
+
+```python 
+context.Participant
+context.ParticipantNumber
+context.Language
+context.Current
+```
+
+Automatically injected variables behave like global values in expressions, while properties provide structured access to collections and services exposed by the runtime.
+
+### Results
+
+Access results from procedures:
+
+```python
+context.Results
+context.Test01
+context.Test01.PDT
+```
+
+* Each procedure result is accessible by its ID
+* `context.Current` refers to the currently executing result
+
+### Variables 
+
+All variables and runtime variables are available directly:
+
+```python
+context.MyVariable
+context.Participant
+context.ParticipantNumber
+context.Language
+```
+
+These include:
+
+* Protocol variables
+* Participant information
+* Procedure parameters
+
+### Instruments
+
+Access instruments declared in the procedure:
+
+```python
+context.Instruments.Stimulator
+context.Instruments.ImageDisplay
+```
+
+These are the same instruments declared via `<instrument>` elements.
+
+### Toolkits
+
+The context provides a set of **toolkits** for common operations:
+
+| Toolkit                 | Description                  |
+| ----------------------- | ---------------------------- |
+| `context.Stimuli`       | Create stimuli |
+| `context.Triggers`      | Generate trigger signals     |
+| `context.Image`         | Display and generate images               |
+| `context.Waveforms`     | Create waveform data      |
+| `context.Psychophysics` | Psychophysical utilities     |
+| `context.Scheduler`     | Schedule tasks               |
+| `context.Keyboard`      | Keyboard input               |
+
+### Logging 
+
+The `context.Log` property is implemented with **Serilog**, a structured logging framework used throughout LabBench. Logging is useful for debugging, tracing execution, and recording runtime information during experiments.
+
+LabBench supports multiple **log levels**, which indicate the severity or importance of a message:
+
+| Level         | Description                                                          |
+| ------------- | -------------------------------------------------------------------- |
+| `Debug`       | Diagnostic information useful during protocol development.           |
+| `Information` | General runtime information (normal operation).                      |
+| `Error`       | An error occurred that affects part of the execution.                |
+
+Example:
+
+```python
+context.Log.Information("Stimulus started")
+context.Log.Warning("Intensity is near maximum")
+context.Log.Error("Failed to generate stimulus")
+```
+
+#### Passing values to logs
+
+Serilog uses **structured (semantic) logging**, where values are passed separately from the message template.
+
+Instead of concatenating strings:
+
+```python
+# Avoid this
+context.Log.Information("Intensity: " + str(x))
+```
+
+Use placeholders:
+
+```python
+context.Log.Information("Intensity: {Intensity}", x)
+```
+
+Multiple values:
+
+```python
+context.Log.Information("Stimulus {ID} at intensity {Intensity}", stimulus_id, x)
+```
+
+Named placeholders improve clarity:
+
+```python
+context.Log.Information(
+    "Stimulus {StimulusID} delivered at {Intensity}",
+    stimulus_id,
+    x
+)
+```
+
+Serilog uses **semantic logging**, meaning:
+
+* The message is a **template**
+* Values are stored as **structured data**, not just text
+
+This allows logs to be:
+
+* Easily searchable
+* Filterable by fields (e.g. all logs where `Intensity > 5`)
+* Machine-readable (for analysis and debugging tools)
+
+Compared to plain text logging, this makes logs significantly more useful for diagnostics and data analysis.
+
+#### Practical examples
+
+Logging a value:
+
+```python
+context.Log.Debug("Current intensity: {Intensity}", x)
+```
+
+Logging multiple values:
+
+```python
+context.Log.Information(
+    "Trial {Trial} completed in {Time}s",
+    trial_number,
+    duration
+)
+```
+
+Logging errors:
+
+```python
+try:
+    DoSomething()
+except Exception as e:
+    context.Log.Error("Error during stimulation: {Error}", str(e))
+```
+
+#### Gotchas
+
+* **Do not use string concatenation:** You lose structured data and make logs harder to analyze.
+* **Placeholder names matter:** Use meaningful names (`{Intensity}` instead of `{x}`).
+* **Order matters:** Values are matched to placeholders in order.
+* **Logging is not free:** Avoid excessive logging in high-frequency loops.
+
+
+### Examples
+
+Example using results:
+
+```python 
+def NextIntensity(context):
+    return context.Test01.PDT * 1.2
+```
+
+Example using assets and instruments:
+
+```python 
+def Stimulate(context, x):
+    context.Instruments.ImageDisplay.Display(context.Assets.Images.Cue, 200, True)
+    context.Instruments.Stimulator.Generate("port1", context.Stimulus)
+    return True
+```
+
+### Gotchas
+
+* **Name collisions:** If a variable or result shares the same name, one may override the other in the scope.
+* **Missing properties return `None`:** This can lead to silent failures if not checked.
+* **Thread-safe but locked:** Access is internally synchronized—avoid long-running operations inside scripts.
+* **Current result may be null:**  `context.Current` is only set during execution of a procedure.
+
+## Python Standard Library
+
+
+## Toolkits
+
+
+## Instruments
+
 
 ## Calculated attributes
 

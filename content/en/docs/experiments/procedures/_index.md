@@ -523,8 +523,8 @@ A `<repeated>` stimulus is defined by the following attributes:
 
 | Attribute | Type                            | Specification |
 |-----------|---------------------------------|---------------|
-| `Tperiod` | double = Calculated(context, x) | |
-| `N`       | int = Calculated(context, x)    | |
+| `Tperiod` | double = Calculated(context, x) | The period in milliseconds between the start of each repetition of the nested stimulus. |
+| `N`       | int = Calculated(context, x)    | The number of times the nested stimulus is repeated. |
 | `Tdelay`  | double = Calculated(context, x) | The delay in milliseconds with respect to its parent stimulus. |
 
 
