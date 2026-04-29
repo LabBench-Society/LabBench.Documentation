@@ -61,13 +61,52 @@ class TimeSlotInstruction:
 
 This is an example, where the the `ImageEngine` class is used to create instructions to the operator at runtime to perform automatic randomization of an experiment.
 
-## Functions
+## Image Toolkit (`ImageToolkit`)
 
-### `ImageEngine GetImageEngine(byte[] image)`
+### Description
 
+Provides utilities for creating image canvases and loading image data for use with image display instruments.
 
-### `ImageCanvas GetCanvas(IImageDisplay display, string colour)`
+### Availability
 
-### `ImageCanvas GetCanvas(int width, int heigth, string colour)`
+```python
+context.Image
+```
 
-### `ImageCanvas GetCanvas(byte[] image)`
+### Properties
+
+*No public readable properties are defined.*
+
+### Methods
+
+| Name             | Signature                                                       | Description                                                                                      |
+| ---------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `GetImageEngine` | `GetImageEngine(data: bytes) -> ImageEngine`                    | Creates an image engine from raw image data.                                                     |
+| `GetCanvas`      | `GetCanvas(display: IImageDisplay) -> ImageCanvas`              | Creates a canvas matching the resolution of a display with default background color (`#000000`). |
+| `GetCanvas`      | `GetCanvas(display: IImageDisplay, color: str) -> ImageCanvas`  | Creates a canvas matching the display with specified background color.                           |
+| `GetCanvas`      | `GetCanvas(width: int, height: int) -> ImageCanvas`             | Creates a canvas with given dimensions and default background color.                             |
+| `GetCanvas`      | `GetCanvas(width: int, height: int, color: str) -> ImageCanvas` | Creates a canvas with given dimensions and background color.                                     |
+| `GetCanvas`      | `GetCanvas(image: LabBenchImage) -> ImageCanvas`                | Creates a canvas initialized from an existing image.                                             |
+
+### Typical usage example
+
+```python
+img = context.Image
+
+# Create canvas matching display
+canvas = img.GetCanvas(context.Instruments.ImageDisplay)
+
+# Create custom canvas
+canvas = img.GetCanvas(800, 600, "#FFFFFF")
+
+# Load image engine from byte data
+engine = img.GetImageEngine(image_bytes)
+```
+
+### Notes / gotchas
+
+* Color values are expected as strings (e.g., `"#RRGGBB"`); no validation is shown in code.
+* Canvas dimensions must match the target display when used for rendering.
+* `GetImageEngine` expects valid image byte data; invalid data will fail during decoding.
+* Internal bitmap caching is used when converting byte arrays to images; repeated use of identical data may reuse cached objects.
+* Asynchronous bitmap loading (`GetSKBitmapAsync`) exists internally but is not exposed directly through the toolkit.
