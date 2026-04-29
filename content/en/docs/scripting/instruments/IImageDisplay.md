@@ -9,7 +9,7 @@ Provides visual stimulus presentation by displaying images on a screen with opti
 **Availability:**
 
 ```python
-context.Instruments.ImageDisplay
+context.Instruments.<ImageDisplayName>
 ```
 
 ### Properties
