@@ -4,80 +4,135 @@ description: Toolkit for creating stimuli in Python code
 weight: 20
 ---
 
-## Stimulus creation
+Provides programmatic construction of stimuli (pulse, ramp, sine, arbitrary, combined, repeated, multi-channel, and segmented waveforms).
 
-### `Pulse(double Is, double Ts)`
+**Availability:**
 
-Returns a pulse stimulus with constant intensity `Is` for the duration `Ts`.
+```python
+context.Stimuli
+```
 
-### `Pulse(double Is, double Ts, double Tdelay)`
+## Properties
 
-Returns a pulse stimulus with constant intensity `Is` for the duration `Ts`, starting after a delay of `Tdelay`.
+*No public readable properties are defined.*
 
-### `Ramp(double intensity, double duration)`
+## Methods
 
-Returns a ramp stimulus that changes linearly from 0 to `intensity` over the specified `duration`.
+| Name             | Signature                                                                                                  | Description                                                        |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `Pulse`          | `Pulse(Is: float, Ts: float) -> PulseValueStimulus`                                                        | Creates a rectangular pulse with intensity `Is` and duration `Ts`. |
+| `Pulse`          | `Pulse(Is: float, Ts: float, Tdelay: float) -> PulseValueStimulus`                                         | Same as above with delay `Tdelay`.                                 |
+| `Ramp`           | `Ramp(intensity: float, duration: float) -> RampValueStimulus`                                             | Creates a linear ramp stimulus.                                    |
+| `Ramp`           | `Ramp(intensity: float, duration: float, delay: float) -> RampValueStimulus`                               | Ramp with delay.                                                   |
+| `Ramp`           | `Ramp(intensity: float, duration: float, delay: float, offset: float) -> RampValueStimulus`                | Ramp with delay and offset.                                        |
+| `Sine`           | `Sine(intensity: float, duration: float, frequency: float) -> SineValueStimulus`                           | Creates a sinusoidal stimulus.                                     |
+| `Sine`           | `Sine(intensity: float, duration: float, frequency: float, delay: float) -> SineValueStimulus`             | Sine with delay.                                                   |
+| `Arbitrary`      | `Arbitrary(expression: Callable[[float], float], duration: float) -> ArbitraryValueStimulus`               | Creates a stimulus from a time-dependent function.                 |
+| `Arbitrary`      | `Arbitrary(expression: Callable[[float], float], duration: float, delay: float) -> ArbitraryValueStimulus` | Same with delay.                                                   |
+| `Combined`       | `Combined() -> CombinedValueStimulus`                                                                      | Creates a stimulus that sums multiple stimuli.                     |
+| `Repeated`       | `Repeated(stimulus: IStimulus, repetitions: int, period: float, delay: float) -> RepeatedValueStimulus`    | Repeats a stimulus with period and delay.                          |
+| `Repeated`       | `Repeated(stimulus: IStimulus, repetitions: int, period: float) -> RepeatedValueStimulus`                  | Repeats a stimulus with period.                                    |
+| `Multiple`       | `Multiple() -> MultipleOutputValueStimulus`                                                                | Creates a multi-channel stimulus.                                  |
+| `LinearStimulus` | `LinearStimulus() -> LinearSegmentValueStimulus`                                                           | Creates a piecewise linear stimulus.                               |
 
-### `Ramp(double intensity, double duration, double delay)`
+## Typical usage example
 
-Returns a ramp stimulus that changes linearly from 0 to `intensity` over the specified `duration`, starting after a delay of `delay`.
+```python
+stim = context.Stimuli
 
-### `Ramp(double intensity, double duration, double delay, double offset)`
+# Simple pulse
+pulse = stim.Pulse(1.0, 5.0)
 
-Returns a ramp stimulus that changes linearly from `offset` to `offset + intensity` over the specified `duration`, starting after a delay of `delay`.
+# Combined stimulus
+combined = stim.Combined() \
+    .Add(stim.Pulse(1.0, 5.0)) \
+    .Add(stim.Sine(0.5, 10.0, 100))
 
+# Repeated stimulus
+rep = stim.Repeated(pulse, 5, 20.0)
 
-### `Sine(double intensity, double duration, double frequency)`
+# Arbitrary waveform
+arb = stim.Arbitrary(lambda t: t * 0.1, 50.0)
+```
 
-Returns a sinusoidal stimulus with amplitude `intensity` and frequency `frequency` over the specified `duration`.
+## Combined Stimulus (`CombinedValueStimulus`)
 
-### `Sine(double intensity, double duration, double frequence, double delay)`
+### Description
 
-Returns a sinusoidal stimulus with amplitude `intensity` and frequency `frequence` over the specified `duration`, starting after a delay of `delay`.
+Represents a stimulus formed by summing multiple stimuli.
 
-### `Arbitrary(Func<double, double> expression, double duration)`
+### Availability
 
-Returns a stimulus defined by a mathematical expression of time. The expression is evaluated over the interval from 0 to `duration`.
+```python
+context.Stimuli.Combined()
+```
 
-### `Arbitrary(Func<double, double> expression, double duration, double delay)`
+### Properties
 
-Returns a stimulus defined by a mathematical expression of time, evaluated over the interval from 0 to `duration`, starting after a delay of `delay`.
+| Name       | Type              | Description                |
+| ---------- | ----------------- | -------------------------- |
+| `Stimulus` | `List[IStimulus]` | List of contained stimuli. |
 
-### `Combined()`
+### Methods
 
-Returns a stimulus that represents the sum of multiple stimuli. Individual stimuli can be added and are combined by superposition over time.
+| Name  | Signature                                           | Description                         |
+| ----- | --------------------------------------------------- | ----------------------------------- |
+| `Add` | `Add(stimulus: IStimulus) -> CombinedValueStimulus` | Adds a stimulus to the combination. |
 
-### `Repeated(IStimulus stimulus, int repetitions, double period, double delay)`
+## Multiple Output Stimulus (`MultipleOutputValueStimulus`)
 
-Returns a stimulus that repeats the given `stimulus` `repetitions` times with a period of `period`, starting after a delay of `delay`.
+### Description
 
-### `Repeated(IStimulus stimulus, int repetitions, double period)`
+Represents a stimulus distributed across multiple output channels.
 
-Returns a stimulus that repeats the given `stimulus` `repetitions` times with a period of `period`.
+### Availability
 
-## Composite stimuli
+```python
+context.Stimuli.Multiple()
+```
 
-### CombinedStimulus
+### Properties
 
-Represents a stimulus composed of multiple stimuli summed together over time.
+| Name      | Type                  | Description                      |
+| --------- | --------------------- | -------------------------------- |
+| `Outputs` | `List[IAnalogOutput]` | List of channel-output mappings. |
 
-#### `Add(IStimulus stimulus)`
+### Methods
 
-Adds a stimulus to the combination.
+| Name  | Signature                                                               | Description                                      |
+| ----- | ----------------------------------------------------------------------- | ------------------------------------------------ |
+| `Add` | `Add(channel: int, stimulus: IStimulus) -> MultipleOutputValueStimulus` | Assigns a stimulus to a specific output channel. |
 
+## Linear Segment Stimulus (`LinearSegmentValueStimulus`)
 
-### MultipleOutputStimulus
+### Description
 
-Represents a collection of stimuli mapped to different output channels.
+Represents a piecewise linear stimulus constructed from sequential segments.
 
-#### `Add(int channel, IStimulus stimulus)`
+### Availability
 
-Adds a stimulus to the specified output `channel`.
+```python
+context.Stimuli.LinearStimulus()
+```
 
-### LinearSegmentStimulus
+### Properties
 
-Represents a stimulus constructed from sequential linear segments.
+| Name       | Type             | Description                                               |
+| ---------- | ---------------- | --------------------------------------------------------- |
+| `Segments` | `List[ISegment]` | Sequence of defined segments.                             |
+| `Baseline` | `float`          | Baseline value before first segment (unit not specified). |
 
-#### `Segment(double value, double duration)`
+### Methods
 
-Adds a segment that linearly transitions to `value` over the specified `duration`.
+| Name      | Signature                                                              | Description                                    |
+| --------- | ---------------------------------------------------------------------- | ---------------------------------------------- |
+| `Segment` | `Segment(value: float, duration: float) -> LinearSegmentValueStimulus` | Adds a segment with target value and duration. |
+
+## Notes / gotchas
+
+* All stimuli represent time-dependent signals; durations and delays are in milliseconds.
+* `Combined` sums values of all contained stimuli at each time point.
+* `Multiple` assigns stimuli to separate output channels; channel indices must match device configuration.
+* `Arbitrary` expressions must be valid Python callables taking time `t` as input.
+* `LinearStimulus` interpolates between segment values; baseline is used before the first segment.
+* No validation is performed; invalid configurations may fail at runtime or during device execution.
