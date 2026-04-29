@@ -222,25 +222,172 @@ Understanding this dual constraint avoids a large class of subtle and frustratin
 
 ## Functions
 
+When the required functionality cannot be implemented with single-line expressions, you can call Python functions defined in script files. Calling functions enables the full power of the Python scripting engine, including defining and instantiating objects, using the Python standard library, and accessing the functionality provided by LabBench through the context object and Toolkits.
+
 ### Syntax
 
-```python
+Use the func: keyword to call a Python function:
 
+```python
+stimulate="func: Script.Stimulate(context, x)
 ```
 
-```python
+In this example, the calculated attribute expects the function to accept two parameters (context, x). The function must be defined as `def [Function Name ](context, x):`
 
+```python
+def Stimulate(context, x):
+    context.Instruments.Stimulator.Generate("port2", context.Stimulus)
+    context.Instruments.ImageDisplay.Display(context.Assets.Images.Cue, 250, True)
+    return True
+```
+
+Script files must be included explicitly in a protocol by a <file-assets> element:
+
+```xml
+<assets>
+    <file-asset file="Script.py" />
+</assets>
 ```
 
 ### Scope
 
+When Python scripts are used in LabBench (via `func: Script.Function(...)`), the script file is **compiled once and loaded into a persistent execution environment**. The functions defined in that file are then called repeatedly during the procedure.
+
+This means that **standard Python scope rules apply**, with a few important implications for how scripts behave over time.
+
+#### Module-level scope (persistent state)
+
+All code defined at the top level of a script file lives in **module scope** and is **persistent across function calls**.
+
+```python
+counter = 0
+
+def Increment(context):
+    global counter
+    counter += 1
+    return counter
+```
+
+* The script is compiled once
+* `counter` is created once
+* Each call to `Increment` will reuse and modify the same variable
+
+This allows scripts to maintain **state across trials or stimulations**
+
+#### Function scope
+
+Variables defined inside a function are **local to that function call**
+
+```python
+def Compute(context):
+    value = 10
+    return value
+```
+
+* `value` is recreated on each call
+* It is not shared between calls
+* It does not affect module-level variables unless explicitly returned or assigned
+
+#### Global keyword
+
+To modify module-level variables inside a function, you must use `global`:
+
+```python
+value = 0
+
+def Update(context):
+    global value
+    value += 1
+    return value
+```
+
+Without `global`, a new local variable is created instead.
+
+#### Multiple functions share the same scope
+
+All functions in the same script file share the same module scope:
+
+```python
+state = 0
+
+def A(context):
+    global state
+    state += 1
+
+def B(context):
+    return state
+```
+
+* Calling `A` modifies `state`
+* Calling `B` will see the updated value
+
+#### No re-initialization between calls
+
+Unlike typical scripting environments, **the script is not reloaded for each call**
+
+This means:
+
+* Initialization code at the top of the file runs only once
+* State persists unless explicitly reset
+* Bugs related to stale state can accumulate over time
+
+#### Recommended pattern: explicit initialization
+
+To avoid unintended state persistence, use an explicit initialization function:
+
+```python
+state = None
+
+def Initialize(context):
+    global state
+    state = 0
+
+def Step(context):
+    global state
+    state += 1
+    return state
+```
+
+This makes lifecycle control explicit and predictable.
+
+#### Gotchas
+
+* **State persists silently:** Variables defined at module level are shared across all calls.
+* **Missing `global` creates bugs:** Forgetting `global` results in a local variable instead of updating shared state.
+* **Initialization runs once:** Do not assume top-level assignments reset between trials.
+* **Functions are looked up by name:** If the function name in XML does not match exactly, execution will fail at runtime.
+* **No automatic isolation:** All functions in a script share the same environment—there is no sandbox per call.
+
+### Mental model
+
+Think of a script file as:
+
+> A loaded Python module that stays alive for the entire experimental session
+
+* Top-level variables = persistent state
+* Functions = entry points called from XML
+* Execution = repeated calls into the same live module
+
+Once you treat it like a long-lived Python module, the behavior becomes predictable.
 
 ## Dynamic text
 
+Text is used extensively in experiments (instructions, labels, prompts). In many cases, text must be dynamic—depending on language, experimental state, or recorded results. Using full Python expressions for all text would require quoting text strings inside Python syntax, which is error-prone. To address this, LabBench introduces dynamic text attributes.
+
+Dynamic text attributes are either a literal string or a calculated attribute that returns a string.
+
 ### Syntax 
 
-```python
+Without the dynamic: keyword, a dynamic text attribute is just a string literal, like for example title=”Age”. With the dynamic: keyword, it is a calculated text attribute:
 
+```python
+title=”dynamic: TextDatabase.Age”
+```
+
+This calculated text attribute will follow all the rules for calculated attributes. Consequently, it can be either a single-line expression or a function call. To call a function, use the func: keyword after the dynamic: keyword as you would for conventional calculated attributes:
+
+```python
+title=”dynamic: func: Script.GetTitle(context)”
 ```
 
 ### Formatted strings (f-strings)
@@ -517,126 +664,281 @@ def Stimulate(context, x):
 * **Thread-safe but locked:** Access is internally synchronized—avoid long-running operations inside scripts.
 * **Current result may be null:**  `context.Current` is only set during execution of a procedure.
 
+## Python compatibility
+
+LabBench uses IronPython as its scripting engine. IronPython is **not a full modern CPython implementation**, and understanding its feature set is important for writing reliable scripts.
+
+The IronPython used in LabBench is based on **Python 3.4**, but includes selected features from newer versions.
+
+Most notably:
+
+* Baseline: **Python 3.4 syntax and standard library**
+* Backported features from newer versions:
+  * **f-strings (Python 3.6)** ✅
+  * Some improvements in formatting and standard library modules
+  * Incremental compatibility improvements with CPython
+
+This means you are working in a **hybrid environment**:
+
+> Python 3.4 core + selected modern features (not a full Python 3.x runtime)
+
+### What works well
+
+These features are safe and recommended:
+
+#### Core language
+
+* Functions, classes, modules
+* Lists, dictionaries, comprehensions
+* Basic OOP patterns
+
+#### String formatting (recommended)
+
+```python
+f"Intensity: {x:.2f}"
+```
+
+* f-strings are supported (even though they are newer than 3.4)
+* `.format()` also works and is fully supported
+
+### What is limited or missing
+
+IronPython differs from the newest version of Python, not fully supported or missing:
+
+* Many Python 3.6+ features (partial support only)
+* `dataclasses`
+* Full `async` / `await`
+* Modern typing features (partial only)
+* Some newer standard library modules
+
+**External packages:**
+
+* **No native CPython extensions**
+  * NumPy ❌
+  * SciPy ❌
+* Pure Python modules may work (but not guaranteed)
+
+**Runtime differences:**
+
+* Runs on **.NET (DLR)**, not CPython
+* Interacts with .NET objects directly
+
+### Cheat sheet: Writing IronPython-compatible code
+
+#### ✅ Do this
+
+| Pattern                      | Example               | Why                        |
+| ---------------------------- | --------------------- | -------------------------- |
+| Use f-strings                | `f"{value:.2f}"`      | Supported and clean        |
+| Use built-in types           | `list`, `dict`        | Fully supported            |
+| Keep dependencies minimal    | —                     | Avoid compatibility issues |
+| Use LabBench context objects | `context.Instruments` | Native integration         |
+
+#### ⚠️ Be careful with
+
+| Feature                           | Issue                               |
+| --------------------------------- | ----------------------------------- |
+| Advanced Python 3 features        | May not exist or behave differently |
+| Typing (`typing` module)          | Only partially supported            |
+| Generators with advanced patterns | Sometimes inconsistent              |
+| Reflection / dynamic tricks       | May behave differently on .NET      |
+
+#### ❌ Avoid this
+
+| Pattern                           | Why                         |
+| --------------------------------- | --------------------------- |
+| NumPy / SciPy                     | Requires CPython extensions |
+| Async frameworks                  | Not reliably supported      |
+| Complex metaprogramming           | Unpredictable in DLR        |
+| Relying on latest Python features | Not implemented             |
+
+### Practical guidelines
+
+* Treat IronPython as a **very stable but slightly old Python core**
+* Prefer **clarity over cleverness**
+* Keep scripts **small and focused**
+* Use LabBench features (stimuli, triggers, context) instead of reimplementing logic
+
+### Mental model
+
+The safest way to think about IronPython in LabBench is:
+
+> “Python 3.4 + a few modern conveniences (like f-strings), running on .NET”
+
+If you stay within that mental model, your scripts will be predictable, portable, and robust.
+
 ## Python Standard Library
 
+IronPython provides access to a **subset of the Python standard library**, along with deep integration into the .NET ecosystem. Many commonly used modules work as expected, but support is not complete—especially for modules that rely on CPython internals or native extensions.
 
-## Toolkits
+As a rule of thumb:
 
+> Pure Python modules → usually supported
 
-## Instruments
+> C-extension / CPython-dependent modules → not supported
 
+### Supported modules
 
-## Calculated attributes
+| Module            | Description                                          | IronPython support |
+| ----------------- | ---------------------------------------------------- | -------------------|
+| `math`            | Mathematical functions (sin, log, sqrt, etc.)        | ✅ Full    |
+| `random`          | Random number generation                             | ✅ Full    |
+| `datetime`        | Dates and times                                      | ✅ Full    |
+| `itertools`       | Efficient iteration utilities                        | ✅ Full    |
+| `operator`        | Functional operators (add, mul, etc.)                | ✅ Full    |
+| `re`              | Regular expressions                                  | ✅ Full    |
+| `string`          | String constants and helpers                         | ✅ Full    |
+| `json`            | JSON encoding/decoding                               | ✅ Full    |
+| `csv`             | CSV file handling                                    | ✅ Full    |
+| `time`            | Time-related functions                               | ✅ Mostly  |
+| `functools`       | Functional programming tools                         | ✅ Mostly  |
+| `collections`     | Specialized containers (`deque`, `namedtuple`, etc.) | ✅ Mostly  |
+| `sys`             | Interpreter interaction                              | ⚠️ Partial |
+| `os`              | Operating system interface                           | ⚠️ Partial |
+| `pathlib`         | Filesystem paths                                     | ⚠️ Partial |
+| `io`              | Stream handling                                      | ⚠️ Partial |
+| `typing`          | Type hints                                           | ⚠️ Partial |
+| `inspect`         | Introspection utilities                              | ⚠️ Partial |
+| `importlib`       | Import system utilities                              | ⚠️ Partial |
 
-Calculated attributes define values using executable expressions or script functions that are evaluated at runtime. They are used throughout LabBench to compute parameters dynamically based on context, results, and inputs.
+Documentation:
+<a href="https://docs.python.org/3.4/library/index.html" target="_blank" rel="noopener noreferrer">
+    Python 3.4 Standard Library Documentation
+</a>
 
-A calculated attribute can take one of two forms:
+### Description of partially supported modules
 
-### 1. Expression
+The following modules are available in IronPython but only **partially supported**. In most cases, core functionality works, while features relying on CPython internals, OS-specific behavior, or advanced runtime features may be missing or behave differently.
 
-A single-line Python expression:
+#### `sys` — Interpreter interaction
 
-```xml
-intensity="min(Stimulator.Max, ManualThreshold.Intensity)"
-duration="10 * Ts"
-```
+Provides access to interpreter-level information and runtime configuration.
 
-Expressions are compiled once and evaluated using a runtime scope that includes:
+**Supported**
 
-* The current procedure context (blackboard)
-* Defined variables and results
-* The free parameter `x` (if provided)
-* Built-in mathematical functions
-* Constants `PI` and `E`
+sys.version, sys.platform
+sys.argv
+sys.path (module search path)
+Basic stdout/stderr access (sys.stdout, sys.stderr)
 
-### 2. Function call
+**Limitations**
 
-A reference to a Python function:
+No CPython-specific internals (e.g., reference counting details)
+Limited support for low-level interpreter hooks
+sys.getsizeof() may not behave as in CPython
 
-```xml
-intensity="func: Script.Compute(context)"
-stimulus="func: Script.Generate(context, x)"
-```
+**Recommendation**
+Use for basic environment inspection and path management only.
 
-Depending on the signature, functions are called as:
+#### `os` — Operating system interface
 
-* `func: Script.Function(context)`
-* `func: Script.Function(context, x)`
+Provides functions for interacting with the file system and environment.
 
-The system validates:
+**Supported**
 
-* That the script asset exists
-* That it is a Python script
-* That the function is defined
+* File and directory operations (`os.listdir`, `os.mkdir`, `os.remove`)
+* Path utilities (`os.path`)
+* Environment variables (`os.environ`)
 
-## Execution model
+**Limitations**
 
-At runtime, a calculated attribute is:
+* Process management is limited (`os.fork` not available)
+* Some platform-specific features missing or inconsistent
+* Permissions and low-level OS calls depend on .NET behavior
 
-1. **Parsed** into either:
+**Recommendation**
+Safe for basic file and directory operations; avoid advanced OS/process control.
 
-   * An expression
-   * A function call
+#### `pathlib` — Filesystem paths
 
-2. **Compiled** (expressions or scripts)
+Object-oriented filesystem path handling.
 
-3. **Executed** with:
+**Supported**
 
-   * `context` (procedure blackboard)
-   * Optional `x` parameter
+* Basic path construction (`Path("file.txt")`)
+* File existence checks (`exists()`)
+* Reading/writing files (`read_text()`, `write_text()`)
 
-If execution is not possible (e.g. missing context or blocked state), a **default value** is returned.
+**Limitations**
 
-## Scope and available values
+* Some advanced methods may be missing or incomplete
+* Behavior may differ slightly due to .NET filesystem handling
+* Limited support for advanced path resolution features
 
-During evaluation, the following are available:
+**Recommendation**
+Use for simple path manipulation; fall back to `os.path` if needed.
 
-### Variables
+#### `io` — Stream handling
 
-| Name            | Description                    |
-| --------------- | ------------------------------ |
-| `x`             | Free parameter (if applicable) |
-| `[ProcedureID]` | Results from procedures        |
-| `[DefineName]`  | Defined values                 |
-| `C`             | Context object                 |
+Provides tools for working with streams and file-like objects.
 
-### Constants
+**Supported**
 
-| Name | Value |
-| ---- | ----- |
-| `PI` | π     |
-| `E`  | e     |
+* Basic file I/O (`open`, text/binary modes)
+* `StringIO` for in-memory streams
 
-### Functions
+**Limitations**
 
-The following functions are available directly in expressions:
+* Some buffering and advanced stream types are incomplete
+* Differences in encoding handling compared to CPython
+* Integration depends on .NET stream implementations
 
-* `exp`, `log`, `log10`
-* `sin`, `cos`, `tan`, `sinh`, `cosh`, `tanh`
-* `asin`, `acos`
-* `abs`, `sqrt`
-* `round`, `floor`, `ceiling`, `truncate`
-* `min`, `max`, `pow`
-* `step(x)`
-* `pulse(x, d)`
+**Recommendation**
+Use for standard file operations; avoid complex stream manipulation.
 
-Array generators:
+#### `typing` — Type hints
 
-* `linspace(x0, x1, n)`
-* `geomspace(x0, x1, n)`
-* `logspace(x0, x1, base, n)`
+Provides support for type annotations.
 
-## Type handling
+**Supported**
 
-Each calculated attribute enforces a return type (e.g. `int`, `double`, `string`, `double[]`).
+* Basic annotations (`List`, `Dict`, `Optional`)
+* Function annotations syntax
 
-The result of execution is:
+**Limitations**
 
-* Converted to the required type
-* Stored internally
-* Returned to the caller
+* No static type checking at runtime
+* Advanced typing features (e.g., `Protocol`, `TypedDict`) missing or incomplete
+* Limited tooling support
 
-If conversion fails, a runtime error is raised.
+**Recommendation**
+Use for readability/documentation only—not for enforcement.
+
+#### `inspect` — Introspection utilities
+
+Provides tools for inspecting objects, functions, and call stacks.
+
+**Supported**
+
+* Basic inspection (`inspect.getmembers`, `inspect.isfunction`)
+* Function signature inspection (partial)
+
+**Limitations**
+
+* Stack inspection may be unreliable
+* Some reflection features differ due to .NET runtime
+* Source code retrieval (`getsource`) may fail
+
+**Recommendation**
+Use cautiously; avoid relying on deep introspection.
+
+#### `importlib` — Import system utilities
+
+Provides programmatic access to the import system.
+
+**Supported**
+
+* Basic module importing (`import_module`)
+* Module loading in simple cases
+
+**Limitations**
+
+* Advanced import hooks not supported
+* Custom loaders and finders may not work
+* Behavior tied to IronPython’s import system, not CPython’s
+
+**Recommendation**
+Use only for simple dynamic imports.
 
 ## Error handling and validation
 
@@ -659,7 +961,6 @@ At runtime:
 * **NaN propagation:** Many functions propagate NaN. One bad value can affect the entire calculation.
 * **Array generation pitfalls:** `linspace`, `geomspace`, and `logspace` can fail if inputs are invalid (e.g. negative values in logspace).
 * **IronPython limitations:** Only pure Python and .NET interop are supported. No CPython native libraries.
-
 * **Controlled scope:**  Only variables provided by LabBench are available. Missing values usually mean they are not part of the execution scope.
 
 
@@ -672,370 +973,5 @@ At runtime:
 
 
 
-
-
-## Scripting in LabBench
-
-Scripting in LabBench provides a powerful way to extend and customize experimental behavior beyond what is possible with static XML configuration alone. While protocols (.expx files) are formally defined and validated using an XSD schema, many XML attributes can contain executable logic in the form of single-line Python expressions (calculated parameters) or references to Python functions defined in external script files. Together, this allows protocols to remain declarative and readable, while still supporting adaptive procedures, conditional logic, and dynamic parameter updates that are essential in modern psychophysics and neuroscience experiments.
-
-Under the hood, LabBench is a .NET application that embeds IronPython as its scripting engine. XML elements are deserialized into strongly typed .NET objects, which are then exposed directly to the IronPython runtime. This tight integration makes it easy to access and manipulate experiment state, stimuli, devices, and parameters from Python code, all while staying within the execution model of LabBench. Script files are included explicitly in a protocol via the <file-assets> element, ensuring that experiments are self-contained and reproducible.
-
-This scripting approach makes it straightforward to use LabBench functionality: protocol writers can automate protocols and extend the functionality of LabBench without modifying the core application. At the same time, it is essential to understand the limitations of the environment. IronPython does not use CPython and therefore does not support native extension modules or the broader ecosystem of packages typically installed via pip. Only pure-Python code and libraries compatible with IronPython—and the .NET framework—can be used. **The scripting system is thus best viewed as a domain-specific extension layer tightly coupled to LabBench, rather than a general-purpose Python environment.**
-
-This section provides information on how to automate experimental protocols with calculated parameters and extend the functionality of LabBench with Python scripts. The concepts described here apply uniformly across all LabBench protocols and are independent of any specific test type.
-
-## Attributes and types
-Attributes are the primary mechanism for configuring experiments in LabBench. 
-
-Each attribute has:
-- A **name**
-- A **value**
-- An associated **type**
-
-The LabBench Language supports a set of simple and structured types used across attributes, calculated expressions, and scripts.
-
-### Simple Types
-| Type | Description | Examples |
-|-----|------------|----------|
-| **Integer** | Whole numbers without fractional parts; may be positive, negative, or zero. | `1`, `2`, `42`, `-7` |
-| **Floating-point** | Rational numbers represented with decimal precision. | `0.1`, `2.75`, `-1.2` |
-| **Text** | Sequences of characters used to represent textual data (strings). | `"This is a text string"` |
-| **Boolean** | Logical truth values with exactly two possible states. | `true`, `false` |
-| **Enumeration (enum)** | A fixed set of named, discrete values representing categorical options. | `single-sample` |
-
-### Structured Types
-
-In addition to simple scalar types, LabBench supports **structured types** that allow complex data to be grouped, indexed, and accessed programmatically. Structured types can be used in:
-
-- Calculated attributes
-- Python scripts
-
-The primary structured types are **lists** and **dictionaries**.
-
-#### Lists
-
-A list is an ordered collection of values accessed by a zero-based index. All elements in a list share the same type, which may be a simple or another structured type.
-
-Lists are typically used when:
-- Order matters
-- Values are accessed by position
-- The number of elements is fixed or known
-
-Type notation:
-```
-type[]
-```
-Definition Example:
-
-```xml
-<define name="StimulusLevels" value="[0.1, 0.2, 0.3, 0.4]"/>
-```
-
-Access from a Single-Line Calculated Attribute:
-
-```xml
-stimulus-intensity="StimulusLevels[0]"
-max-intensity="max(StimulusLevels)"
-```
-Access from Python Script:
-
-```python
-def ExampleFunction(tc):
-    first_level = tc.StimulusLevels[0]
-    last_level  = tc.StimulusLevels[-1]
-    return first_level
-```
-
-#### Dictionaries
-A dictionary stores values as key–value pairs. Elements are accessed using a key rather than a numeric index. Keys are simple types (most commonly text), and values may be simple or structured types.
-
-Dictionaries are typically used when:
-- Semantic labels identify values
-- Order is not important
-- Configuration or lookup tables are needed
-
-Type notation:
-
-```
-key_type<value_type>
-```
-
-
-Definition Example:
-
-```xml
-<define name="Thresholds" value="{'low': 0.2, 'medium': 0.5, 'high': 0.8}"/>
-```
-
-Access from a Single-Line Calculated Attribute:
-
-```xml
-stimulus-intensity="Thresholds['medium']"
-upper-limit="min(Thresholds['high'], Device.Imax)"
-```
-
-Access from Python Script:
-
-```python
-def ExampleFunction(tc):
-    medium_threshold = tc.Thresholds['medium']
-    return medium_threshold
-```
-
-
-#### Nested Structured Types
-
-Structured types may be nested arbitrarily. For example, a dictionary may contain lists, and a list may contain dictionaries.
-
-
-Access from a Single-Line Calculated Attribute:
-
-```xml
-stimulus-intensity="Results['Test01']['Metrics']['mean'][0]"
-```
-
-Access from Python Script:
-
-```python
-def ExampleFunction(tc):
-    value = tc.Results['Test01']['Metrics']['mean'][0]
-    return value
-```
-
-#### Summary
-
-| Structured Type | Access Syntax | Typical Use Case |
-|----------------|--------------|------------------|
-| List | `values[index]` | Ordered collections |
-| Dictionary | `values[key]` | Named lookup |
-
-Lists and dictionaries can be used when writing both **single-line calculated attributes** and **Python scripts** for LabBench protocols. 
-
-
-## Calculated Attributes
-Most attributes in LabBench can be *calculated*, meaning their values are specified as expressions rather than fixed literals. 
-
-Calculated attributes allow experiments to:
-- Automate configuration steps
-- React to results from earlier parts of the experiment
-- Adapt dynamically during execution
-
-A calculated attribute is written as a **single-line Python expression** enclosed in quotes. This expression is evaluated by the LabBench runtime.
-
-Example:
-
-```python
-parameter="0.7 * PreviousTest.Result"
-```
-
-Calculated attributes make it possible to derive new values directly from:
-
-- Results of earlier tests
-- Instrument properties
-- Defined constants
-- Mathematical functions
-
-### Available Variables in Calculated Attributes
-Depending on where a calculated attribute is used, the following variables may be available:
-
-- Results from previous tests (referenced by test ID)
-- Instruments used by the test (referenced by instrument ID)
-- Defines declared in the protocol
-- Mathematical functions such as: exp, round, log, log10, sin, cos, tan, abs, sqrt, max, min, pow
-- Free parameter x, when applicable (e.g., in tests that evaluate responses as a function of a changing parameter)
-- Language, if the experiment is localized
-- SESSION_NAME and SESSION_TIME, describing the active session
-
-### Calculated attribute types
-Calculated attributes must declare the type of value they return and the function signature when called from a Python script:
-
-```
-int calculated(tc) or int calculated(tc,x) – must return an integer
-double calculated(tc) – must return a floating-point number
-float[] calculated(tc) – must return a list of floats
-any = calculated(tc) – may return any supported type
-```
-
-Returning a value of the wrong type or calling a Python function with the wrong function signature will result in a runtime error.
-
-## Dynamic Text Attributes
-
-Text is used extensively in experiments (instructions, labels, prompts). In many cases, text must be dynamic—depending on language, experimental state, or recorded results. Using full Python expressions for all text would require quoting text strings inside Python syntax, which is error-prone. 
-
-To address this, LabBench introduces dynamic text attributes.
-
-### Literal Text
-
-Literal text can be written directly:
-
-```xml
-instruction= "Please respond when ready"
-``` 
-
-### Dynamic Text
-
-If the text value begins with the keyword dynamic:, it is evaluated as a calculated text expression:
-
-```xml
-instruction="dynamic: Text['INSTRUCTION_01']"
-```
-
-This mechanism allows seamless mixing of literal text and calculated text without forcing all text to be expressed as Python strings.
-
-## Defines
-
-Experiments often require the same value to be reused across multiple attributes. Repeating literal values increases the risk of inconsistencies and errors. LabBench addresses this using defines, which implement the "Don't Repeat Yourself" (DRY) principle.
-
-Defines are declared once and can then be referenced throughout the protocol, calculated attributes, and scripts.
-
-Each define have:
-- A **name** (used as the variable name)
-- A **value** (literal or calculated)
-
-Conceptually, defines act as global constants or configuration variables for the experiment.
-
-Defines are available:
-- In calculated attributes (by name)
-- In Python scripts (via the test context)
-
-## Python Scripts
-Single-line calculated attributes are ideal for simple expressions, but they are insufficient for:
-
-- Complex logic
-- Conditional branching
-- Reusable algorithms
-- Extending test behavior
-
-In these cases, LabBench supports Python scripts that can be called from calculated attributes. LabBench provides access to a full Python runtime, including the standard library.
-
-### Calling Script Functions
-
-To call a Python function from a calculated attribute, prefix the value with the keyword func::
-
-```xml
-attribute= "func: ScriptID.FunctionName(tc)"
-```
-Depending on the calculated parameter, a free parameter x can be passed :
-
-```xml
-attribute= "func: ScriptID.FunctionName(tc, x)"
-```
-
-Where:
-- **ScriptID**: is the ID of the script as declared in the experiment assets
-- **FunctionName**: is the Python function to call
-- **tc** is the test context (always provided)
-- **x** is a free parameter, such as stimulus intensity, etc.
-
-Each calculated parameter specifies whether they expect a (tc) or (tc,x) function signature.
-
-### Defining Functions
-
-Functions callable by LabBench must:
-- Be defined at the top level of the script
-- Accept the test context (tc) or (tc,x) as their arguments depending on the expected function signature of the calculated parameter.
-- Return a value compatible with the calculated attribute's declared type
-
-Example structure:
-
-```python
-def ExampleFunction(tc):
-    # custom logic
-    return result
-```
-
-Returning an incorrect type will cause a runtime error during experiment execution.
-
-## The Test Context (tc)
-
-When a Python function is called, LabBench passes it a test context object (tc). 
-
-This context provides structured access to all relevant information needed for advanced logic.
-
-The test context includes:
-Defines
-All protocols defines are accessible as fields on tc, named after their define IDs:
-tc.MyDefine
-Results
-Results from completed tests are accessible via the results namespace or directly when exposed by the test:
-tc.[TestID].[Property or function of the result]
-Parameters
-Some tests expose additional parameters to simplify configuration logic. These are available as scoped defines that are only available for relevant calculated parameters:
-tc.NumberOfStimuli
-Devices
-Instruments used by a test are accessible via the Devices struct:
-tc.Instruments.Stimulator
-tc.Instruments.Trigger
-tc.Instruments.Display
-Assets
-Files and other assets declared in the experiment are accessible via:
-tc.Assets.[Asset ID]
-Localization and Session Information
-If applicable, the test context also provides:
-tc.Language
-tc.SESSION_NAME
-tc.SESSION_TIME
-
-
-## How-to guides
-
-### Constructing Strings with `str.format()` 
-
-In LabBench, `str.format()` is the preferred way to construct clear and maintainable strings in calculated parameters and Python scripts. It replaces placeholders in a string with values provided explicitly, avoiding manual string concatenation and type conversions. Here is an example of its syntax  with positional placeholders:
-
-``` python
-"Hello {}, you have {} messages".format(name, count)
-```
-
--   `{}` marks insertion points
-- Arguments are applied in order
-- Values are converted to strings automatically
-
-Named placeholders can also be used and is recommended for complex strings:
-
-``` python
-"User {user} has {count} messages".format(user=name, count=count)
-```
-
-Using named placeholders makes format strings more readable than positional placeholders, allows arguments to be reordered freely, and reduces the risk of errors when the string changes over time. A second advantage is that values can be reused:
-
-``` python
-"{x} + {x} = {result}".format(x=2, result=4)
-```
-
-Values are formatted with format specifiers:
-
-``` python
-"Value: {:.2f}".format(3.14159)   # 'Value: 3.14'
-"Hex: {:x}".format(255)           # 'Hex: ff'
-```
-
-Format specifiers: 
-
-| Specifier | Meaning | Example | Result |
-|----------|---------|---------|--------|
-| `{}` | Default formatting | `"{}".format(42)` | `42` |
-| `{s}` | String (same as default) | `"{:s}".format("hi")` | `hi` |
-| `{d}` | Decimal integer | `"{:d}".format(42)` | `42` |
-| `{b}` | Binary integer | `"{:b}".format(5)` | `101` |
-| `{o}` | Octal integer | `"{:o}".format(8)` | `10` |
-| `{x}` | Hexadecimal (lowercase) | `"{:x}".format(255)` | `ff` |
-| `{X}` | Hexadecimal (uppercase) | `"{:X}".format(255)` | `FF` |
-| `{f}` | Fixed-point float | `"{:f}".format(3.14)` | `3.140000` |
-| `{.nf}` | Float with `n` decimals | `"{:.2f}".format(3.14159)` | `3.14` |
-| `{e}` | Scientific notation | `"{:e}".format(1000)` | `1.000000e+03` |
-| `{g}` | General format (compact) | `"{:g}".format(3.14000)` | `3.14` |
-| `{c}` | Character from int | `"{:c}".format(65)` | `A` |
-| `{%}` | Percentage | `"{:.1%}".format(0.25)` | `25.0%` |
-| `{n}` | Number with locale | `"{:n}".format(1000000)` | `1,000,000`* |
-| `{width}` | Minimum field width | `"{:5d}".format(42)` | `   42` |
-| `{<width}` | Left-aligned | `"{:<5d}".format(42)` | `42   ` |
-| `{>width}` | Right-aligned | `"{:>5d}".format(42)` | `   42` |
-| `{^width}` | Center-aligned | `"{:^5d}".format(42)` | ` 42  ` |
-| `{0width}` | Zero-padded | `"{:05d}".format(42)` | `00042` |
-| `{+}` | Always show sign | `"{:+d}".format(42)` | `+42` |
-| `{-}` | Show minus only | `"{:-d}".format(-42)` | `-42` |
-| `{}` with attributes | Object attribute access | `"{u.name}".format(u=user)` | value |
-| `{}` with keys | Dict key access | `"{cfg[port]}".format(cfg=cfg)` | value |
 
 
