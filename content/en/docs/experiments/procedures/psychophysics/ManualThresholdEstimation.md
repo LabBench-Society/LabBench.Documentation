@@ -397,11 +397,40 @@ Catch trials are defined with:
 
 Catch trials `<catch-trials>` has the following attributes:
 
-| Attribute      | Type                         | Specification                                                                 |
-|----------------|------------------------------|-------------------------------------------------------------------------------|
-| `order`        | enum                         | Defines how catch trials are distributed (e.g., `block-randomised`).          |
-| `interval`     | int = Calculated(context)    | Frequency of catch trials (e.g., every *n* trials).                           |
-| `instruction`  | dynamic text                 | Instruction shown to the operator during catch trials (e.g., "Catch Trial").  |
-| `image`        | image = Calculated(context)  | Image displayed to guide the operator during catch trials (e.g., no stimulus).|
+| Attribute     | Type                       | Specification                                                                 |
+|---------------|----------------------------|-------------------------------------------------------------------------------|
+| `order`       | enum                       | Defines how catch trials are scheduled within the procedure. See table below.|
+| `interval`    | int                        | Controls how often catch trials occur. Interpretation depends on `order`: fixed interval, block size, or probability denominator. |
+| `instruction` | string = Calculated(context) | Optional instruction shown to the operator during catch trials.               |
+| `image`       | image = Calculated(context)  | Optional image displayed to guide the operator during catch trials.           |
+
+**Catch Trial Order Modes:**
+
+| Value              | Description                                                                 |
+|--------------------|-----------------------------------------------------------------------------|
+| `deterministic`    | Catch trials occur at a fixed interval. A catch trial is inserted every *interval* trials (specifically at position `interval - 1` within each cycle). |
+| `block-randomised` | Exactly one catch trial occurs within each block of *interval* trials. The position of the catch trial within each block is randomised. |
+| `randomised`       | Each trial has a probability of `1 / interval` of being a catch trial. Catch trials are distributed randomly across the procedure. |
+
 
 ## Scripting
+
+The result of the procedure has the following properties that can be accessed by calculated parameters:
+
+| Property              | Type            | Description                                                                 |
+|----------------------|-----------------|-----------------------------------------------------------------------------|
+| `Completed`          | bool            | Indicates whether the procedure completed successfully.                     |
+| `Failed`             | bool            | Indicates whether the procedure failed (e.g., no valid threshold found).    |
+| `Responder`          | bool            | Indicates whether estimations stop algorithm was fulfilled. |
+| `Threshold`          | double          | Estimated threshold value.                                                  |
+| `MaxIntensity`       | double          | Maximum intensity used during the procedure.                                |
+| `Intensities`        | double[]    | Sequence of stimulus intensities presented during each trial.               |
+| `Responses`          | double[]    | Participant responses for each trial (typically 1 = correct, 0 = incorrect).|
+| `IsCatchTrial`       | double[]    | Indicates whether each trial was a catch trial (1 = catch trial, 0 = normal).|
+| `Alpha`              | double[]    | Estimated alpha values (threshold parameter) over trials (Psi method).      |
+| `Beta`               | double[]    | Estimated beta values (slope parameter) over trials (Psi method).           |
+| `NumberOfResponses`  | int             | Total number of responses recorded.                                         |
+
+## Example protocols:
+
+
