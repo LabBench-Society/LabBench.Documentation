@@ -433,4 +433,9 @@ The result of the procedure has the following properties that can be accessed by
 
 ## Example protocols:
 
-
+<ul>
+  <li><a href="https://github.com/LabBench-Society/Protocols/blob/main/tactile.filament/tactile.filament.expx" target="_blank" rel="noopener noreferrer">Monofilament Testing (von Frey Hairs/Semmes-Weinstein)</a></li>
+  <li><a href="https://github.com/LabBench-Society/Protocols/blob/main/tactile.gratingOrientation/tactile.gratingOrientation.expx" target="_blank" rel="noopener noreferrer">Grating Orientation Testing (Grating Domes)</a></li>
+  <li><a href="https://github.com/LabBench-Society/Protocols/blob/main/tactile.tpdDisc/tactile.tpdDisc.expx" target="_blank" rel="noopener noreferrer">Two-Point Discrimination Testing (Disk Discriminator)</a></li>
+  <li><a href="https://github.com/LabBench-Society/Protocols/blob/main/tactile.tpdDiscOrientation/tactile.tpdDiscOrientation.expx" target="_blank" rel="noopener noreferrer">Two-Point Orientation Testing (Disk Discriminator)</a></li>
+</ul>
