@@ -84,3 +84,6 @@ Key requirements:
 
 ## Example protocol
 
+* <a href="https://github.com/LabBench-Society/Protocols/tree/main/intro.postSessionActions" target="_blank" rel="noopener noreferrer">
+    Introduction to post-session actions
+</a>
