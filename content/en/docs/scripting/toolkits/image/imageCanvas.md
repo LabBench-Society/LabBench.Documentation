@@ -550,7 +550,7 @@ This function is useful when fine control over corner curvature is required, suc
 This function does not return a value. It draws a rounded rectangle with independent corner radii onto the canvas.
 
 
-### Sprite(x, y, sprite)
+### Sprite(x, y, sprite, width=-1, height=-1)
 
 Draws a bitmap image (sprite) onto the canvas at the specified position, using the current horizontal and vertical alignment settings.
 
@@ -568,7 +568,7 @@ This allows sprites to be positioned semantically (e.g. centered on a point, ali
 
 #### Return Value
 
-This function does not return a value. It draws the sprite bitmap onto the canvas at the computed position.
+* ImageRectangle.
 
 ## Text functions
 
