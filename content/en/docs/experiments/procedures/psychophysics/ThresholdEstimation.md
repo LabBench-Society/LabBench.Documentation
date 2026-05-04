@@ -800,8 +800,6 @@ each child `<category>` element defines a category with the following attributes
 
 ## Stimulation
 
-### Stimulation Channels
-
 Stimulation channels allow the estimation of psychometric functions and/or thresholds for multiple stimuli concurrently within a single threshold estimation test. Each channel represents an independent stimulus condition with its own adaptive estimation algorithm and stimulus definition. 
 
 During the experiment, LabBench alternates between channels on successive trials, interleaving stimulus presentations so that each channel progresses toward its own threshold or psychometric estimate.
@@ -831,12 +829,107 @@ This interleaving ensures that multiple stimulus categories or conditions can be
 </channels>
 ```
 
-### Custom Stimulations
-
 ## Scripting
 
-### Properties
+Results from the **Threshold Estimation Procedure** can be accessed from calculated parameters and IronPython scripts using dot notation:
 
-### Functions
+```python
+ProcedureID.Property
+```
+
+**Properties:**
+
+| Property           | Type       | Description                                                     |
+| ------------------ | ---------- | --------------------------------------------------------------- |
+| `Completed`        | `bool`     | `True` when all estimates are either available or failed.       |
+| `Failed`           | `bool`     | `True` if one or more estimates failed.                         |
+| `Estimates`        | `ThresholdEstimate[]`     | List of all `ThresholdEstimate` objects.                        |
+| `InputChannels`    | `string[]` | Names of input channels used during acquisition (if available). |
+| `StimulusChannels` | `string[]` | Names of stimulus channels used in the procedure.               |
+
+**Threshold estimates:**
+
+Threshold values can be accessed directly using the channel ID:
+
+```python
+value = ProcedureID["Thermal"]
+# or
+value = ProcedureID.Thermal
+```
+
+| Expression                 | Type     | Description                           |
+| -------------------------- | -------- | ------------------------------------- |
+| `ProcedureID["ChannelID"]` | `double` | Returns the computed threshold value. |
+| `ProcedureID.ChannelID`    | `double` | Equivalent dot-notation access.       |
+
+If the specified channel does not exist, an error is raised.
+
+### ThresholdEstimate
+
+Each estimate represents the result of a single adaptive procedure for a stimulus channel.
+
+**Properties:**
+
+| Property               | Type     | Description                                                      |
+| ---------------------- | -------- | ---------------------------------------------------------------- |
+| `ID`                   | `string` | Unique identifier of the estimate (channel ID).                  |
+| `Name`                 | `string` | Human-readable channel name.                                     |
+| `Value`                | `double` | Estimated threshold value. Returns `NaN` if the estimate failed. |
+| `Available`            | `bool`   | Indicates whether a valid estimate is available.                 |
+| `Failed`               | `bool`   | Indicates whether the estimation failed.                         |
+| `Imin`                 | `double` | Minimum stimulus intensity.                                      |
+| `Imax`                 | `double` | Maximum stimulus intensity.                                      |
+| `ReactionTime`         | `double` | Mean reaction time across valid responses.                       |
+| `ReactionTimes` | `double[]` | Reaction times for trials with a response. |
+| `ReactionTimeVariance` | `double` | Variance of reaction times.                                      |
+| `ConfidenceAvailable`  | `bool`   | Indicates whether confidence intervals are available.            |
+| `ConfidenceLevel`      | `double` | Confidence level (e.g., 0.95).                                   |
+| `Function`             | `object` | Psychometric function used for estimation.                       |
+| `DataPoints`           | `EstimationPoint[]`   | Array of `EstimationPoint` entries (raw trial data).              |
+
+
+### EstimationPoint
+
+Represents a single trial in the adaptive threshold estimation.
+
+**Properties:**
+
+| Field          | Type     | Description                                                      |
+| -------------- | -------- | ---------------------------------------------------------------- |
+| `Response`     | `bool`   | `True` if the subject responded positively.                      |
+| `CatchTrial`   | `bool`   | Indicates whether the trial was a catch trial.                   |
+| `Intensity`    | `double` | Stimulus intensity used for the trial.                           |
+| `Answer`       | `int`    | Raw response code (task-dependent).                              |
+| `ReactionTime` | `double` | Reaction time in milliseconds.                                   |
+| `Time`         | `double` | Time since procedure start (milliseconds).                       |
+| `Alpha`        | `double` | Current estimate of threshold parameter (psychometric function). |
+| `Beta`         | `double` | Slope parameter of the psychometric function.                    |
+| `Gamma`        | `double` | Guess rate parameter.                                            |
+| `Lambda`       | `double` | Lapse rate parameter.                                            |
+
+
+**Confidence intervals:**
+
+If supported by the estimation algorithm, confidence intervals are available per trial:
+
+| Property                   | Type     | Description                                          |
+| -------------------------- | -------- | ---------------------------------------------------- |
+| `AlphaConfidenceAvailable` | `bool`   | Indicates if alpha confidence interval is available. |
+| `AlphaConfidenceInterval`  | `object` | Confidence interval for alpha.                       |
+| `BetaConfidenceAvailable`  | `bool`   | Indicates if beta confidence interval is available.  |
+| `BetaConfidenceInterval`   | `object` | Confidence interval for beta.                        |
+
+If confidence data is not available, default bounds are estimated internally.
+
+### Notes
+
+* `Value` returns `NaN` if the estimation failed.
+* Reaction times only include trials with valid responses.
+* Data points are stored in temporal order.
+* Channel IDs are case-sensitive when accessed via scripting.
+* Confidence intervals are only available when supported by the estimation algorithm.
+
 
 ## Example protocols
+
+- <a href="https://github.com/LabBench-Society/Protocols/tree/main/intro.thrEstimation" target="_blank" rel="noopener noreferrer">Introduction to threshold estimation</a>
