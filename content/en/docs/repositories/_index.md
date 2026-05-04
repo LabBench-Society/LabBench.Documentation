@@ -132,7 +132,7 @@ Readme association:
 
 * Each category may have an associated `<category id>.xps` description page
 
-### Protocol definitions
+### Protocols
 
 A protocol is defined with the `<protocol>` element:
 
@@ -167,9 +167,9 @@ Description pages are human-readable representations of repository, category, an
 
 There are three types of description pages:
 
-* Repository description: must be located at the root of the repository and named 'repository'.xps
-* Category descriptions: must be located in the category directory <category id>/ and named <category id>.xps.
-* Protocol descriptions: must be located in the protocol directory <category id><protocol id>/ and named <category id><protocol id>.xps
+* Repository description: must be located at the root of the repository and named `repository.xps`.
+* Category descriptions: must be located in the category directory `<category id>/` and named `<category id>.xps`.
+* Protocol descriptions: must be located in the protocol directory `<category id>.<protocol id>/` and named `<category id>.<protocol id>.xps`.
 
 The .xps format (XML Paper Specification) is a fixed-layout document format developed by Microsoft. It preserves the exact visual appearance of a document, including layout, fonts, and graphics, similar to PDF files. 
 
