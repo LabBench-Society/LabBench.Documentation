@@ -220,6 +220,15 @@ Required XPS printer:
 
 ## Building repositories
 
+The source repository typically contains additional files that LabBench does not require to execute protocols, such as Markdown documentation (e.g., README.md), HTML description pages, batch scripts, styling resources, and source files used to generate images (e.g., PowerPoint or Adobe Illustrator files). These files support authoring, documentation, and asset creation but are not part of the runtime requirements. 
+
+During the build process, only the necessary files are copied to a dedicated build directory, including experiment definitions (.expx), required asset files, and repository metadata (e.g., repository.xml), producing a minimal, deployment-ready version of the repository. 
+
+As part of this process, a cache index is generated that contains the identifier of each file and its checksum. When content is requested, LabBench compares the locally cached file's checksum with the checksum specified in the cache index retrieved from the server. If the checksums differ, the file is re-downloaded, and the local cache is updated, ensuring that only modified content is transferred.
+
+
+
+![](/images/Repositories/Slide1.PNG)
 
 
 ## Source control
